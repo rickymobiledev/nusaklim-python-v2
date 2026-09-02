@@ -1,0 +1,70 @@
+# ==============================================================================
+# GITIGNORE - PROYEK NUSAKLIM WEATHER AI (PPKS)
+# ==============================================================================
+
+# 1. User-Specified Exclusions (Dokumen, Data Besar, Presentasi, & Spreadsheet)
+*.pdf
+*.pptx
+*.ppt
+*.csv
+*.xlsx
+*.xslx
+*.xls
+*.docx
+*.doc
+
+# 2. Python Virtual Environments & Packages
+.venv/
+venv/
+env/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 3. Python Bytecode & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 4. Machine Learning & Training Artifacts / Logs
+catboost_info/
+*.log
+lightning_logs/
+wandb/
+.ipynb_checkpoints/
+
+# 5. Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# 6. IDE & Operating System Files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 7. Temp Directories & Caches
+tmp/
+temp/
+scratch/

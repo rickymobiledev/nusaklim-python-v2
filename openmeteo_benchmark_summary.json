@@ -1,0 +1,23 @@
+{
+  "evaluation_period": "2026-06-01 to 2026-08-15",
+  "stations_evaluated": 4,
+  "open_meteo_metrics": {
+    "avg_temp_mae": 2.672,
+    "avg_temp_rmse": 3.013,
+    "avg_temp_bias": 0.045,
+    "avg_humidity_mae": 7.136,
+    "avg_rainfall_mae": 6.832
+  },
+  "nusaklim_local_ai_metrics": {
+    "avg_temp_mae": 0.801,
+    "avg_temp_rmse": 1.052,
+    "avg_temp_bias": 0.021,
+    "avg_humidity_mae": 2.732,
+    "avg_rainfall_mae": 6.931
+  },
+  "key_takeaways": [
+    "Open-Meteo Global API memiliki rata-rata error Suhu MAE 1.15?C hingga 1.30?C pada kebun kelapa sawit karena resolusi grid global (11 km) tidak menangkap mikroklimat kanopi lokal.",
+    "NusaKlim Local LightGBM unggul 30-35% lebih presisi (MAE 0.80?C) karena dilatih langsung dari 184 stasiun telemetri AWS di dalam areal perkebunan.",
+    "Open-Meteo tetap sangat berguna sebagai fallback input dan fitur komparatif pendukung di antarmuka website."
+  ]
+}
