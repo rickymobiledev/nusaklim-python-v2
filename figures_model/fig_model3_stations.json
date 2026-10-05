@@ -1,0 +1,26 @@
+{
+  "station_ids": [
+    "201",
+    "248",
+    "227",
+    "222",
+    "224",
+    "225",
+    "219",
+    "247",
+    "228",
+    "243"
+  ],
+  "files": [
+    "fig_model3_actual_vs_predicted_201.png",
+    "fig_model3_actual_vs_predicted_248.png",
+    "fig_model3_actual_vs_predicted_227.png",
+    "fig_model3_actual_vs_predicted_222.png",
+    "fig_model3_actual_vs_predicted_224.png",
+    "fig_model3_actual_vs_predicted_225.png",
+    "fig_model3_actual_vs_predicted_219.png",
+    "fig_model3_actual_vs_predicted_247.png",
+    "fig_model3_actual_vs_predicted_228.png",
+    "fig_model3_actual_vs_predicted_243.png"
+  ]
+}

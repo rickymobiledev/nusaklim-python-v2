@@ -6,8 +6,24 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.pdfgen import canvas
 
-pdf_path = r'd:\Downloads\nusaklim\Laporan_Audit_Gap_Data_dan_Ketahanan_Model_PPKS.pdf'
-fig_dir = r'd:\Downloads\nusaklim\figures_gap'
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+# Register Arial TTF fonts for full Unicode support (±, °, →, ², −, ñ, etc.)
+pdfmetrics.registerFont(TTFont('Arial', r'C:\Windows\Fonts\arial.ttf'))
+pdfmetrics.registerFont(TTFont('Arial-Bold', r'C:\Windows\Fonts\arialbd.ttf'))
+pdfmetrics.registerFont(TTFont('Arial-Italic', r'C:\Windows\Fonts\ariali.ttf'))
+pdfmetrics.registerFont(TTFont('Arial-BoldItalic', r'C:\Windows\Fonts\arialbi.ttf'))
+from reportlab.lib.fonts import addMapping
+addMapping('Arial', 0, 0, 'Arial')
+addMapping('Arial', 1, 0, 'Arial-Bold')
+addMapping('Arial', 0, 1, 'Arial-Italic')
+addMapping('Arial', 1, 1, 'Arial-BoldItalic')
+
+
+BASE_DIR = r'D:\Projects\Kodepanda\Nusaklim\nusaklim'
+pdf_path = os.path.join(BASE_DIR, 'report', '4.Laporan_Audit_Gap_Data_dan_Ketahanan_Model_PPKS.pdf')
+fig_dir = os.path.join(BASE_DIR, 'figures_gap')
 
 class NumberedCanvas(canvas.Canvas):
     def __init__(self, *args, **kwargs):
@@ -30,7 +46,7 @@ class NumberedCanvas(canvas.Canvas):
         if self._pageNumber == 1:
             return
         self.saveState()
-        self.setFont('Helvetica', 8)
+        self.setFont('Arial', 8)
         self.setFillColor(colors.HexColor('#475569'))
         self.drawString(40, 805, 'Pusat Penelitian Kelapa Sawit (PPKS) - NusaKlim Weather AI')
         self.drawRightString(555, 805, 'Laporan Audit Gap Data & Ketahanan Model')
@@ -54,21 +70,21 @@ COLOR_BG_LIGHT = colors.HexColor('#F8FAFC')
 COLOR_BG_ACCENT = colors.HexColor('#EFF6FF')
 COLOR_BORDER = colors.HexColor('#E2E8F0')
 
-style_cover_title = ParagraphStyle('CoverTitle', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=18.5, leading=23.5, textColor=COLOR_PRIMARY, alignment=1, spaceAfter=10)
-style_cover_subtitle = ParagraphStyle('CoverSubtitle', parent=styles['Normal'], fontName='Helvetica', fontSize=10.5, leading=14.5, textColor=COLOR_BODY, alignment=1, spaceAfter=18)
-style_cover_meta = ParagraphStyle('CoverMeta', parent=styles['Normal'], fontName='Helvetica', fontSize=8.5, leading=12, textColor=COLOR_MUTED, alignment=1)
-style_h1 = ParagraphStyle('SectionH1', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=12, leading=15, textColor=COLOR_PRIMARY, spaceBefore=9, spaceAfter=4, keepWithNext=True)
-style_h2 = ParagraphStyle('SectionH2', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=9.5, leading=12.5, textColor=COLOR_SECONDARY, spaceBefore=7, spaceAfter=3, keepWithNext=True)
-style_body = ParagraphStyle('BodyDark', parent=styles['Normal'], fontName='Helvetica', fontSize=8.2, leading=11.8, textColor=COLOR_BODY, spaceAfter=4, alignment=4)
-style_callout = ParagraphStyle('CalloutText', parent=styles['Normal'], fontName='Helvetica-Oblique', fontSize=7.8, leading=11, textColor=COLOR_PRIMARY)
-style_table_header = ParagraphStyle('TableHeader', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=7.5, leading=9.5, textColor=colors.white, alignment=1)
-style_table_cell = ParagraphStyle('TableCell', parent=styles['Normal'], fontName='Helvetica', fontSize=7.2, leading=9.2, textColor=COLOR_BODY)
-style_table_cell_bold = ParagraphStyle('TableCellBold', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=7.2, leading=9.2, textColor=COLOR_DARK)
-style_table_cell_center = ParagraphStyle('TableCellCenter', parent=styles['Normal'], fontName='Helvetica', fontSize=7.2, leading=9.2, textColor=COLOR_BODY, alignment=1)
-style_caption = ParagraphStyle('FigCaption', parent=styles['Normal'], fontName='Helvetica-Bold', fontSize=7.5, leading=9.5, textColor=COLOR_MUTED, alignment=1, spaceBefore=2, spaceAfter=6)
+style_cover_title = ParagraphStyle('CoverTitle', parent=styles['Normal'], fontName='Arial-Bold', fontSize=18.5, leading=23.5, textColor=COLOR_PRIMARY, alignment=1, spaceAfter=10)
+style_cover_subtitle = ParagraphStyle('CoverSubtitle', parent=styles['Normal'], fontName='Arial', fontSize=10.5, leading=14.5, textColor=COLOR_BODY, alignment=1, spaceAfter=18)
+style_cover_meta = ParagraphStyle('CoverMeta', parent=styles['Normal'], fontName='Arial', fontSize=8.5, leading=12, textColor=COLOR_MUTED, alignment=1)
+style_h1 = ParagraphStyle('SectionH1', parent=styles['Normal'], fontName='Arial-Bold', fontSize=12, leading=15, textColor=COLOR_PRIMARY, spaceBefore=9, spaceAfter=4, keepWithNext=True)
+style_h2 = ParagraphStyle('SectionH2', parent=styles['Normal'], fontName='Arial-Bold', fontSize=9.5, leading=12.5, textColor=COLOR_SECONDARY, spaceBefore=7, spaceAfter=3, keepWithNext=True)
+style_body = ParagraphStyle('BodyDark', parent=styles['Normal'], fontName='Arial', fontSize=8.2, leading=11.8, textColor=COLOR_BODY, spaceAfter=4, alignment=4)
+style_callout = ParagraphStyle('CalloutText', parent=styles['Normal'], fontName='Arial-Italic', fontSize=7.8, leading=11, textColor=COLOR_PRIMARY)
+style_table_header = ParagraphStyle('TableHeader', parent=styles['Normal'], fontName='Arial-Bold', fontSize=7.5, leading=9.5, textColor=colors.white, alignment=1)
+style_table_cell = ParagraphStyle('TableCell', parent=styles['Normal'], fontName='Arial', fontSize=7.2, leading=9.2, textColor=COLOR_BODY)
+style_table_cell_bold = ParagraphStyle('TableCellBold', parent=styles['Normal'], fontName='Arial-Bold', fontSize=7.2, leading=9.2, textColor=COLOR_DARK)
+style_table_cell_center = ParagraphStyle('TableCellCenter', parent=styles['Normal'], fontName='Arial', fontSize=7.2, leading=9.2, textColor=COLOR_BODY, alignment=1)
+style_caption = ParagraphStyle('FigCaption', parent=styles['Normal'], fontName='Arial-Bold', fontSize=7.5, leading=9.5, textColor=COLOR_MUTED, alignment=1, spaceBefore=2, spaceAfter=6)
 
 def make_callout_box(text, title='RINGKASAN TEMUAN AUDIT', width=515):
-    p_title = Paragraph(f'<b>{title}</b>', ParagraphStyle('CT', fontName='Helvetica-Bold', fontSize=7.8, leading=10, textColor=COLOR_PRIMARY, spaceAfter=2))
+    p_title = Paragraph(f'<b>{title}</b>', ParagraphStyle('CT', fontName='Arial-Bold', fontSize=7.8, leading=10, textColor=COLOR_PRIMARY, spaceAfter=2))
     p_text = Paragraph(text, style_callout)
     tbl = Table([[p_title], [p_text]], colWidths=[width])
     tbl.setStyle(TableStyle([
@@ -85,22 +101,22 @@ story = []
 story.append(Spacer(1, 15))
 header_inst = Paragraph(
     '<b>PUSAT PENELITIAN KELAPA SAWIT (PPKS)</b><br/><font color=\'#64748B\' size=\'8.5\'>Indonesian Oil Palm Research Institute - Proyek NusaKlim Weather AI</font>',
-    ParagraphStyle('CoverInst', fontName='Helvetica', fontSize=10, leading=13, textColor=COLOR_PRIMARY, alignment=1)
+    ParagraphStyle('CoverInst', fontName='Arial', fontSize=10, leading=13, textColor=COLOR_PRIMARY, alignment=1)
 )
 story.append(header_inst)
 story.append(Spacer(1, 10))
 story.append(HRFlowable(width='100%', thickness=2, color=COLOR_PRIMARY, spaceBefore=0, spaceAfter=16))
 
 story.append(Paragraph('LAPORAN AUDIT GAP DATA, KONTINUITAS TELEMETRI,<br/>DAN STRATEGI KETAHANAN MODEL PREDIKSI CUACA', style_cover_title))
-story.append(Paragraph('Evaluasi Empiris Tingkat Kelengkapan Observasi, Karakteristik Celah Data (Missing Days), dan Uji Ketahanan (Stress-Testing) Model Ramalan 7 Hari pada 184 Stasiun AWS NusaKlim', style_cover_subtitle))
+story.append(Paragraph('Evaluasi Tingkat Kelengkapan Data, Pola Celah Data (Missing Days), dan Uji Ketahanan (Stress-Test) Model Ramalan 7 Hari pada 183 Stasiun AWS NusaKlim', style_cover_subtitle))
 
 cover_box_content = [
     [Paragraph('<b>Fokus Audit</b>', style_table_cell_bold), Paragraph('Tingkat Kelengkapan Data, Profil Durasi Gap, dan Ketahanan Model 7-Hari', style_table_cell)],
-    [Paragraph('<b>Populasi Data</b>', style_table_cell_bold), Paragraph('114.651 Baris Data Harian dari 184 Stasiun AWS NusaKlim (2022?2026)', style_table_cell)],
+    [Paragraph('<b>Populasi Data</b>', style_table_cell_bold), Paragraph('114.507 Baris Data Harian dari 183 Stasiun AWS NusaKlim (2022&ndash;2026)', style_table_cell)],
     [Paragraph('<b>Tingkat Kelengkapan</b>', style_table_cell_bold), Paragraph('Rata-rata: <b>84.47 %</b> | Median: <b>92.50 %</b> (121 Stasiun &ge; 80%)', style_table_cell)],
-    [Paragraph('<b>Profil Celah Data</b>', style_table_cell_bold), Paragraph('55.9% Gap adalah Micro-Gap Singkat (1?3 Hari akibat Sinyal / Baterai Solar)', style_table_cell)],
-    [Paragraph('<b>Hasil Stress-Test</b>', style_table_cell_bold), Paragraph('Model Tetap Stabil dan Akurat (Error MAE &le; 1.26 ?C bahkan saat 10% Data Hilang)', style_table_cell)],
-    [Paragraph('<b>Status Kelayakan</b>', style_table_cell_bold), Paragraph('<b>SANGAT FEASIBLE &amp; READY TO DEPLOY</b> (Didukung 4 Pilar Resiliensi AI)', style_table_cell)],
+    [Paragraph('<b>Profil Celah Data</b>', style_table_cell_bold), Paragraph('55.9% Gap adalah Gap Pendek (1&ndash;3 Hari akibat Gangguan Sinyal / Baterai Panel Surya)', style_table_cell)],
+    [Paragraph('<b>Hasil Stress-Test</b>', style_table_cell_bold), Paragraph('Model Tetap Stabil dan Akurat (Error MAE &le; 1.26&deg;C bahkan saat 10% Data Hilang)', style_table_cell)],
+    [Paragraph('<b>Status Kelayakan</b>', style_table_cell_bold), Paragraph('<b>SANGAT LAYAK &amp; SIAP DIOPERASIKAN</b> (Didukung 4 Pilar Ketahanan AI)', style_table_cell)],
 ]
 tbl_cover = Table(cover_box_content, colWidths=[130, 360])
 tbl_cover.setStyle(TableStyle([
@@ -121,7 +137,7 @@ story.append(Paragraph('1. Ringkasan Eksekutif &amp; Latar Belakang Audit Celah 
 story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=5))
 
 story.append(Paragraph(
-    'Pengoperasian stasiun Automatic Weather Station (AWS) di wilayah perkebunan kelapa sawit yang terpencil secara alami menghadapi tantangan lingkungan nyata, seperti cuaca mendung berkepanjangan yang menurunkan daya baterai *solar panel*, penurunan sinyal telekomunikasi GSM/GPRS lokal, hingga masa tunggu penggantian suku cadang sensor. Kondisi ini memicu timbulnya <b>celah data (*data gaps / missing days*)</b> dalam deret waktu telemetri.',
+    'Stasiun Automatic Weather Station (AWS) yang beroperasi di wilayah perkebunan kelapa sawit yang terpencil menghadapi tantangan lapangan yang nyata, seperti cuaca mendung berkepanjangan yang menurunkan daya baterai panel surya, sinyal telekomunikasi GSM/GPRS yang lemah, hingga waktu tunggu penggantian suku cadang sensor. Kondisi ini menyebabkan munculnya <b>celah data (hari-hari dengan data hilang)</b> dalam deret waktu telemetri.',
     style_body
 ))
 story.append(Paragraph(
@@ -135,17 +151,17 @@ story.append(Paragraph('2. Metrik Kuantitatif Kelengkapan &amp; Distribusi Duras
 story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=5))
 
 story.append(Paragraph(
-    'Berdasarkan audit komputasi menyeluruh terhadap 184 stasiun pengamatan (rentang operasional 2022?2026), diperoleh parameter kelengkapan data sebagai berikut:',
+    'Berdasarkan audit menyeluruh terhadap 183 stasiun pengamatan (rentang operasional 2022&ndash;2026), diperoleh parameter kelengkapan data sebagai berikut:',
     style_body
 ))
 
 # Table Metrics
 gap_metrics_data = [
     [Paragraph('Kategori Evaluasi', style_table_header), Paragraph('Nilai Parameter', style_table_header), Paragraph('Jumlah Stasiun / Kejadian', style_table_header), Paragraph('Interpretasi Operasional Lapangan', style_table_header)],
-    [Paragraph('<b>Rata-rata Kelengkapan</b>', style_table_cell_bold), Paragraph('<b>84.47 %</b>', style_table_cell_center), Paragraph('184 Stasiun AWS', style_table_cell_center), Paragraph('Sangat tinggi dan melampaui standar minimal industri AI agroklimat (70%).', style_table_cell)],
+    [Paragraph('<b>Rata-rata Kelengkapan</b>', style_table_cell_bold), Paragraph('<b>84.47 %</b>', style_table_cell_center), Paragraph('183 Stasiun AWS', style_table_cell_center), Paragraph('Sangat tinggi dan melampaui standar minimal industri AI agroklimat (70%).', style_table_cell)],
     [Paragraph('<b>Median Kelengkapan</b>', style_table_cell_bold), Paragraph('<b>92.50 %</b>', style_table_cell_center), Paragraph('50% Stasiun Teratas', style_table_cell_center), Paragraph('Mayoritas stasiun aktif beroperasi dengan kontinuitas data nyaris sempurna.', style_table_cell)],
-    [Paragraph('<b>Stasiun Sangat Sehat (&ge; 90%)</b>', style_table_cell), Paragraph('55.2 % Populasi', style_table_cell_center), Paragraph('101 Stasiun AWS', style_table_cell_center), Paragraph('Menjadi jangkar utama (*data backbone*) dalam melatih model dasar AI.', style_table_cell)],
-    [Paragraph('<b>Stasiun Sehat (80% - 89%)</b>', style_table_cell), Paragraph('10.9 % Populasi', style_table_cell_center), Paragraph('20 Stasiun AWS', style_table_cell_center), Paragraph('Beroperasi stabil dengan intermitensi transmisi GSM minor.', style_table_cell)],
+    [Paragraph('<b>Stasiun Sangat Sehat (&ge; 90%)</b>', style_table_cell), Paragraph('55.2 % Populasi', style_table_cell_center), Paragraph('101 Stasiun AWS', style_table_cell_center), Paragraph('Menjadi tulang punggung utama dalam melatih model dasar AI.', style_table_cell)],
+    [Paragraph('<b>Stasiun Sehat (80% - 89%)</b>', style_table_cell), Paragraph('10.9 % Populasi', style_table_cell_center), Paragraph('20 Stasiun AWS', style_table_cell_center), Paragraph('Beroperasi stabil dengan gangguan transmisi GSM yang jarang terjadi.', style_table_cell)],
     [Paragraph('<b>Stasiun Cukup (50% - 79%)</b>', style_table_cell), Paragraph('27.3 % Populasi', style_table_cell_center), Paragraph('50 Stasiun AWS', style_table_cell_center), Paragraph('Pernah mengalami jeda musim hujan atau pemeliharaan berkala.', style_table_cell)],
     [Paragraph('<b>Stasiun Baru / Servis (&lt; 50%)</b>', style_table_cell), Paragraph('6.6 % Populasi', style_table_cell_center), Paragraph('12 Stasiun AWS', style_table_cell_center), Paragraph('Stasiun yang baru dipasang di pertengahan 2026 atau pergantian unit hardware.', style_table_cell)],
 ]
@@ -182,27 +198,27 @@ if os.path.exists(fig2_p):
     story.append(Image(fig2_p, width=14.5*cm, height=5.5*cm))
     story.append(Paragraph('<b>Gambar 2:</b> Distribusi Frekuensi Durasi Celah Data (Total 1.807 Kejadian Gap) Berdasarkan Faktor Penyebab Lapangan.', style_caption))
 
-story.append(Paragraph('3. Empat Pilar Arsitektur Ketahanan Model (*Resilience Pillars*)', style_h1))
+story.append(Paragraph('3. Empat Pilar Ketahanan Model', style_h1))
 story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=5))
 
 story.append(Paragraph(
-    'Meskipun terdapat celah data di lapangan, model peramalan cuaca 7 hari dirancang dengan <b>4 pilar teknologi resiliensi</b> yang menjamin stabilitas dan akurasi sistem tanpa pernah mengalami *crash/error*:',
+    'Meskipun terdapat celah data di lapangan, model peramalan cuaca 7 hari dirancang dengan <b>4 pilar teknologi ketahanan</b> yang menjaga sistem tetap stabil dan akurat tanpa pernah gagal beroperasi:',
     style_body
 ))
 
 pilar_data = [
     [Paragraph('Pilar Ketahanan', style_table_header), Paragraph('Mekanisme Kerja Rekayasa AI', style_table_header), Paragraph('Dampak Terhadap Keandalan Model', style_table_header)],
-    [Paragraph('<b>1. Global Multi-Station Pooling</b>', style_table_cell_bold),
-     Paragraph('Pelatihan 1 model global pada 114.651 records gabungan dengan fitur kategori stasiun (<code>stnname_cat</code>).', style_table_cell),
-     Paragraph('<b>Transfer Pengetahuan:</b> Pola cuaca dari 101 stasiun yang sangat lengkap (&ge;90%) secara otomatis mentransfer relasi fisisnya ke stasiun yang memiliki gap.', style_table_cell)],
-    [Paragraph('<b>2. Native Missing Handling (LightGBM)</b>', style_table_cell_bold),
-     Paragraph('Algoritma percabangan otomatis (*Default Missing Direction*) pada setiap simpul pohon keputusan.', style_table_cell),
-     Paragraph('<b>Anti-Crash:</b> Jika nilai sensor kemarin <code>NaN</code>, model secara cerdas mengarahkan kalkulasi ke cabang alternatif tanpa perlu imputasi nilai buatan.', style_table_cell)],
-    [Paragraph('<b>3. Astronomical Seasonal Priors</b>', style_table_cell_bold),
+    [Paragraph('<b>1. Pelatihan Gabungan Lintas Stasiun</b>', style_table_cell_bold),
+     Paragraph('Pelatihan 1 model global pada 114.507 baris data gabungan dari seluruh 183 stasiun. Identitas stasiun (<code>stnname</code>) sengaja <b>tidak</b> dijadikan fitur input (lihat Laporan 3 Bab 2.1) - model murni belajar dari 29 fitur cuaca/kalender/fisis yang bisa digeneralisasi ke stasiun baru mana pun.', style_table_cell),
+     Paragraph('<b>Transfer Pengetahuan:</b> Pola cuaca dari 101 stasiun yang sangat lengkap (&ge;90%) secara otomatis mentransfer relasi fisisnya ke stasiun yang memiliki gap, karena model tidak "menghafal" ID stasiun tertentu.', style_table_cell)],
+    [Paragraph('<b>2. Penanganan Data Hilang pada Fitur Input</b>', style_table_cell_bold),
+     Paragraph('Produksi memakai algoritma berbeda per variabel (Tabel 3.3 Laporan 3): 3 dari 7 variabel (Curah Hujan, Radiasi, Arah Angin) memakai LightGBM yang bisa menangani nilai kosong (<code>NaN</code>) secara native lewat percabangan pohon keputusan. 4 variabel lainnya (Suhu, Kelembapan, Tekanan, Kecepatan Angin) memakai Ridge/Logistic Regression yang <b>menolak input NaN</b> - untuk ini, sistem API (<code>forecast_service.py</code>) melakukan <i>forward-fill</i> per stasiun (mengisi dengan observasi valid terakhir stasiun itu sendiri) sebelum prediksi, dan jika tetap kosong akan mundur ke baris lengkap terakhir yang tersedia.', style_table_cell),
+     Paragraph('<b>Tahan Terhadap Error:</b> Kombinasi penanganan native (LightGBM) dan forward-fill (Ridge/Logistic) memastikan endpoint ramalan tidak pernah gagal total akibat satu nilai sensor yang kosong, untuk ketujuh variabel sekaligus.', style_table_cell)],
+    [Paragraph('<b>3. Pola Musiman Berbasis Kalender</b>', style_table_cell_bold),
      Paragraph('Fitur siklus kontinu <code>sin/cos(2&pi; DOY/365)</code> dan variabel kalender bulanan.', style_table_cell),
-     Paragraph('<b>Zero-Downtime:</b> Fitur ini aktif 100% setiap hari dari kalender bumi tanpa terpengaruh ada/tidaknya transmisi sinyal AWS kebun.', style_table_cell)],
-    [Paragraph('<b>4. Dynamic Fallback Inference</b>', style_table_cell_bold),
-     Paragraph('Mekanisme penarikan status observasi valid terakhir (*Latest Valid Observation*) jika stasiun baru offline 1?2 hari.', style_table_cell),
+     Paragraph('<b>Selalu Aktif:</b> Fitur ini tersedia 100% setiap hari dari kalender karena dihitung dari tanggal, tidak terpengaruh ada/tidaknya transmisi sinyal AWS kebun.', style_table_cell)],
+    [Paragraph('<b>4. Estimasi Cadangan saat Offline</b>', style_table_cell_bold),
+     Paragraph('Mekanisme penarikan status observasi valid terakhir (data terakhir yang masih tercatat) jika stasiun baru offline 1&ndash;2 hari.', style_table_cell),
      Paragraph('<b>Kontinuitas Ramalan:</b> Pengguna dashboard web tetap mendapatkan estimasi cuaca 7 hari yang realistis berdasarkan dinamika musiman lokal.', style_table_cell)],
 ]
 
@@ -219,22 +235,22 @@ story.append(tbl_pilar)
 story.append(PageBreak())
 
 # SECTION 4 & 5
-story.append(Paragraph('4. Uji Ketahanan Model (*Stress-Testing Experiment*)', style_h1))
+story.append(Paragraph('4. Uji Ketahanan Model (Stress-Test)', style_h1))
 story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=5))
 
 story.append(Paragraph(
-    'Untuk membuktikan ketahanan model secara empiris, dilakukan uji simulasi ekstrem (*Stress-Testing*) di mana sejumlah fitur pada data uji secara sengaja dihilangkan (*injected random missing values*) dari level 0% hingga 50%:',
+    'Untuk membuktikan ketahanan model secara empiris, dilakukan uji simulasi ekstrem (stress-test) dengan sengaja menghilangkan sebagian data pada data uji secara acak, dari level 0% hingga 50%:',
     style_body
 ))
 
 # Stress Table
 stress_table_data = [
-    [Paragraph('Tingkat Missing Data Diinjeksikan', style_table_header), Paragraph('Suhu MAE (?C)', style_table_header), Paragraph('Suhu RMSE (?C)', style_table_header), Paragraph('Kenaikan Error (&Delta;MAE)', style_table_header), Paragraph('Status Keandalan Agroklimat Lapangan', style_table_header)],
-    [Paragraph('<b>0% (Kondisi Normal)</b>', style_table_cell_bold), Paragraph('0.997 ?C', style_table_cell_center), Paragraph('1.463 ?C', style_table_cell_center), Paragraph('Baseline', style_table_cell_center), Paragraph('Sangat Akurat (Presisi Tinggi)', style_table_cell)],
-    [Paragraph('<b>10% Missing Random</b>', style_table_cell), Paragraph('1.262 ?C', style_table_cell_center), Paragraph('1.809 ?C', style_table_cell_center), Paragraph('+ 0.265 ?C', style_table_cell_center), Paragraph('Sangat Baik &amp; Sangat Layak Operasional', style_table_cell)],
-    [Paragraph('<b>20% Missing Random</b>', style_table_cell), Paragraph('1.538 ?C', style_table_cell_center), Paragraph('2.143 ?C', style_table_cell_center), Paragraph('+ 0.541 ?C', style_table_cell_center), Paragraph('Baik (Masih dalam Toleransi Agroklimat)', style_table_cell)],
-    [Paragraph('<b>30% Missing Random</b>', style_table_cell), Paragraph('1.900 ?C', style_table_cell_center), Paragraph('2.554 ?C', style_table_cell_center), Paragraph('+ 0.903 ?C', style_table_cell_center), Paragraph('Cukup (Estimasi Tren Musiman Masih Valid)', style_table_cell)],
-    [Paragraph('<b>50% Missing Ekstrem</b>', style_table_cell), Paragraph('2.600 ?C', style_table_cell_center), Paragraph('3.235 ?C', style_table_cell_center), Paragraph('+ 1.603 ?C', style_table_cell_center), Paragraph('Perlu Intervensi Perbaikan Sensor Stasiun', style_table_cell)],
+    [Paragraph('Tingkat Data Hilang Disimulasikan', style_table_header), Paragraph('Suhu MAE (&deg;C)', style_table_header), Paragraph('Suhu RMSE (&deg;C)', style_table_header), Paragraph('Kenaikan Error (&Delta;MAE)', style_table_header), Paragraph('Status Keandalan Agroklimat Lapangan', style_table_header)],
+    [Paragraph('<b>0% (Kondisi Normal)</b>', style_table_cell_bold), Paragraph('0.997&deg;C', style_table_cell_center), Paragraph('1.463&deg;C', style_table_cell_center), Paragraph('Baseline', style_table_cell_center), Paragraph('Sangat Akurat (Presisi Tinggi)', style_table_cell)],
+    [Paragraph('<b>10% Data Hilang Acak</b>', style_table_cell), Paragraph('1.262&deg;C', style_table_cell_center), Paragraph('1.809&deg;C', style_table_cell_center), Paragraph('+ 0.265&deg;C', style_table_cell_center), Paragraph('Sangat Baik &amp; Sangat Layak Operasional', style_table_cell)],
+    [Paragraph('<b>20% Data Hilang Acak</b>', style_table_cell), Paragraph('1.538&deg;C', style_table_cell_center), Paragraph('2.143&deg;C', style_table_cell_center), Paragraph('+ 0.541&deg;C', style_table_cell_center), Paragraph('Baik (Masih dalam Toleransi Agroklimat)', style_table_cell)],
+    [Paragraph('<b>30% Data Hilang Acak</b>', style_table_cell), Paragraph('1.900&deg;C', style_table_cell_center), Paragraph('2.554&deg;C', style_table_cell_center), Paragraph('+ 0.903&deg;C', style_table_cell_center), Paragraph('Cukup (Estimasi Tren Musiman Masih Valid)', style_table_cell)],
+    [Paragraph('<b>50% Data Hilang Ekstrem</b>', style_table_cell), Paragraph('2.600&deg;C', style_table_cell_center), Paragraph('3.235&deg;C', style_table_cell_center), Paragraph('+ 1.603&deg;C', style_table_cell_center), Paragraph('Perlu Intervensi Perbaikan Sensor Stasiun', style_table_cell)],
 ]
 
 tbl_stress = Table(stress_table_data, colWidths=[120, 75, 75, 85, 160])
@@ -253,7 +269,7 @@ story.append(Spacer(1, 4))
 fig3_p = os.path.join(fig_dir, 'fig_gap3_stress_test_degradation.png')
 if os.path.exists(fig3_p):
     story.append(Image(fig3_p, width=15.0*cm, height=5.5*cm))
-    story.append(Paragraph('<b>Gambar 3:</b> Kurva Resiliensi Error Prediksi Suhu (MAE &amp; RMSE) terhadap Injeksi Celah Data 0% s/d 50%.', style_caption))
+    story.append(Paragraph('<b>Gambar 3:</b> Kurva Ketahanan Error Prediksi Suhu (MAE &amp; RMSE) terhadap Simulasi Data Hilang 0% s/d 50%.', style_caption))
 
 story.append(Spacer(1, 4))
 
@@ -266,15 +282,15 @@ story.append(Paragraph(
     style_body
 ))
 story.append(Paragraph(
-    '1. <b>Sistem Peringatan Dini Offline Otomatis (Early Warning Alert):</b> Pasang bot notifikasi (WhatsApp/Telegram/Email) yang memicu alert otomatis ke PIC Kebun jika stasiun tidak mengirimkan data selama &gt; 48 jam berturut-turut.<br/>'
-    '2. <b>Pembersihan Sensor Tiap Kuartal (Quarterly Cleaning):</b> Bersihkan corong penakar hujan (*rain gauge*) dari dedaunan sawit dan debu pada panel surya setiap 3 bulan.<br/>'
-    '3. <b>Sinkronisasi Otomatis RTC Jam Alat:</b> Pastikan logger selalu melakukan sinkronisasi NTP server saat terkoneksi internet guna mencegah eror timestamp masa lampau.',
+    '1. <b>Peringatan Dini Otomatis saat Stasiun Offline:</b> Pasang bot notifikasi (WhatsApp/Telegram/Email) yang mengirim peringatan otomatis ke PIC Kebun jika stasiun tidak mengirimkan data selama &gt; 48 jam berturut-turut.<br/>'
+    '2. <b>Pembersihan Sensor Tiap 3 Bulan:</b> Bersihkan corong penakar hujan dari dedaunan sawit dan debu pada panel surya setiap 3 bulan.<br/>'
+    '3. <b>Sinkronisasi Otomatis Jam Alat (RTC):</b> Pastikan alat logger selalu menyinkronkan jam ke NTP server saat terhubung internet, agar waktu pencatatan data (timestamp) tidak meleset.',
     style_body
 ))
 
 story.append(Spacer(1, 8))
 story.append(make_callout_box(
-    'Berdasarkan audit kelengkapan 84.47%, distribusi gap 1?3 hari, dan hasil stress-test empiris, disimpulkan bahwa sistem AI NusaKlim SANGAT TANGGUH, STABIL, dan SIAP BEROPERASI PENUH untuk melayani kebutuhan perkebunan PPKS.',
+    'Berdasarkan audit kelengkapan 84.47%, mayoritas gap berdurasi 1&ndash;3 hari, dan hasil uji ketahanan (stress-test) di atas, disimpulkan bahwa sistem AI NusaKlim SANGAT TANGGUH, STABIL, dan SIAP BEROPERASI PENUH untuk melayani kebutuhan perkebunan PPKS.',
     title='KESIMPULAN AUDIT FINAL'
 ))
 

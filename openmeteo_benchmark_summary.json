@@ -1,23 +1,110 @@
 {
-  "evaluation_period": "2026-06-01 to 2026-08-15",
+  "evaluation_period": "2026-07-21 to 2026-08-19",
+  "primary_station": "222",
   "stations_evaluated": 4,
+  "algo_used": {
+    "temp_avg": "Ridge Regression (Linear Baseline)",
+    "humidity_avg": "Ridge Regression (Linear Baseline)",
+    "rainfall_total_mm": "LightGBM (Gradient Boosting)"
+  },
+  "station_results": {
+    "222": {
+      "station_name": "Rambutan",
+      "company": "PalmCo - Regional 1",
+      "lat": 3.37936,
+      "lon": 99.1416,
+      "n_days_matched": 30,
+      "open_meteo": {
+        "temp_mae": 1.542,
+        "temp_rmse": 1.692,
+        "temp_bias": -1.542,
+        "humidity_mae": 2.889,
+        "rainfall_mae": 6.737
+      },
+      "nusaklim_ai": {
+        "temp_mae": 0.756,
+        "temp_rmse": 0.933,
+        "temp_bias": -0.189,
+        "humidity_mae": 3.249,
+        "rainfall_mae": 6.325
+      }
+    },
+    "2179": {
+      "station_name": "Sei Pagar",
+      "company": "PalmCo - Regional 3",
+      "lat": 0.326288,
+      "lon": 101.352241,
+      "n_days_matched": 30,
+      "open_meteo": {
+        "temp_mae": 0.725,
+        "temp_rmse": 0.822,
+        "temp_bias": -0.53,
+        "humidity_mae": 7.51,
+        "rainfall_mae": 4.342
+      },
+      "nusaklim_ai": {
+        "temp_mae": 0.807,
+        "temp_rmse": 0.94,
+        "temp_bias": -0.321,
+        "humidity_mae": 2.054,
+        "rainfall_mae": 3.837
+      }
+    },
+    "248": {
+      "station_name": "Bentayan",
+      "company": "PalmCo - Regional 7",
+      "lat": -2.4558,
+      "lon": 104.199,
+      "n_days_matched": 30,
+      "open_meteo": {
+        "temp_mae": 0.85,
+        "temp_rmse": 1.059,
+        "temp_bias": 0.76,
+        "humidity_mae": 13.514,
+        "rainfall_mae": 1.243
+      },
+      "nusaklim_ai": {
+        "temp_mae": 0.71,
+        "temp_rmse": 0.933,
+        "temp_bias": -0.019,
+        "humidity_mae": 1.778,
+        "rainfall_mae": 3.715
+      }
+    },
+    "267": {
+      "station_name": "Meliau",
+      "company": "PalmCo - Regional 5",
+      "lat": -0.07283,
+      "lon": 110.289,
+      "n_days_matched": 30,
+      "open_meteo": {
+        "temp_mae": 0.893,
+        "temp_rmse": 1.114,
+        "temp_bias": -0.634,
+        "humidity_mae": 3.524,
+        "rainfall_mae": 1.747
+      },
+      "nusaklim_ai": {
+        "temp_mae": 0.749,
+        "temp_rmse": 1.085,
+        "temp_bias": -0.074,
+        "humidity_mae": 3.286,
+        "rainfall_mae": 4.324
+      }
+    }
+  },
   "open_meteo_metrics": {
-    "avg_temp_mae": 2.672,
-    "avg_temp_rmse": 3.013,
-    "avg_temp_bias": 0.045,
-    "avg_humidity_mae": 7.136,
-    "avg_rainfall_mae": 6.832
+    "avg_temp_mae": 1.002,
+    "avg_temp_rmse": 1.172,
+    "avg_temp_bias": -0.487,
+    "avg_humidity_mae": 6.859,
+    "avg_rainfall_mae": 3.517
   },
   "nusaklim_local_ai_metrics": {
-    "avg_temp_mae": 0.801,
-    "avg_temp_rmse": 1.052,
-    "avg_temp_bias": 0.021,
-    "avg_humidity_mae": 2.732,
-    "avg_rainfall_mae": 6.931
-  },
-  "key_takeaways": [
-    "Open-Meteo Global API memiliki rata-rata error Suhu MAE 1.15?C hingga 1.30?C pada kebun kelapa sawit karena resolusi grid global (11 km) tidak menangkap mikroklimat kanopi lokal.",
-    "NusaKlim Local LightGBM unggul 30-35% lebih presisi (MAE 0.80?C) karena dilatih langsung dari 184 stasiun telemetri AWS di dalam areal perkebunan.",
-    "Open-Meteo tetap sangat berguna sebagai fallback input dan fitur komparatif pendukung di antarmuka website."
-  ]
+    "avg_temp_mae": 0.756,
+    "avg_temp_rmse": 0.973,
+    "avg_temp_bias": -0.151,
+    "avg_humidity_mae": 2.592,
+    "avg_rainfall_mae": 4.55
+  }
 }

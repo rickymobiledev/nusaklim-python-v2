@@ -1,0 +1,17 @@
+{
+  "issue_date": "2026-08-12",
+  "station_ids": [
+    "201",
+    "248",
+    "227",
+    "222",
+    "224"
+  ],
+  "files": [
+    "fig_merged4_trajectory_201.png",
+    "fig_merged4_trajectory_248.png",
+    "fig_merged4_trajectory_227.png",
+    "fig_merged4_trajectory_222.png",
+    "fig_merged4_trajectory_224.png"
+  ]
+}

@@ -13,9 +13,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 def run_nusaklim_pipeline(
-    input_csv=r"d:\Downloads\nusaklim\nusaklim-aws-reduce.csv",
-    output_daily_csv=r"d:\Downloads\nusaklim\nusaklim_daily_aggregated.csv",
-    figures_output_dir=r"d:\Downloads\nusaklim\figures",
+    input_csv=r"D:\Projects\Kodepanda\Nusaklim\nusaklim\data_raw\nusaklim-aws-reduce.csv",
+    output_daily_csv=r"D:\Projects\Kodepanda\Nusaklim\nusaklim\nusaklim_daily_aggregated.csv",
+    figures_output_dir=r"D:\Projects\Kodepanda\Nusaklim\nusaklim\figures",
     chunk_size=500000
 ):
     print("=" * 75)
@@ -75,47 +75,47 @@ def run_nusaklim_pipeline(
             
         retained_valid_rows += len(chunk)
         
-        # 3. Quality Control (QC) & Konversi Satuan (Sesuai Notulen Rapat)
-        # Suhu (?F -> ?C, ambang batas tropis 12?C - 45?C, filter kode 3276.7?F & 0?F)
+        # 3. Quality Control (QC) & Konversi Satuan (Kriteria Kewajaran Fisik direvisi - Notulen Rapat)
+        # Suhu (F -> C, batas kewajaran 0C - 100C, filter kode error 3276.7F & 0F)
         temp_raw = pd.to_numeric(chunk['tempout'].replace('---', np.nan), errors='coerce')
         temp_c = (temp_raw - 32.0) * (5.0 / 9.0)
-        temp_invalid = (temp_c < 12.0) | (temp_c > 45.0) | (temp_raw == 3276.7) | (temp_raw == 0)
+        temp_invalid = (temp_c < 0.0) | (temp_c > 100.0) | (temp_raw == 3276.7) | (temp_raw == 0)
         qc_flags['temp_qc_dropped'] += temp_invalid.sum()
         temp_c = temp_c.mask(temp_invalid)
-        
-        # Barometer (inHg -> hPa, ambang batas 920 - 1040 hPa)
+
+        # Barometer (inHg -> hPa, batas kewajaran 500 - 1200 hPa)
         bar_raw = pd.to_numeric(chunk['bar'].replace('---', np.nan), errors='coerce')
         bar_hpa = bar_raw * 33.864
-        bar_invalid = (bar_hpa < 920.0) | (bar_hpa > 1040.0)
+        bar_invalid = (bar_hpa < 500.0) | (bar_hpa > 1200.0)
         qc_flags['bar_qc_dropped'] += bar_invalid.sum()
         bar_hpa = bar_hpa.mask(bar_invalid)
-        
-        # Curah Hujan (rain15 * 12.70 -> mm, filter lonjakan rollover > 60 mm/15-min)
+
+        # Curah Hujan (rain15 * 12.70 -> mm, batas kewajaran 0 - 1000 mm per interval)
         rain_raw = pd.to_numeric(chunk['rain15'].replace('---', np.nan), errors='coerce')
-        rain_invalid = (rain_raw < 0) | (rain_raw > 4.72)
-        qc_flags['rain_qc_dropped'] += rain_invalid.sum()
-        rain_raw = rain_raw.mask(rain_invalid)
         rain_mm = rain_raw * 12.70
-        
-        # Radiasi Solar (0 - 1500 W/m2, filter kode 32767)
+        rain_invalid = (rain_mm < 0) | (rain_mm > 1000.0)
+        qc_flags['rain_qc_dropped'] += rain_invalid.sum()
+        rain_mm = rain_mm.mask(rain_invalid)
+
+        # Radiasi Solar (batas kewajaran 0 - 2000 W/m2, filter kode error 32767)
         solar_raw = pd.to_numeric(chunk['solar'].replace('---', np.nan), errors='coerce')
-        solar_invalid = (solar_raw < 0) | (solar_raw > 1500) | (solar_raw == 32767)
+        solar_invalid = (solar_raw < 0) | (solar_raw > 2000) | (solar_raw == 32767)
         qc_flags['solar_qc_dropped'] += solar_invalid.sum()
         solar_raw = solar_raw.mask(solar_invalid)
-        
-        # Kelembapan Relatif (15% - 100%, filter kode -1 dan 255)
+
+        # Kelembapan Relatif (batas kewajaran 0% - 100%, filter kode error -1 dan 255)
         hum_raw = pd.to_numeric(chunk['humout'].replace('---', np.nan), errors='coerce')
-        hum_invalid = (hum_raw < 15.0) | (hum_raw > 100.0) | (hum_raw == 255) | (hum_raw == -1)
+        hum_invalid = (hum_raw < 0.0) | (hum_raw > 100.0) | (hum_raw == 255) | (hum_raw == -1)
         qc_flags['hum_qc_dropped'] += hum_invalid.sum()
         hum_raw = hum_raw.mask(hum_invalid)
-        
-        # Kecepatan Angin (0 - 80 km/h, filter kode 255)
+
+        # Kecepatan Angin (batas kewajaran 0 - 100 km/h, filter kode error 255)
         windspd_raw = pd.to_numeric(chunk['windspd'].replace('---', np.nan), errors='coerce')
-        windspd_invalid = (windspd_raw < 0) | (windspd_raw > 80.0) | (windspd_raw == 255)
+        windspd_invalid = (windspd_raw < 0) | (windspd_raw > 100.0) | (windspd_raw == 255)
         qc_flags['windspd_qc_dropped'] += windspd_invalid.sum()
         windspd_raw = windspd_raw.mask(windspd_invalid)
-        
-        # Arah Angin Derajat (0? - 360?, filter kode 32767)
+
+        # Arah Angin Derajat (batas kewajaran 0 - 360 derajat, filter kode error 32767)
         winddir_raw = pd.to_numeric(chunk['winddir'].replace('---', np.nan), errors='coerce')
         winddir_invalid = (winddir_raw < 0) | (winddir_raw > 360.0) | (winddir_raw == 32767)
         qc_flags['winddir_qc_dropped'] += winddir_invalid.sum()
@@ -202,8 +202,16 @@ def run_nusaklim_pipeline(
 
     # 5. Konstruksi Output DataFrame Harian
     print("Compiling final daily dataframe with Cardinal Wind Directions...")
+    # Batas kewajaran jumlah pembacaan per hari (interval sensor 10-15 menit -> maks wajar 144x/hari).
+    # Stasiun-hari yang melebihi ini menandakan alat mengirim data berulang/duplikat (bukan error nilai,
+    # tapi error frekuensi pelaporan), sehingga SUM harian (Radiasi, Hujan) jadi tidak dapat dipercaya.
+    MAX_PLAUSIBLE_RECORDS_PER_DAY = 200
+    dropped_excess_records = 0
     daily_list = []
     for (stn, dt_str), d in daily_data.items():
+        if d['total_records'] > MAX_PLAUSIBLE_RECORDS_PER_DAY:
+            dropped_excess_records += 1
+            continue
         temp_mean = d['temp_sum'] / d['temp_cnt'] if d['temp_cnt'] > 0 else np.nan
         bar_mean = d['bar_sum'] / d['bar_cnt'] if d['bar_cnt'] > 0 else np.nan
         hum_mean = d['hum_sum'] / d['hum_cnt'] if d['hum_cnt'] > 0 else np.nan
@@ -211,7 +219,8 @@ def run_nusaklim_pipeline(
         winddir_mean = d['winddir_sum'] / d['winddir_cnt'] if d['winddir_cnt'] > 0 else np.nan
         
         rain_tot = min(300.0, d['rain_sum']) if d['rain_cnt'] > 0 and d['rain_sum'] <= 350.0 else (np.nan if d['rain_cnt'] == 0 else min(300.0, d['rain_sum']))
-        solar_tot = d['solar_sum'] if d['solar_cnt'] > 0 else np.nan
+        # Rata-rata harian (W/m2), bukan SUM: SUM bergantung pada jumlah pembacaan per hari (<=200)
+        solar_tot = d['solar_sum'] / d['solar_cnt'] if d['solar_cnt'] > 0 else np.nan
         
         # Kategorisasi Arah Angin (Notulen Poin 4)
         if np.isnan(winddir_mean):
@@ -240,7 +249,7 @@ def run_nusaklim_pipeline(
             'humidity_max': round(d['hum_max'], 2) if not np.isnan(d['hum_max']) else np.nan,
             'pressure_avg_hpa': round(bar_mean, 2) if not np.isnan(bar_mean) else np.nan,
             'rainfall_total_mm': round(min(300.0, rain_tot), 2) if (not np.isnan(rain_tot) and rain_tot <= 500) else np.nan,
-            'solar_radiation_total': round(solar_tot, 2) if not np.isnan(solar_tot) else np.nan,
+            'solar_radiation_avg': round(solar_tot, 2) if not np.isnan(solar_tot) else np.nan,
             'wind_speed_avg': round(windspd_mean, 2) if not np.isnan(windspd_mean) else np.nan,
             'wind_speed_max': round(d['windspd_max'], 2) if not np.isnan(d['windspd_max']) else np.nan,
             'wind_direction_deg': round(winddir_mean, 1) if not np.isnan(winddir_mean) else np.nan,
@@ -250,6 +259,7 @@ def run_nusaklim_pipeline(
 
     df_daily = pd.DataFrame(daily_list).sort_values(['stnname', 'date']).reset_index(drop=True)
     df_daily.to_csv(output_daily_csv, index=False)
+    print(f"Dropped {dropped_excess_records:,} station-days with implausible reporting frequency (> {MAX_PLAUSIBLE_RECORDS_PER_DAY} records/day).")
     print(f"SUCCESS: Saved {len(df_daily):,} station-days to {output_daily_csv} ({os.path.getsize(output_daily_csv):,} bytes)")
     print(f"Pipeline completed in {time.time() - start_time:.2f} seconds.")
     return df_daily
