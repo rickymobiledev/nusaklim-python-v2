@@ -2,10 +2,101 @@
   "evaluation_period": "2026-07-21 to 2026-08-19",
   "primary_station": "222",
   "stations_evaluated": 4,
+  "open_meteo_source": "https://historical-forecast-api.open-meteo.com/v1/forecast",
   "algo_used": {
     "temp_avg": "Ridge Regression (Linear Baseline)",
     "humidity_avg": "Ridge Regression (Linear Baseline)",
-    "rainfall_total_mm": "LightGBM (Gradient Boosting)"
+    "rainfall_total_mm": "LightGBM (Gradient Boosting)",
+    "solar_radiation_avg": "Ridge Regression (Linear Baseline)",
+    "pressure_avg_hpa": "Ridge Regression (Linear Baseline)",
+    "wind_speed_avg": "Ridge Regression (Linear Baseline)",
+    "wind_direction_name": "LightGBM (Gradient Boosting)"
+  },
+  "indicator_summary": {
+    "temp_avg": {
+      "label": "Suhu Rata-rata",
+      "unit": "°C",
+      "metric": "MAE",
+      "om_avg": 0.9902,
+      "nk_avg": 0.7555,
+      "nk_wins": 3,
+      "om_wins": 1,
+      "ties": 0,
+      "n_stations": 4,
+      "winner_avg": "NusaKlim"
+    },
+    "humidity_avg": {
+      "label": "Kelembapan",
+      "unit": "%",
+      "metric": "MAE",
+      "om_avg": 6.8595,
+      "nk_avg": 2.5917,
+      "nk_wins": 3,
+      "om_wins": 1,
+      "ties": 0,
+      "n_stations": 4,
+      "winner_avg": "NusaKlim"
+    },
+    "rainfall_total_mm": {
+      "label": "Curah Hujan",
+      "unit": "mm",
+      "metric": "MAE",
+      "om_avg": 3.5173,
+      "nk_avg": 4.5503,
+      "nk_wins": 2,
+      "om_wins": 2,
+      "ties": 0,
+      "n_stations": 4,
+      "winner_avg": "Open-Meteo"
+    },
+    "solar_radiation_avg": {
+      "label": "Radiasi Matahari",
+      "unit": "W/m²",
+      "metric": "MAE",
+      "om_avg": 64.2265,
+      "nk_avg": 40.2562,
+      "nk_wins": 3,
+      "om_wins": 1,
+      "ties": 0,
+      "n_stations": 4,
+      "winner_avg": "NusaKlim"
+    },
+    "pressure_avg_hpa": {
+      "label": "Tekanan Udara",
+      "unit": "hPa",
+      "metric": "MAE",
+      "om_avg": 0.5062,
+      "nk_avg": 0.7482,
+      "nk_wins": 1,
+      "om_wins": 3,
+      "ties": 0,
+      "n_stations": 4,
+      "winner_avg": "Open-Meteo"
+    },
+    "wind_speed_avg": {
+      "label": "Kecepatan Angin",
+      "unit": "km/h",
+      "metric": "MAE",
+      "om_avg": 6.1088,
+      "nk_avg": 0.18,
+      "nk_wins": 4,
+      "om_wins": 0,
+      "ties": 0,
+      "n_stations": 4,
+      "winner_avg": "NusaKlim"
+    },
+    "wind_direction_name": {
+      "label": "Arah Mata Angin",
+      "unit": "kategori",
+      "metric": "Accuracy",
+      "om_avg": 0.4583,
+      "nk_avg": 0.7417,
+      "nk_wins": 4,
+      "om_wins": 0,
+      "ties": 0,
+      "n_stations": 4,
+      "winner_avg": "NusaKlim"
+    }
   },
   "station_results": {
     "222": {
@@ -14,11 +105,116 @@
       "lat": 3.37936,
       "lon": 99.1416,
       "n_days_matched": 30,
+      "indicators": {
+        "temp_avg": {
+          "label": "Suhu Rata-rata",
+          "unit": "°C",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 1.517,
+            "bias": -1.517
+          },
+          "nk": {
+            "value": 0.756,
+            "bias": -0.189
+          },
+          "winner": "NusaKlim"
+        },
+        "humidity_avg": {
+          "label": "Kelembapan",
+          "unit": "%",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 2.909,
+            "bias": 2.01
+          },
+          "nk": {
+            "value": 3.249,
+            "bias": 0.258
+          },
+          "winner": "Open-Meteo"
+        },
+        "rainfall_total_mm": {
+          "label": "Curah Hujan",
+          "unit": "mm",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 6.737,
+            "bias": 3.897
+          },
+          "nk": {
+            "value": 6.325,
+            "bias": 2.243
+          },
+          "winner": "NusaKlim"
+        },
+        "solar_radiation_avg": {
+          "label": "Radiasi Matahari",
+          "unit": "W/m²",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 45.772,
+            "bias": 14.12
+          },
+          "nk": {
+            "value": 64.692,
+            "bias": -12.268
+          },
+          "winner": "Open-Meteo"
+        },
+        "pressure_avg_hpa": {
+          "label": "Tekanan Udara",
+          "unit": "hPa",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 1.287,
+            "bias": -1.287
+          },
+          "nk": {
+            "value": 0.808,
+            "bias": 0.057
+          },
+          "winner": "NusaKlim"
+        },
+        "wind_speed_avg": {
+          "label": "Kecepatan Angin",
+          "unit": "km/h",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 4.633,
+            "bias": 4.633
+          },
+          "nk": {
+            "value": 0.277,
+            "bias": -0.023
+          },
+          "winner": "NusaKlim"
+        },
+        "wind_direction_name": {
+          "label": "Arah Mata Angin",
+          "unit": "kategori",
+          "metric": "Accuracy",
+          "n": 30,
+          "om": {
+            "value": 0.6333
+          },
+          "nk": {
+            "value": 0.8333
+          },
+          "winner": "NusaKlim"
+        }
+      },
       "open_meteo": {
-        "temp_mae": 1.542,
-        "temp_rmse": 1.692,
-        "temp_bias": -1.542,
-        "humidity_mae": 2.889,
+        "temp_mae": 1.517,
+        "temp_rmse": 1.667,
+        "temp_bias": -1.517,
+        "humidity_mae": 2.909,
         "rainfall_mae": 6.737
       },
       "nusaklim_ai": {
@@ -35,11 +231,116 @@
       "lat": 0.326288,
       "lon": 101.352241,
       "n_days_matched": 30,
+      "indicators": {
+        "temp_avg": {
+          "label": "Suhu Rata-rata",
+          "unit": "°C",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 0.709,
+            "bias": -0.501
+          },
+          "nk": {
+            "value": 0.807,
+            "bias": -0.321
+          },
+          "winner": "Open-Meteo"
+        },
+        "humidity_avg": {
+          "label": "Kelembapan",
+          "unit": "%",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 7.484,
+            "bias": 4.144
+          },
+          "nk": {
+            "value": 2.054,
+            "bias": -1.066
+          },
+          "winner": "NusaKlim"
+        },
+        "rainfall_total_mm": {
+          "label": "Curah Hujan",
+          "unit": "mm",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 4.342,
+            "bias": 4.166
+          },
+          "nk": {
+            "value": 3.837,
+            "bias": 3.837
+          },
+          "winner": "NusaKlim"
+        },
+        "solar_radiation_avg": {
+          "label": "Radiasi Matahari",
+          "unit": "W/m²",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 50.552,
+            "bias": 50.009
+          },
+          "nk": {
+            "value": 27.15,
+            "bias": -7.712
+          },
+          "winner": "NusaKlim"
+        },
+        "pressure_avg_hpa": {
+          "label": "Tekanan Udara",
+          "unit": "hPa",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 0.182,
+            "bias": -0.156
+          },
+          "nk": {
+            "value": 0.66,
+            "bias": 0.025
+          },
+          "winner": "Open-Meteo"
+        },
+        "wind_speed_avg": {
+          "label": "Kecepatan Angin",
+          "unit": "km/h",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 6.246,
+            "bias": 6.246
+          },
+          "nk": {
+            "value": 0.181,
+            "bias": -0.029
+          },
+          "winner": "NusaKlim"
+        },
+        "wind_direction_name": {
+          "label": "Arah Mata Angin",
+          "unit": "kategori",
+          "metric": "Accuracy",
+          "n": 30,
+          "om": {
+            "value": 0.8
+          },
+          "nk": {
+            "value": 1.0
+          },
+          "winner": "NusaKlim"
+        }
+      },
       "open_meteo": {
-        "temp_mae": 0.725,
-        "temp_rmse": 0.822,
-        "temp_bias": -0.53,
-        "humidity_mae": 7.51,
+        "temp_mae": 0.709,
+        "temp_rmse": 0.799,
+        "temp_bias": -0.501,
+        "humidity_mae": 7.484,
         "rainfall_mae": 4.342
       },
       "nusaklim_ai": {
@@ -56,11 +357,116 @@
       "lat": -2.4558,
       "lon": 104.199,
       "n_days_matched": 30,
+      "indicators": {
+        "temp_avg": {
+          "label": "Suhu Rata-rata",
+          "unit": "°C",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 0.869,
+            "bias": 0.789
+          },
+          "nk": {
+            "value": 0.71,
+            "bias": -0.019
+          },
+          "winner": "NusaKlim"
+        },
+        "humidity_avg": {
+          "label": "Kelembapan",
+          "unit": "%",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 13.511,
+            "bias": -13.511
+          },
+          "nk": {
+            "value": 1.778,
+            "bias": -0.011
+          },
+          "winner": "NusaKlim"
+        },
+        "rainfall_total_mm": {
+          "label": "Curah Hujan",
+          "unit": "mm",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 1.243,
+            "bias": 0.837
+          },
+          "nk": {
+            "value": 3.715,
+            "bias": 2.915
+          },
+          "winner": "Open-Meteo"
+        },
+        "solar_radiation_avg": {
+          "label": "Radiasi Matahari",
+          "unit": "W/m²",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 80.019,
+            "bias": 79.307
+          },
+          "nk": {
+            "value": 34.198,
+            "bias": 1.432
+          },
+          "winner": "NusaKlim"
+        },
+        "pressure_avg_hpa": {
+          "label": "Tekanan Udara",
+          "unit": "hPa",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 0.329,
+            "bias": -0.293
+          },
+          "nk": {
+            "value": 0.763,
+            "bias": -0.061
+          },
+          "winner": "Open-Meteo"
+        },
+        "wind_speed_avg": {
+          "label": "Kecepatan Angin",
+          "unit": "km/h",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 9.308,
+            "bias": 9.308
+          },
+          "nk": {
+            "value": 0.106,
+            "bias": 0.106
+          },
+          "winner": "NusaKlim"
+        },
+        "wind_direction_name": {
+          "label": "Arah Mata Angin",
+          "unit": "kategori",
+          "metric": "Accuracy",
+          "n": 30,
+          "om": {
+            "value": 0.1
+          },
+          "nk": {
+            "value": 0.5333
+          },
+          "winner": "NusaKlim"
+        }
+      },
       "open_meteo": {
-        "temp_mae": 0.85,
-        "temp_rmse": 1.059,
-        "temp_bias": 0.76,
-        "humidity_mae": 13.514,
+        "temp_mae": 0.869,
+        "temp_rmse": 1.085,
+        "temp_bias": 0.789,
+        "humidity_mae": 13.511,
         "rainfall_mae": 1.243
       },
       "nusaklim_ai": {
@@ -77,11 +483,116 @@
       "lat": -0.07283,
       "lon": 110.289,
       "n_days_matched": 30,
+      "indicators": {
+        "temp_avg": {
+          "label": "Suhu Rata-rata",
+          "unit": "°C",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 0.866,
+            "bias": -0.608
+          },
+          "nk": {
+            "value": 0.749,
+            "bias": -0.074
+          },
+          "winner": "NusaKlim"
+        },
+        "humidity_avg": {
+          "label": "Kelembapan",
+          "unit": "%",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 3.534,
+            "bias": -2.023
+          },
+          "nk": {
+            "value": 3.286,
+            "bias": 0.039
+          },
+          "winner": "NusaKlim"
+        },
+        "rainfall_total_mm": {
+          "label": "Curah Hujan",
+          "unit": "mm",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 1.747,
+            "bias": 0.46
+          },
+          "nk": {
+            "value": 4.324,
+            "bias": 3.068
+          },
+          "winner": "Open-Meteo"
+        },
+        "solar_radiation_avg": {
+          "label": "Radiasi Matahari",
+          "unit": "W/m²",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 80.563,
+            "bias": 78.477
+          },
+          "nk": {
+            "value": 34.985,
+            "bias": 0.808
+          },
+          "winner": "NusaKlim"
+        },
+        "pressure_avg_hpa": {
+          "label": "Tekanan Udara",
+          "unit": "hPa",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 0.227,
+            "bias": 0.134
+          },
+          "nk": {
+            "value": 0.762,
+            "bias": 0.058
+          },
+          "winner": "Open-Meteo"
+        },
+        "wind_speed_avg": {
+          "label": "Kecepatan Angin",
+          "unit": "km/h",
+          "metric": "MAE",
+          "n": 30,
+          "om": {
+            "value": 4.248,
+            "bias": 4.248
+          },
+          "nk": {
+            "value": 0.156,
+            "bias": -0.004
+          },
+          "winner": "NusaKlim"
+        },
+        "wind_direction_name": {
+          "label": "Arah Mata Angin",
+          "unit": "kategori",
+          "metric": "Accuracy",
+          "n": 30,
+          "om": {
+            "value": 0.3
+          },
+          "nk": {
+            "value": 0.6
+          },
+          "winner": "NusaKlim"
+        }
+      },
       "open_meteo": {
-        "temp_mae": 0.893,
-        "temp_rmse": 1.114,
-        "temp_bias": -0.634,
-        "humidity_mae": 3.524,
+        "temp_mae": 0.866,
+        "temp_rmse": 1.092,
+        "temp_bias": -0.608,
+        "humidity_mae": 3.534,
         "rainfall_mae": 1.747
       },
       "nusaklim_ai": {
@@ -94,9 +605,9 @@
     }
   },
   "open_meteo_metrics": {
-    "avg_temp_mae": 1.002,
-    "avg_temp_rmse": 1.172,
-    "avg_temp_bias": -0.487,
+    "avg_temp_mae": 0.99,
+    "avg_temp_rmse": 1.161,
+    "avg_temp_bias": -0.459,
     "avg_humidity_mae": 6.859,
     "avg_rainfall_mae": 3.517
   },

@@ -54,6 +54,19 @@ with open(os.path.join(BASE_DIR, "nusaklim_daily_aggregated.csv"), encoding="utf
 with open(os.path.join(BASE_DIR, "openmeteo_benchmark_summary.json"), encoding="utf-8") as _f:
     _OM = json.load(_f)
 OM_AVG = _OM['open_meteo_metrics']
+_ISUM = _OM['indicator_summary']
+_IND_ORDER = ['temp_avg', 'humidity_avg', 'rainfall_total_mm', 'solar_radiation_avg', 'pressure_avg_hpa', 'wind_speed_avg', 'wind_direction_name']
+
+
+def _join_labels(items):
+    items = list(items)
+    if len(items) <= 1:
+        return items[0] if items else '-'
+    return ', '.join(items[:-1]) + ' dan ' + items[-1]
+
+
+_NK_BETTER = [_ISUM[k]['label'] for k in _IND_ORDER if _ISUM[k]['winner_avg'] == 'NusaKlim']
+_OM_BETTER = [_ISUM[k]['label'] for k in _IND_ORDER if _ISUM[k]['winner_avg'] == 'Open-Meteo']
 NK_AVG = _OM['nusaklim_local_ai_metrics']
 
 
@@ -151,7 +164,7 @@ cover_meta = [
     [Paragraph('<b>Dataset Bersih Terstandar</b>', style_table_cell_bold), Paragraph(f'14.823.713 baris interval bersih (969 MB) &amp; {idn(N_RAW_ROWS)} baris harian (10 MB)', style_table_cell)],
     [Paragraph('<b>Model Champion Produksi</b>', style_table_cell_bold), Paragraph(f'<b>Algoritma Juara per-Variabel ({"/".join(_ALGO_SET)}, H+1 s/d H+7)</b> | Akurasi Suhu MAE &plusmn;{_metrics["temp_avg_h1"]["MAE"]:.2f}&deg;C di H+1 | Retrain Penuh &plusmn;21 Menit', style_table_cell_bold)],
     [Paragraph('<b>Layanan Backend &amp; API</b>', style_table_cell_bold), Paragraph('REST API FastAPI Modular (&lt; 30 ms latensi inferensi) + Rekomendasi Agronomi Kebun', style_table_cell)],
-    [Paragraph('<b>Validasi Data Aktual</b>', style_table_cell_bold), Paragraph('Suhu &amp; Kelembapan Terbukti <b>Lebih Akurat</b> dibandingkan Open-Meteo Global API; Curah Hujan Masih Perlu Perbaikan Lanjutan', style_table_cell_bold)],
+    [Paragraph('<b>Validasi Data Aktual</b>', style_table_cell_bold), Paragraph(f'Dibandingkan dengan Open-Meteo pada 7 indikator di 4 stasiun: NusaKlim lebih akurat pada {_join_labels(_NK_BETTER)}; Open-Meteo lebih akurat pada {_join_labels(_OM_BETTER)}', style_table_cell_bold)],
     [Paragraph('<b>Tim Penyusun</b>', style_table_cell_bold), Paragraph('Tim Data Analyst &amp; AI Engineering PPKS | Tanggal: September 2026', style_table_cell)],
 ]
 tbl_cov = Table(cover_meta, colWidths=[135, 380])
@@ -350,30 +363,32 @@ story.append(Paragraph(
 ))
 
 om_tbl_data = [
-    [Paragraph('Metrik Evaluasi', style_table_header), Paragraph('Open-Meteo Global API', style_table_header), Paragraph('NusaKlim PPKS Local AI', style_table_header), Paragraph('Keunggulan &amp; Analisis Presisi', style_table_header)],
-    [Paragraph('<b>Suhu Rata-rata (MAE)</b>', style_table_cell_bold), Paragraph(f'{OM_AVG["avg_temp_mae"]:.2f} &deg;C', style_table_cell_center), Paragraph(f'<b>{NK_AVG["avg_temp_mae"]:.2f} &deg;C</b>', style_table_cell_center), Paragraph('<b>NusaKlim lebih akurat</b> pada 3 dari 4 stasiun uji.', style_table_cell_bold)],
-    [Paragraph('<b>Suhu Ekstrem (RMSE)</b>', style_table_cell_bold), Paragraph(f'{OM_AVG["avg_temp_rmse"]:.2f} &deg;C', style_table_cell_center), Paragraph(f'<b>{NK_AVG["avg_temp_rmse"]:.2f} &deg;C</b>', style_table_cell_center), Paragraph('NusaKlim lebih stabil menangkap variasi suhu harian.', style_table_cell)],
-    [Paragraph('<b>Suhu Mean Bias</b>', style_table_cell_bold), Paragraph(f'{OM_AVG["avg_temp_bias"]:+.2f} &deg;C', style_table_cell_center), Paragraph(f'{NK_AVG["avg_temp_bias"]:+.2f} &deg;C', style_table_cell_center), Paragraph('Kedua mesin sama-sama cenderung under-estimate.', style_table_cell)],
-    [Paragraph('<b>Kelembapan Udara (MAE)</b>', style_table_cell_bold), Paragraph(f'{OM_AVG["avg_humidity_mae"]:.2f} %', style_table_cell_center), Paragraph(f'<b>{NK_AVG["avg_humidity_mae"]:.2f} %</b>', style_table_cell_center), Paragraph('<b>NusaKlim jauh lebih presisi</b> untuk evaporasi kebun.', style_table_cell_bold)],
-    [Paragraph('<b>Curah Hujan (MAE)</b>', style_table_cell_bold), Paragraph(f'<b>{OM_AVG["avg_rainfall_mae"]:.2f} mm</b>', style_table_cell_center), Paragraph(f'{NK_AVG["avg_rainfall_mae"]:.2f} mm', style_table_cell_center), Paragraph('<b>Open-Meteo lebih presisi</b>; area perbaikan model hujan H+1.', style_table_cell)],
+    [Paragraph('Indikator (Ukuran Error)', style_table_header), Paragraph('Open-Meteo Global API', style_table_header), Paragraph('NusaKlim PPKS Local AI', style_table_header), Paragraph('Lebih Akurat (Rata-rata 4 Stasiun)', style_table_header)],
 ]
-tbl_om = Table(om_tbl_data, colWidths=[110, 100, 100, 205])
-tbl_om.setStyle(TableStyle([
-    ('BACKGROUND', (0, 0), (-1, 0), COLOR_PRIMARY),
-    ('BACKGROUND', (0, 1), (-1, 1), COLOR_BG_ACCENT),
-    ('BOX', (0, 0), (-1, -1), 1, COLOR_PRIMARY),
-    ('INNERGRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-    ('PADDING', (0, 0), (-1, -1), 3),
-    ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-]))
+om_cmds = [
+    ('BACKGROUND', (0, 0), (-1, 0), COLOR_PRIMARY), ('BOX', (0, 0), (-1, -1), 1, COLOR_PRIMARY),
+    ('INNERGRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('PADDING', (0, 0), (-1, -1), 3), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+]
+for _ri, _k in enumerate(_IND_ORDER, start=1):
+    _x = _ISUM[_k]
+    _fmt = (lambda v: f'{v * 100:.1f}%') if _x['metric'] == 'Accuracy' else (lambda v: f'{v:.2f} {_x["unit"]}')
+    om_tbl_data.append([
+        Paragraph(f'<b>{_x["label"]}</b> ({"Accuracy" if _x["metric"] == "Accuracy" else "MAE"})', style_table_cell_bold),
+        Paragraph(_fmt(_x['om_avg']), style_table_cell_center), Paragraph(_fmt(_x['nk_avg']), style_table_cell_center),
+        Paragraph(f'<b>{_x["winner_avg"]}</b> (NusaKlim menang di {_x["nk_wins"]} dari {_x["n_stations"]} stasiun)', style_table_cell),
+    ])
+    om_cmds.append(('BACKGROUND', (2 if _x['winner_avg'] == 'NusaKlim' else 1, _ri), (2 if _x['winner_avg'] == 'NusaKlim' else 1, _ri), COLOR_BG_ACCENT))
+tbl_om = Table(om_tbl_data, colWidths=[130, 90, 90, 205])
+tbl_om.setStyle(TableStyle(om_cmds))
 story.append(tbl_om)
+story.append(Paragraph('Rincian per stasiun beserta kurva aktual vs Open-Meteo vs NusaKlim untuk ketujuh indikator ada di Laporan 5.', style_body))
 
 story.append(Spacer(1, 4))
-story.append(Paragraph('<b>B. Alasan Hasil Berbeda Antar Variabel Cuaca:</b>', style_h2))
+story.append(Paragraph('<b>B. Alasan Hasil Berbeda Antar Indikator:</b>', style_h2))
 story.append(Paragraph(
-    '1. <b>Efek Redaman Tutupan Kanopi:</b> Pelepah sawit bertindak sebagai isolator termal yang meredam panas siang hari dan menahan dingin malam hari. Karena NusaKlim dilatih langsung dari data di bawah kanopi, model ini menangkap efek tersebut lebih baik pada Suhu &amp; Kelembapan dibanding model numerik global Open-Meteo yang mengasumsikan permukaan rata-rata.<br/>'
-    f'2. <b>Evapotranspirasi Monokultur:</b> Tingginya transpirasi kelapa sawit menjaga RH udara tetap tinggi dan stabil, yang kerap kurang tertangkap oleh model global Open-Meteo (error RH {OM_AVG["avg_humidity_mae"]:.2f}% vs {NK_AVG["avg_humidity_mae"]:.2f}% NusaKlim).<br/>'
-    f'3. <b>Curah Hujan Konvektif Bersifat Lokal &amp; Stokastik:</b> Hujan tropis di perkebunan sawit bersifat konvektif jangka pendek dan sangat bervariasi antar titik. Model NusaKlim H+1 berbasis lag/rolling historis belum menangkap kejadian hujan mendadak seakurat ansambel fisik skala sinoptik Open-Meteo, sehingga pada metrik ini Open-Meteo justru lebih presisi (MAE {OM_AVG["avg_rainfall_mae"]:.2f} mm vs {NK_AVG["avg_rainfall_mae"]:.2f} mm) &ndash; area prioritas perbaikan berikutnya.',
+    f'1. <b>Indikator yang dipengaruhi kondisi mikro kebun ({_join_labels(_NK_BETTER)}):</b> NusaKlim dilatih langsung dari sensor stasiun yang sama dengan data aktual, sehingga ikut menangkap karakter mikroklimat kebun, sedangkan Open-Meteo menyajikan rata-rata grid 11 km pada area terbuka. Khusus Kecepatan Angin, selisih besar terutama berasal dari perbedaan lokasi dan tinggi pengukuran.<br/>'
+    f'2. <b>Tekanan Udara bersifat sinoptik:</b> pola tekanan ditentukan sistem cuaca regional yang diramal baik oleh model fisika numerik global, sehingga Open-Meteo lebih akurat (MAE {_ISUM["pressure_avg_hpa"]["om_avg"]:.2f} hPa vs {_ISUM["pressure_avg_hpa"]["nk_avg"]:.2f} hPa).<br/>'
+    f'3. <b>Curah Hujan konvektif bersifat lokal dan stokastik:</b> hasilnya terbelah antar stasiun; rata-rata Open-Meteo sedikit lebih unggul (MAE {_ISUM["rainfall_total_mm"]["om_avg"]:.2f} mm vs {_ISUM["rainfall_total_mm"]["nk_avg"]:.2f} mm) &ndash; area prioritas perbaikan model berikutnya.',
     style_body
 ))
 
