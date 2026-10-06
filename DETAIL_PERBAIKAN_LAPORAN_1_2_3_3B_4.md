@@ -172,3 +172,25 @@ Membandingkan, untuk 7 indikator cuaca di 30 stasiun sampel acak: **Model Lokal*
 - **Jumlah stasiun**: 184 → 183 di semua laporan, dicek ulang langsung dari data mentah.
 - **Angka dihitung otomatis dari data/model**, bukan ditulis manual — supaya tidak ada lagi angka basi ketika data/model diperbarui.
 - **Bahasa disederhanakan**: istilah asing yang tidak perlu dihapus, referensi ke "notulen rapat" internal dihapus, klaim yang berlebihan/tidak didukung data diluruskan.
+
+---
+
+## Putaran Revisi 5–6 Oktober 2026
+
+### Data & model
+- `process_nusaklim.py`: kolom `solar_radiation_total` (SUM) diganti `solar_radiation_avg` (= solar_sum / solar_cnt). Alasan: korelasi SUM dengan `records_count` = 0,42, sehingga total harian bergantung pada jumlah pembacaan (≤200/hari), bukan hanya cuaca. Nama kolom diganti di `retrain_pipeline.py`, `api/forecast_service.py`, dan skrip figur. Konversi API ke MJ/m²/hari: W/m² × 0,0864 (sebelumnya dibagi 1000 yang tidak punya dasar fisika).
+- QC di `retrain_pipeline.py`: batas lama 45.000 (untuk SUM) diganti 1.500 W/m² untuk rata-rata harian. Catatan terbuka: 1,6% hari-stasiun bernilai >450 W/m² (di atas batas fisik rata-rata harian ekuator ±430 W/m²), tercatat di Laporan 2 sebagai dugaan sensor bermasalah dan sengaja belum dibuang.
+- Fitur: `doy` mentah dihapus (`assert len(feature_cols) == 29`). Benchmark ML dijalankan ulang; hasil DL (LSTM/GRU, tidak memakai fitur tabular) digabung ulang. Juara per indikator tidak berubah: Ridge (temp, humidity, solar, pressure, wind speed) dan LightGBM (rain, wind direction).
+- `compute_permutation_importance()` di `retrain_pipeline.py` (5 pengulangan, skor MAE untuk regresi dan F1-Macro untuk klasifikasi) dipakai di `gen_figures_model.py` dan disimpan ke `figures_model/permutation_importance_h1.json`.
+
+### Laporan 3b
+- `station_sampling.py`: ditambah `eligible_stations()` (≥365 hari latih, ≥25 dari 30 hari uji valid pada 7 indikator H+1) → 94 stasiun; `local_30` diambil acak (seed 42) dari 94 itu; `global_10` tidak berubah.
+- `local_vs_global_stats.py` (baru): satu sumber hitungan kemenangan per stasiun dan `recommend()` (Lokal hanya jika menang di lebih banyak stasiun DAN unggul pada rata-rata metrik). Dipakai oleh `generate_local_benchmark_figures.py` dan `generate_per_station_pdf.py`. Bug lama: teks mencetak jumlah kemenangan Lokal untuk model yang direkomendasikan, sehingga angka tertukar.
+
+### Laporan 5
+- `open_meteo_benchmark.py` ditulis ulang: data per jam (Historical Forecast API; identik dengan archive API untuk periode uji) dirangkum harian WIB (rata-rata; jumlah untuk hujan; arah angin dari rata-rata vektor lalu dikategorikan dengan batas sudut yang sama dengan data AWS). Menghasilkan `fig_openmeteo_ratio_heatmap.png`, `fig_openmeteo_ts_{222,2179,248,267}.png`, dan menambah `indicator_summary` serta `indicators` per stasiun di `openmeteo_benchmark_summary.json` (kunci lama tetap ada untuk kompatibilitas).
+
+### Lain-lain
+- `api/main.py`: `/compare` membaca `settings.openmeteo_summary_path`, dengan fallback "Belum tersedia" bila file tidak ada.
+- Presentasi `create_data_cleaning_eda_presentation.py`: agregasi radiasi, korelasi, jumlah baris, dan path file diperbarui.
+- Catatan pengujian: tes ingest sempat gagal karena memori habis saat berjalan bersamaan dengan benchmark DL (RAM 7,9 GB); dijalankan sendiri berhasil.

@@ -70,3 +70,25 @@ Setelah 3 laporan di atas selesai, dilakukan satu putaran perapian menyeluruh ke
 **Laporan 3b** juga sempat mengutip angka lama dari Laporan 4 (R² LSTM = 0.848, MAE Deep MLP = 0.756°C) yang sudah tidak ada lagi setelah Laporan 4 diganti ke Curah Hujan — sudah diperbaiki agar tidak mengutip angka yang sudah tidak ada sumbernya.
 
 Seluruh 7 laporan PDF (dan salinan bernomornya) sudah dibuat ulang dan dicek bersih dari simbol rusak, sisa tanda bintang, dan angka "184".
+
+---
+
+## Putaran Revisi 5–6 Oktober 2026 (menggantikan catatan di atas jika berbeda)
+
+**Laporan 3 (Model Prediksi 7 Hari)**
+- **Radiasi matahari**: dulu dijumlahkan dari semua pembacaan sensor sehari, sehingga angkanya ribuan dan ikut berubah mengikuti jumlah pembacaan per hari. Sekarang dirata-ratakan (median ±166 W/m²). Hasilnya R² radiasi naik dari 0,24 ke 0,45 (H+1) dan dari 0,14 ke 0,33 (H+7). Semua model, benchmark, dan laporan terkait dibuat ulang.
+- **Fitur input**: sekarang **29 fitur** (dulu tertulis "36"/"37", lalu "29 rekayasa" padahal model memakai 30). Rinciannya: 28 turunan dari data pengamatan nyata + 1 fitur langsung dari dataset (arah angin hari berjalan). Fitur Day of the Year mentah dihapus, tersisa sin/cos. Daftar lengkap ada di Bab 2.2 laporan. Istilah "rekayasa fitur" diganti agar tidak disangka data buatan.
+- **Algoritma produksi**: hanya Ridge Regression (5 indikator) dan LightGBM (Curah Hujan dan Arah Angin). Random Forest dan Logistic Regression ditulis sebagai pembanding, bukan model produksi.
+- **Arah angin**: tabel juara menampilkan Accuracy (F1 dalam kurung). **Feature importance** memakai permutation importance yang seragam untuk semua algoritma.
+
+**Laporan 3b (Model Per-Stasiun vs Global)**
+- Stasiun uji tidak lagi diambil acak lalu difilter (yang membuat 6 dari 30 gugur menjadi n=24). Kelengkapan data dicek lebih dulu untuk 183 stasiun (≥365 hari latih dan ≥25 dari 30 hari uji pada 7 indikator → 94 stasiun lolos), baru 30 diambil acak (seed=42). Seluruh 30 stasiun diuji.
+- Gambar, tabel, dan kesimpulan kini memakai satu hitungan kemenangan dan satu aturan keputusan. Hasil: Model Global dipertahankan untuk 6 dari 7 indikator; Model Lokal hanya untuk Kecepatan Angin. Ditambahkan kolom R² median.
+
+**Laporan 5 (Komparasi Open-Meteo)**
+- Dibandingkan pada **7 indikator di tiap stasiun** (MAE; Accuracy untuk arah angin), lengkap dengan heatmap rasio error dan kurva aktual vs Open-Meteo vs NusaKlim untuk 7 indikator di setiap stasiun.
+- Hasil rata-rata 4 stasiun: NusaKlim lebih akurat pada Suhu, Kelembapan, Radiasi, Kecepatan Angin, Arah Angin; Open-Meteo lebih akurat pada Curah Hujan dan Tekanan Udara. Keunggulan pada Kecepatan Angin sebagian besar karena beda lokasi dan tinggi pengukuran sensor.
+
+**Laporan 2, 4, 6 dan lainnya**: angka radiasi dan korelasi disamakan dengan data saat ini (mis. korelasi Suhu vs Kelembapan yang tertulis −0,41 di catatan lama ternyata −0,38 pada data terbaru), teks algoritma/jumlah fitur diperbarui, tanggal sampul menjadi Oktober 2026. Presentasi Laporan 2 juga disamakan.
+
+**Sistem**: endpoint `/api/v1/compare` kini membaca hasil benchmark Laporan 5 (dulu angka tetap 0,801 vs 2,670 °C, "75 hari").
