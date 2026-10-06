@@ -127,7 +127,7 @@ tbl_cover.setStyle(TableStyle([
 story.append(tbl_cover)
 
 story.append(Spacer(1, 20))
-story.append(Paragraph('<b>Disusun Oleh:</b> Tim Data Analyst &amp; AI Engineering PPKS<br/><b>Tanggal Publikasi:</b> September 2026 | Versi 1.0 (Production-Ready)', style_cover_meta))
+story.append(Paragraph('<b>Disusun Oleh:</b> Tim Data Analyst &amp; AI Engineering PPKS<br/><b>Tanggal Publikasi:</b> Oktober 2026 | Versi 1.0 (Production-Ready)', style_cover_meta))
 story.append(PageBreak())
 
 # SECTION 1

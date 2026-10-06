@@ -141,7 +141,7 @@ cover_box_content = [
     [Paragraph('<b>Periode Observasi</b>', style_table_cell_bold), Paragraph(f'{OM["evaluation_period"].replace(" to ", " s/d ")} (30 Hari Observasi Aktual &ndash; periode data uji yang sama dengan pengujian model produksi, data yang tidak dipakai saat melatih model)', style_table_cell)],
     [Paragraph('<b>Resolusi Grid</b>', style_table_cell_bold), Paragraph('Open-Meteo Global Forecast (grid 11 km) vs NusaKlim Local AI (Point-Telemetry Stasiun Kebun)', style_table_cell)],
     [Paragraph('<b>Temuan Utama</b>', style_table_cell_bold), Paragraph(f'Rata-rata 4 stasiun, <b>NusaKlim lebih akurat pada {_join([OM["indicator_summary"][k]["label"] for k in IND_ORDER_COVER if OM["indicator_summary"][k]["winner_avg"] == "NusaKlim"])}</b>, sedangkan <b>Open-Meteo lebih akurat pada {_join([OM["indicator_summary"][k]["label"] for k in IND_ORDER_COVER if OM["indicator_summary"][k]["winner_avg"] == "Open-Meteo"])}</b> (ketujuh indikator dibandingkan di tiap stasiun, Bab 4)', style_table_cell_bold)],
-    [Paragraph('<b>Penyusun Laporan</b>', style_table_cell_bold), Paragraph('Tim Data Analyst &amp; AI Engineering NusaKlim PPKS | Tanggal: September 2026', style_table_cell)],
+    [Paragraph('<b>Penyusun Laporan</b>', style_table_cell_bold), Paragraph('Tim Data Analyst &amp; AI Engineering NusaKlim PPKS | Tanggal: Oktober 2026', style_table_cell)],
 ]
 tbl_cover = Table(cover_box_content, colWidths=[130, 385])
 tbl_cover.setStyle(TableStyle([

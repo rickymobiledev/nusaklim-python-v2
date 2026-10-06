@@ -150,8 +150,8 @@ for var, label in INDICATORS:
             rmse_l.append(ind['local']['RMSE']); rmse_g.append(ind['global']['RMSE'])
             r2_l.append(ind['local']['R2']); r2_g.append(ind['global']['R2'])
         n_local_win += int(win)
-    avg_local = {'MAE': np.mean(mae_l) if mae_l else np.nan, 'RMSE': np.mean(rmse_l) if rmse_l else np.nan, 'R2': np.mean(r2_l) if r2_l else np.nan}
-    avg_global = {'MAE': np.mean(mae_g) if mae_g else np.nan, 'RMSE': np.mean(rmse_g) if rmse_g else np.nan, 'R2': np.mean(r2_g) if r2_g else np.nan}
+    avg_local = {'MAE': np.mean(mae_l) if mae_l else np.nan, 'RMSE': np.mean(rmse_l) if rmse_l else np.nan, 'R2': np.mean(r2_l) if r2_l else np.nan, 'R2med': np.median(r2_l) if r2_l else np.nan}
+    avg_global = {'MAE': np.mean(mae_g) if mae_g else np.nan, 'RMSE': np.mean(rmse_g) if rmse_g else np.nan, 'R2': np.mean(r2_g) if r2_g else np.nan, 'R2med': np.median(r2_g) if r2_g else np.nan}
     summary_rows.append({'var': var, 'label': label, 'algo': ALGO_USED[var], 'n_local_win': n_local_win, 'n_total': n_total,
                           'pct_local': n_local_win / n_total * 100 if n_total else 0,
                           'avg_delta': np.mean(deltas) if deltas else 0,
@@ -215,7 +215,7 @@ tbl_cover.setStyle(TableStyle([
 ]))
 story.append(tbl_cover)
 story.append(Spacer(1, 18))
-story.append(Paragraph('<b>Disusun Oleh:</b> Tim Data Analyst &amp; AI Engineering PPKS<br/><b>Tanggal Publikasi:</b> September 2026', style_cover_meta))
+story.append(Paragraph('<b>Disusun Oleh:</b> Tim Data Analyst &amp; AI Engineering PPKS<br/><b>Tanggal Publikasi:</b> Oktober 2026', style_cover_meta))
 story.append(PageBreak())
 
 # ==================== BAB 1 ====================
@@ -254,18 +254,16 @@ story.append(Paragraph(
     style_body
 ))
 
-story.append(PageBreak())
-
 # ==================== BAB 3 ====================
 story.append(Paragraph('3. Hasil: Model Lokal vs Global per Indikator', style_h1))
 story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=5))
 story.append(Paragraph('3.1 Perbandingan Model per Variabel Regresi (MAE, RMSE, R&sup2;)', style_h2))
 story.append(Paragraph(
-    f'MAE, RMSE, dan R&sup2; berikut adalah rata-rata lintas seluruh stasiun uji yang punya data cukup untuk indikator tsb (dari {len(LOCAL["stations"])} stasiun sampel, lihat kolom "n"). Model Lokal = dilatih ulang khusus tiap stasiun; Model Global = model produksi yang sama persis dari Laporan 3, diskor pada baris uji stasiun yang sama. Baris dengan latar hijau menandai pemenang per indikator, memakai kriteria yang sama dengan Tabel 3.3 Laporan 3: unggul di &ge;2 dari 3 metrik (bukan MAE saja).',
+    f'MAE, RMSE, dan R&sup2; berikut adalah rata-rata lintas seluruh stasiun uji yang punya data cukup untuk indikator tsb (dari {len(LOCAL["stations"])} stasiun sampel, lihat kolom "n"). Model Lokal = dilatih ulang khusus tiap stasiun; Model Global = model produksi yang sama persis dari Laporan 3, diskor pada baris uji stasiun yang sama. Kolom R&sup2; ditampilkan dua kali: <b>rata-rata</b> dan <b>median</b> lintas stasiun. Median lebih tahan terhadap satu-dua stasiun ekstrem (misalnya R&sup2; sangat negatif pada Curah Hujan akibat beberapa stasiun dengan hujan sangat jarang), sedangkan rata-rata bisa terdistorsi olehnya; pemenang tetap ditentukan dari rata-rata MAE, RMSE, dan R&sup2;. Baris dengan latar hijau menandai pemenang per indikator, memakai kriteria yang sama dengan Tabel 3.3 Laporan 3: unggul di &ge;2 dari 3 metrik (bukan MAE saja).',
     style_body
 ))
 sum_rows = [[Paragraph('Variabel', style_table_header), Paragraph('Model', style_table_header), Paragraph('Algoritma', style_table_header),
-             Paragraph('n (stasiun)', style_table_header), Paragraph('MAE', style_table_header), Paragraph('RMSE', style_table_header), Paragraph('R&sup2;', style_table_header)]]
+             Paragraph('n (stasiun)', style_table_header), Paragraph('MAE', style_table_header), Paragraph('RMSE', style_table_header), Paragraph('R&sup2; (rata-rata)', style_table_header), Paragraph('R&sup2; (median)', style_table_header)]]
 style_cmds = [
     ('BACKGROUND', (0, 0), (-1, 0), COLOR_PRIMARY), ('BOX', (0, 0), (-1, -1), 1, COLOR_PRIMARY),
     ('INNERGRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('PADDING', (0, 0), (-1, -1), 3), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
@@ -286,20 +284,20 @@ for _, r in df_summary.iterrows():
             Paragraph(f"{m['MAE']:.3f}", style_table_cell_center),
             Paragraph(f"{m['RMSE']:.3f}", style_table_cell_center),
             Paragraph(f"{m['R2']:.3f}", style_table_cell_center),
+            Paragraph(f"{m['R2med']:.3f}", style_table_cell_center),
         ])
         if is_best:
             style_cmds.append(('BACKGROUND', (0, row_i), (-1, row_i), COLOR_BG_ACCENT))
-tbl_sum = Table(sum_rows, colWidths=[95, 75, 115, 55, 55, 55, 50], repeatRows=1)
+tbl_sum = Table(sum_rows, colWidths=[88, 68, 102, 42, 46, 46, 62, 61], repeatRows=1)
 tbl_sum.setStyle(TableStyle(style_cmds))
 story.append(tbl_sum)
 story.append(Spacer(1, 4))
 
 fig1_p = os.path.join(fig_dir, 'fig_local1_winrate_per_indicator.png')
 if os.path.exists(fig1_p):
-    story.append(Image(fig1_p, width=16.0 * cm, height=8.8 * cm))
+    story.append(Image(fig1_p, width=13.6 * cm, height=8.09 * cm))
     story.append(Paragraph(f'<b>Gambar 1:</b> Proporsi stasiun (dari {len(LOCAL["stations"])}) yang lebih akurat dengan Model Lokal (hijau), Model Global (abu-abu tua), atau seri (abu-abu muda), per indikator. Penilaian per stasiun memakai MAE untuk indikator angka dan Accuracy untuk Arah Mata Angin; algoritma juara masing-masing indikator.', style_caption))
 
-story.append(PageBreak())
 story.append(Paragraph('3.2 Detail Klasifikasi Arah Mata Angin', style_h2))
 story.append(Paragraph(
     f'Untuk target kategori <b>Arah Mata Angin</b>, evaluasi dibedakan dari target regresi memakai Accuracy, Precision, Recall, dan F1-Score (rata-rata makro), dirata-ratakan lintas {len(wd_local["Accuracy"])} stasiun uji (algoritma {ALGO_USED[CLASSIFICATION_TARGET]}). Kriteria pemenang: unggul di &ge;1 dari 2 metrik acuan (Accuracy, F1-Macro):',
@@ -363,8 +361,7 @@ for _, r in df_summary.iterrows():
     if r['rec'] == 'Lokal':
         why = f'Model Lokal lebih akurat di {nl} dari {nn} stasiun (Global {ng}) dan juga unggul pada rata-rata metrik, sehingga kedua kriteria sejalan.'
     elif nl > ng:
-        why = (f'Model Lokal memang lebih akurat di {nl} dari {nn} stasiun (Global {ng}), tetapi pada rata-rata metrik (Tabel 3.1/3.2) Model Global lebih baik '
-               f'&ndash; keunggulan Lokal di banyak stasiun bersifat tipis, sedangkan di stasiun lain Lokal tertinggal jauh. Karena kedua kriteria tidak sejalan, Model Global dipertahankan.')
+        why = (f'Lokal lebih akurat di {nl} dari {nn} stasiun (Global {ng}), tetapi rata-rata metrik (Tabel 3.1/3.2) lebih baik di Global: keunggulan Lokal tipis, sedangkan di stasiun lain Lokal tertinggal jauh. Kriteria tidak sejalan, sehingga Global dipertahankan.')
     elif ng > nl:
         why = f'Model Global lebih akurat di {ng} dari {nn} stasiun (Lokal {nl}) dan juga unggul pada rata-rata metrik, sehingga kedua kriteria sejalan.'
     else:
@@ -373,11 +370,11 @@ for _, r in df_summary.iterrows():
 
 story.append(Spacer(1, 4))
 story.append(make_callout_box(
-    '<b>Rekomendasi arsitektur produksi:</b> untuk indikator di mana Model Global unggul di mayoritas stasiun, pertahankan pipeline produksi satu-model-global seperti Laporan 3 (lebih sederhana dioperasikan &amp; di-retrain). Untuk indikator di mana Model Lokal unggul di mayoritas stasiun, pertimbangkan pipeline hibrida: model global sebagai fallback/baseline, dilengkapi model lokal per-stasiun (dilatih otomatis saat riwayat data stasiun mencukupi, lihat ambang batas Bab 2.2) khusus untuk indikator tsb. Algoritma yang dipakai pada kedua skenario tetap algoritma juara produksi indikator tersebut (Tabel 3.3 Laporan 3, kolom "Algoritma" Bab 3) - keputusan lokal-vs-global tidak mengubah pemilihan algoritma, hanya cakupan data latihnya.',
+    '<b>Rekomendasi arsitektur produksi:</b> pertahankan pipeline satu-model-global seperti Laporan 3 untuk indikator yang direkomendasikan Global (lebih sederhana dioperasikan dan di-retrain). Untuk indikator yang direkomendasikan Lokal, pertimbangkan pipeline hibrida: model global sebagai fallback, dilengkapi model lokal per-stasiun yang dilatih otomatis saat riwayat data mencukupi. Algoritma tetap algoritma juara produksi (Tabel 3.3 Laporan 3); keputusan lokal-vs-global hanya mengubah cakupan data latih.',
     title='REKOMENDASI ARSITEKTUR'
 ))
 
-story.append(Spacer(1, 10))
+story.append(Spacer(1, 4))
 sig_data = [
     [Paragraph('<b>Disiapkan Oleh:</b><br/><br/><br/><u><b>Yudha</b></u><br/>Data Analyst NusaKlim PPKS', style_table_cell),
      Paragraph('<b>Diverifikasi Oleh:</b><br/><br/><br/><u><b>Cut Mardiana</b></u><br/>Asisten TI', style_table_cell),
@@ -387,7 +384,7 @@ tbl_sig = Table(sig_data, colWidths=[172, 172, 171])
 tbl_sig.setStyle(TableStyle([
     ('BOX', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
     ('INNERGRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER),
-    ('PADDING', (0, 0), (-1, -1), 6),
+    ('PADDING', (0, 0), (-1, -1), 3),
     ('VALIGN', (0, 0), (-1, -1), 'TOP'),
 ]))
 story.append(tbl_sig)

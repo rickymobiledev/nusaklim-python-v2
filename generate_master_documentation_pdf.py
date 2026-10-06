@@ -165,7 +165,7 @@ cover_meta = [
     [Paragraph('<b>Model Champion Produksi</b>', style_table_cell_bold), Paragraph(f'<b>Algoritma Juara per-Variabel ({"/".join(_ALGO_SET)}, H+1 s/d H+7)</b> | Akurasi Suhu MAE &plusmn;{_metrics["temp_avg_h1"]["MAE"]:.2f}&deg;C di H+1 | Retrain Penuh &plusmn;21 Menit', style_table_cell_bold)],
     [Paragraph('<b>Layanan Backend &amp; API</b>', style_table_cell_bold), Paragraph('REST API FastAPI Modular (&lt; 30 ms latensi inferensi) + Rekomendasi Agronomi Kebun', style_table_cell)],
     [Paragraph('<b>Validasi Data Aktual</b>', style_table_cell_bold), Paragraph(f'Dibandingkan dengan Open-Meteo pada 7 indikator di 4 stasiun: NusaKlim lebih akurat pada {_join_labels(_NK_BETTER)}; Open-Meteo lebih akurat pada {_join_labels(_OM_BETTER)}', style_table_cell_bold)],
-    [Paragraph('<b>Tim Penyusun</b>', style_table_cell_bold), Paragraph('Tim Data Analyst &amp; AI Engineering PPKS | Tanggal: September 2026', style_table_cell)],
+    [Paragraph('<b>Tim Penyusun</b>', style_table_cell_bold), Paragraph('Tim Data Analyst &amp; AI Engineering PPKS | Tanggal: Oktober 2026', style_table_cell)],
 ]
 tbl_cov = Table(cover_meta, colWidths=[135, 380])
 tbl_cov.setStyle(TableStyle([
