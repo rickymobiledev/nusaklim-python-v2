@@ -1,0 +1,50 @@
+[
+  {
+    "Horizon":"H+1",
+    "Algoritma":"LightGBM (Gradient Boosting)",
+    "MAE":7.8682377475,
+    "RMSE":17.1891672594,
+    "R2":0.8024044974,
+    "Training_s":32.82
+  },
+  {
+    "Horizon":"H+1",
+    "Algoritma":"Ridge Regression (Linear Baseline)",
+    "MAE":7.8119347611,
+    "RMSE":17.4965458252,
+    "R2":0.7952744636,
+    "Training_s":0.06
+  },
+  {
+    "Horizon":"H+1",
+    "Algoritma":"Random Forest (Ensemble Bagging)",
+    "MAE":7.2271236982,
+    "RMSE":16.9609172165,
+    "R2":0.807617285,
+    "Training_s":68.33
+  },
+  {
+    "Horizon":"H+7",
+    "Algoritma":"LightGBM (Gradient Boosting)",
+    "MAE":8.3979019902,
+    "RMSE":17.0901733991,
+    "R2":0.8078214583,
+    "Training_s":71.15
+  },
+  {
+    "Horizon":"H+7",
+    "Algoritma":"Ridge Regression (Linear Baseline)",
+    "MAE":8.0839273747,
+    "RMSE":17.1190506705,
+    "R2":0.8071714613,
+    "Training_s":0.08
+  },
+  {
+    "Horizon":"H+7",
+    "Algoritma":"Random Forest (Ensemble Bagging)",
+    "MAE":8.1718074963,
+    "RMSE":17.2815948801,
+    "R2":0.8034922897,
+    "Training_s":73.87
+  }
+]

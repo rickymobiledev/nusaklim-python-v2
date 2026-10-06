@@ -38,7 +38,7 @@ class ForecastResponse(BaseModel):
     station: StationInfo
     generated_at_wib: str
     model_version: str
-    model_algorithm: str = "LightGBM Multi-Horizon Regressor & Classifier"
+    model_algorithm: str = "Multi-Algoritma per Variabel (Ridge Regression / LightGBM)"
     evaluation_mae_temp: float = 0.801
     forecast: List[DailyForecastItem]
 
@@ -69,3 +69,47 @@ class RetrainResponse(BaseModel):
     message: str
     task_id: str
     timestamp: str
+
+class PhysicalForecastDay(BaseModel):
+    date: str = Field(..., example="2026-10-01")
+    temperature: float = Field(..., example=27.7)
+    humidity: float = Field(..., example=80)
+    radiation: float = Field(..., example=21.51)
+    rainfall: float = Field(..., example=1.9)
+    airPressure: float = Field(..., example=1007)
+    windSpeed: float = Field(..., example=1.66)
+    windDirectionDeg: float = Field(..., example=219)
+
+class PhysicalForecastUnits(BaseModel):
+    temperature: str = "°C"
+    humidity: str = "%"
+    radiation: str = "MJ/m²"
+    rainfall: str = "mm"
+    airPressure: str = "hPa"
+    windSpeed: str = "m/s"
+
+class PhysicalForecastData(BaseModel):
+    stationId: str
+    stationName: str
+    latitude: float
+    longitude: float
+    timezone: str = "Asia/Jakarta"
+    generatedAt: str = Field(..., description="Waktu forecast ini dihitung (WIB), bukan waktu observasi sensor.")
+    dataSource: str = Field(
+        ..., example="model",
+        description="'model' = prediksi 49 sub-model produksi dari histori stasiun ybs. "
+                    "'fallback_statistik' = stasiun tanpa histori/model gagal muat - nilai rata-rata nasional, BUKAN prediksi sungguhan."
+    )
+    forecast: List[PhysicalForecastDay]
+    units: PhysicalForecastUnits = Field(default_factory=PhysicalForecastUnits)
+
+class PhysicalForecastResponse(BaseModel):
+    data: PhysicalForecastData
+
+class PhysicalForecastBulkError(BaseModel):
+    stationId: str
+    error: str
+
+class PhysicalForecastBulkResponse(BaseModel):
+    data: List[PhysicalForecastData]
+    errors: List[PhysicalForecastBulkError] = Field(default_factory=list)

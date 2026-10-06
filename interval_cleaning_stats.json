@@ -1,0 +1,48 @@
+{
+  "total_raw_rows": 14827287,
+  "dropped_non_station": 7,
+  "dropped_invalid_timestamp": 1,
+  "dropped_epoch_setup": 3566,
+  "retained_valid_rows": 14823713,
+  "qc_masked_to_nan": {
+    "temp": 150080,
+    "humidity": 112360,
+    "pressure": 117649,
+    "rain": 29767,
+    "solar": 125808,
+    "windspd": 105758,
+    "winddir": 146834
+  },
+  "output_file_bytes": 1018140382,
+  "elapsed_seconds": 340.6,
+  "thresholds": {
+    "temp_c": [
+      0.0,
+      100.0
+    ],
+    "humidity_pct": [
+      0.0,
+      100.0
+    ],
+    "pressure_hpa": [
+      500.0,
+      1200.0
+    ],
+    "rainfall_mm": [
+      0.0,
+      1000.0
+    ],
+    "solar_radiation_wm2": [
+      0.0,
+      2000.0
+    ],
+    "wind_speed_kmh": [
+      0.0,
+      100.0
+    ],
+    "wind_direction_deg": [
+      0.0,
+      360.0
+    ]
+  }
+}

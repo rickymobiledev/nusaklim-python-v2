@@ -1,0 +1,538 @@
+{
+  "phase1_global_vs_local": {
+    "217": {
+      "station_name": "Balap",
+      "n_train_local": 886,
+      "n_test": 28,
+      "n_test_global": 28,
+      "local_model": {
+        "MAE": 0.7673,
+        "RMSE": 0.9337,
+        "R2": 0.0998
+      },
+      "global_model": {
+        "MAE": 0.8874,
+        "RMSE": 1.0426,
+        "R2": -0.1388
+      }
+    },
+    "222": {
+      "station_name": "Rambutan",
+      "n_train_local": 668,
+      "n_test": 29,
+      "n_test_global": 30,
+      "local_model": {
+        "MAE": 0.8084,
+        "RMSE": 0.9959,
+        "R2": -0.3586
+      },
+      "global_model": {
+        "MAE": 1.0451,
+        "RMSE": 1.2242,
+        "R2": -1.1143
+      }
+    },
+    "224": {
+      "station_name": "Adolina",
+      "n_train_local": 811,
+      "n_test": 29,
+      "n_test_global": 30,
+      "local_model": {
+        "MAE": 0.8557,
+        "RMSE": 1.0243,
+        "R2": -0.3623
+      },
+      "global_model": {
+        "MAE": 1.1277,
+        "RMSE": 1.3059,
+        "R2": -1.2815
+      }
+    },
+    "243": {
+      "station_name": "Sei Galuh",
+      "n_train_local": 828,
+      "n_test": 29,
+      "n_test_global": 30,
+      "local_model": {
+        "MAE": 0.8125,
+        "RMSE": 0.9246,
+        "R2": -0.0159
+      },
+      "global_model": {
+        "MAE": 0.7537,
+        "RMSE": 0.9041,
+        "R2": 0.0071
+      }
+    },
+    "248": {
+      "station_name": "Bentayan",
+      "n_train_local": 496,
+      "n_test": 29,
+      "n_test_global": 30,
+      "local_model": {
+        "MAE": 0.6836,
+        "RMSE": 0.8811,
+        "R2": 0.0357
+      },
+      "global_model": {
+        "MAE": 0.8611,
+        "RMSE": 1.0431,
+        "R2": -0.3642
+      }
+    },
+    "267": {
+      "station_name": "Meliau",
+      "n_train_local": 462,
+      "n_test": 29,
+      "n_test_global": 30,
+      "local_model": {
+        "MAE": 1.0624,
+        "RMSE": 1.3526,
+        "R2": -0.8232
+      },
+      "global_model": {
+        "MAE": 1.0304,
+        "RMSE": 1.2994,
+        "R2": -0.6663
+      }
+    }
+  },
+  "phase2_ml_vs_dl": {
+    "217": {
+      "station_name": "Balap",
+      "n_train": 886,
+      "n_test": 28,
+      "models": [
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "LightGBM",
+          "MAE": 0.7673,
+          "RMSE": 0.9337,
+          "R2": 0.0998,
+          "Training_Time_s": 0.868
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "XGBoost",
+          "MAE": 0.8469,
+          "RMSE": 0.9788,
+          "R2": 0.0109,
+          "Training_Time_s": 2.27
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "CatBoost",
+          "MAE": 0.8858,
+          "RMSE": 1.0349,
+          "R2": -0.1059,
+          "Training_Time_s": 2.828
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "Random Forest",
+          "MAE": 0.8156,
+          "RMSE": 0.9715,
+          "R2": 0.0255,
+          "Training_Time_s": 1.296
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "Ridge Regression",
+          "MAE": 0.9672,
+          "RMSE": 1.0561,
+          "R2": -0.1516,
+          "Training_Time_s": 0.026
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "LSTM",
+          "MAE": 0.8107,
+          "RMSE": 0.9906,
+          "R2": -0.0444,
+          "Training_Time_s": 15.315
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "GRU",
+          "MAE": 0.8149,
+          "RMSE": 0.993,
+          "R2": -0.0493,
+          "Training_Time_s": 17.307
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "Deep MLP",
+          "MAE": 1.9199,
+          "RMSE": 2.3402,
+          "R2": -4.654,
+          "Training_Time_s": 3.991
+        }
+      ]
+    },
+    "222": {
+      "station_name": "Rambutan",
+      "n_train": 668,
+      "n_test": 29,
+      "models": [
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "LightGBM",
+          "MAE": 0.8084,
+          "RMSE": 0.9959,
+          "R2": -0.3586,
+          "Training_Time_s": 0.559
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "XGBoost",
+          "MAE": 0.887,
+          "RMSE": 1.0763,
+          "R2": -0.5869,
+          "Training_Time_s": 2.003
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "CatBoost",
+          "MAE": 0.7672,
+          "RMSE": 0.9209,
+          "R2": -0.1617,
+          "Training_Time_s": 2.683
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "Random Forest",
+          "MAE": 0.8048,
+          "RMSE": 0.9684,
+          "R2": -0.2848,
+          "Training_Time_s": 1.018
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "Ridge Regression",
+          "MAE": 0.7496,
+          "RMSE": 0.9244,
+          "R2": -0.1707,
+          "Training_Time_s": 0.013
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "LSTM",
+          "MAE": 0.8701,
+          "RMSE": 1.0396,
+          "R2": -0.5248,
+          "Training_Time_s": 15.124
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "GRU",
+          "MAE": 0.8591,
+          "RMSE": 1.0277,
+          "R2": -0.4901,
+          "Training_Time_s": 10.672
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "Deep MLP",
+          "MAE": 1.4388,
+          "RMSE": 1.8424,
+          "R2": -3.6502,
+          "Training_Time_s": 2.058
+        }
+      ]
+    },
+    "224": {
+      "station_name": "Adolina",
+      "n_train": 811,
+      "n_test": 29,
+      "models": [
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "LightGBM",
+          "MAE": 0.8557,
+          "RMSE": 1.0243,
+          "R2": -0.3623,
+          "Training_Time_s": 1.007
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "XGBoost",
+          "MAE": 0.8746,
+          "RMSE": 1.0882,
+          "R2": -0.5374,
+          "Training_Time_s": 1.454
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "CatBoost",
+          "MAE": 0.8083,
+          "RMSE": 1.0042,
+          "R2": -0.3094,
+          "Training_Time_s": 2.149
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "Random Forest",
+          "MAE": 0.8364,
+          "RMSE": 1.0392,
+          "R2": -0.4023,
+          "Training_Time_s": 0.813
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "Ridge Regression",
+          "MAE": 0.7415,
+          "RMSE": 0.9129,
+          "R2": -0.0821,
+          "Training_Time_s": 0.007
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "LSTM",
+          "MAE": 0.897,
+          "RMSE": 1.0349,
+          "R2": -0.4329,
+          "Training_Time_s": 5.161
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "GRU",
+          "MAE": 0.939,
+          "RMSE": 1.0709,
+          "R2": -0.5341,
+          "Training_Time_s": 11.689
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "Deep MLP",
+          "MAE": 1.1144,
+          "RMSE": 1.4778,
+          "R2": -1.8358,
+          "Training_Time_s": 3.039
+        }
+      ]
+    },
+    "243": {
+      "station_name": "Sei Galuh",
+      "n_train": 828,
+      "n_test": 29,
+      "models": [
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "LightGBM",
+          "MAE": 0.8125,
+          "RMSE": 0.9246,
+          "R2": -0.0159,
+          "Training_Time_s": 0.956
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "XGBoost",
+          "MAE": 0.839,
+          "RMSE": 0.986,
+          "R2": -0.1552,
+          "Training_Time_s": 2.358
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "CatBoost",
+          "MAE": 0.813,
+          "RMSE": 0.9617,
+          "R2": -0.099,
+          "Training_Time_s": 3.288
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "Random Forest",
+          "MAE": 0.7843,
+          "RMSE": 0.9408,
+          "R2": -0.0517,
+          "Training_Time_s": 0.882
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "Ridge Regression",
+          "MAE": 0.7953,
+          "RMSE": 0.9395,
+          "R2": -0.0487,
+          "Training_Time_s": 0.01
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "LSTM",
+          "MAE": 0.7927,
+          "RMSE": 0.9817,
+          "R2": -0.1706,
+          "Training_Time_s": 8.163
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "GRU",
+          "MAE": 0.7876,
+          "RMSE": 0.9759,
+          "R2": -0.1569,
+          "Training_Time_s": 11.431
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "Deep MLP",
+          "MAE": 1.7269,
+          "RMSE": 2.1171,
+          "R2": -4.326,
+          "Training_Time_s": 2.157
+        }
+      ]
+    },
+    "248": {
+      "station_name": "Bentayan",
+      "n_train": 496,
+      "n_test": 29,
+      "models": [
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "LightGBM",
+          "MAE": 0.6836,
+          "RMSE": 0.8811,
+          "R2": 0.0357,
+          "Training_Time_s": 0.494
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "XGBoost",
+          "MAE": 0.6331,
+          "RMSE": 0.8777,
+          "R2": 0.0431,
+          "Training_Time_s": 1.271
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "CatBoost",
+          "MAE": 0.6857,
+          "RMSE": 0.8674,
+          "R2": 0.0656,
+          "Training_Time_s": 1.853
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "Random Forest",
+          "MAE": 0.6164,
+          "RMSE": 0.8093,
+          "R2": 0.1865,
+          "Training_Time_s": 0.491
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "Ridge Regression",
+          "MAE": 0.6027,
+          "RMSE": 0.7844,
+          "R2": 0.2358,
+          "Training_Time_s": 0.006
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "LSTM",
+          "MAE": 0.8718,
+          "RMSE": 1.0544,
+          "R2": -0.3941,
+          "Training_Time_s": 2.497
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "GRU",
+          "MAE": 0.8691,
+          "RMSE": 1.0521,
+          "R2": -0.3878,
+          "Training_Time_s": 8.396
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "Deep MLP",
+          "MAE": 2.7535,
+          "RMSE": 2.9838,
+          "R2": -10.0577,
+          "Training_Time_s": 1.842
+        }
+      ]
+    },
+    "267": {
+      "station_name": "Meliau",
+      "n_train": 462,
+      "n_test": 29,
+      "models": [
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "LightGBM",
+          "MAE": 1.0624,
+          "RMSE": 1.3526,
+          "R2": -0.8232,
+          "Training_Time_s": 0.643
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "XGBoost",
+          "MAE": 0.9719,
+          "RMSE": 1.3085,
+          "R2": -0.7062,
+          "Training_Time_s": 1.67
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "CatBoost",
+          "MAE": 0.9626,
+          "RMSE": 1.2365,
+          "R2": -0.5237,
+          "Training_Time_s": 2.014
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "Random Forest",
+          "MAE": 0.9401,
+          "RMSE": 1.279,
+          "R2": -0.6303,
+          "Training_Time_s": 0.559
+        },
+        {
+          "Category": "Machine Learning",
+          "Algorithm": "Ridge Regression",
+          "MAE": 1.0152,
+          "RMSE": 1.3055,
+          "R2": -0.6983,
+          "Training_Time_s": 0.007
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "LSTM",
+          "MAE": 1.2798,
+          "RMSE": 1.4786,
+          "R2": -1.1575,
+          "Training_Time_s": 2.494
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "GRU",
+          "MAE": 1.2876,
+          "RMSE": 1.4864,
+          "R2": -1.1803,
+          "Training_Time_s": 6.157
+        },
+        {
+          "Category": "Deep Learning",
+          "Algorithm": "Deep MLP",
+          "MAE": 1.7975,
+          "RMSE": 2.2733,
+          "R2": -4.1502,
+          "Training_Time_s": 1.327
+        }
+      ]
+    }
+  },
+  "split_date": "2026-07-21",
+  "end_date": "2026-08-19",
+  "stations": {
+    "217": "Balap",
+    "222": "Rambutan",
+    "224": "Adolina",
+    "243": "Sei Galuh",
+    "248": "Bentayan",
+    "267": "Meliau"
+  }
+}

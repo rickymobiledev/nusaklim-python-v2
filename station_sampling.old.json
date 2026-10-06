@@ -1,0 +1,1287 @@
+{
+  "seed": 42,
+  "method": "Sampel acak sederhana dari seluruh stasiun yang memiliki data, menggunakan numpy Generator(PCG64) seed=42.",
+  "n_data_stations_total": 183,
+  "n_stations_unmatched_no_device_metadata": 11,
+  "n_stations_available": 172,
+  "n_global_10": 10,
+  "n_local_30": 30,
+  "global_10": [
+    {
+      "stnname": "2118",
+      "name": "Rantau Prapat",
+      "latitude": 2.118762082931541,
+      "longitude": 99.80197794681806
+    },
+    {
+      "stnname": "2120",
+      "name": "Sei Kebara",
+      "latitude": 1.7402634226813645,
+      "longitude": 100.25389232442902
+    },
+    {
+      "stnname": "214",
+      "name": "Sei Daun",
+      "latitude": 1.6695,
+      "longitude": 100.313
+    },
+    {
+      "stnname": "2179",
+      "name": "Sei Pagar",
+      "latitude": 0.326288,
+      "longitude": 101.352241
+    },
+    {
+      "stnname": "2218",
+      "name": "Talo Pino",
+      "latitude": -4.251580332708067,
+      "longitude": 102.72007053682891
+    },
+    {
+      "stnname": "2230",
+      "name": "Bojong Datar",
+      "latitude": -6.446506,
+      "longitude": 106.02178
+    },
+    {
+      "stnname": "2240",
+      "name": "Kebun Jollong",
+      "latitude": -6.6505185,
+      "longitude": 110.9119635
+    },
+    {
+      "stnname": "254",
+      "name": "Dusun Hulu",
+      "latitude": 3.09945,
+      "longitude": 99.339
+    },
+    {
+      "stnname": "294",
+      "name": "Bukit Tujuh",
+      "latitude": 1.5665607699370103,
+      "longitude": 100.26511506221236
+    },
+    {
+      "stnname": "296",
+      "name": "Sawit Langkat",
+      "latitude": 3.701234193964426,
+      "longitude": 98.29418656602854
+    }
+  ],
+  "local_30": [
+    {
+      "stnname": "2116",
+      "name": "Sei Dadap",
+      "latitude": 2.953745,
+      "longitude": 99.668627
+    },
+    {
+      "stnname": "2118",
+      "name": "Rantau Prapat",
+      "latitude": 2.118762082931541,
+      "longitude": 99.80197794681806
+    },
+    {
+      "stnname": "2124",
+      "name": "Pulau Mandi",
+      "latitude": 2.8674871,
+      "longitude": 99.5013493
+    },
+    {
+      "stnname": "2136",
+      "name": "Gunung Bayu",
+      "latitude": 3.145568117719985,
+      "longitude": 99.37143716238128
+    },
+    {
+      "stnname": "2168",
+      "name": "Pandawa",
+      "latitude": -2.033,
+      "longitude": 116.068
+    },
+    {
+      "stnname": "2170",
+      "name": "Wilmar Karunia Kencana Permai Sejati",
+      "latitude": -2.24,
+      "longitude": 112.52
+    },
+    {
+      "stnname": "2171",
+      "name": "Wilmar Daya Landak Plantation",
+      "latitude": 0.329,
+      "longitude": 110.127
+    },
+    {
+      "stnname": "2175",
+      "name": "Wilmar Agro Nusa Investama",
+      "latitude": 1.2710731,
+      "longitude": 109.4349025
+    },
+    {
+      "stnname": "2179",
+      "name": "Sei Pagar",
+      "latitude": 0.326288,
+      "longitude": 101.352241
+    },
+    {
+      "stnname": "2182",
+      "name": "Air Molek 2",
+      "latitude": -0.4094513084919175,
+      "longitude": 102.1999030832712
+    },
+    {
+      "stnname": "2186",
+      "name": "Pangkalan 50 Kota",
+      "latitude": 0.0934492965545542,
+      "longitude": 100.67189772507685
+    },
+    {
+      "stnname": "2187",
+      "name": "Rimbo Dua",
+      "latitude": -1.3817259409201677,
+      "longitude": 102.17591728281636
+    },
+    {
+      "stnname": "2198",
+      "name": "Hanusentra Agro Lestari",
+      "latitude": 1.1704219452215396,
+      "longitude": 117.95331510005424
+    },
+    {
+      "stnname": "2199",
+      "name": "Hapesong ",
+      "latitude": 1.452212730288131,
+      "longitude": 99.0689653851014
+    },
+    {
+      "stnname": "2214",
+      "name": "Kayan Wilayah 1",
+      "latitude": 2.682492533898542,
+      "longitude": 117.60619243600053
+    },
+    {
+      "stnname": "2218",
+      "name": "Talo Pino",
+      "latitude": -4.251580332708067,
+      "longitude": 102.72007053682891
+    },
+    {
+      "stnname": "2223",
+      "name": "Way Lima",
+      "latitude": -5.4198519,
+      "longitude": 105.0676954
+    },
+    {
+      "stnname": "2224",
+      "name": "Bergen",
+      "latitude": -5.3262579652059525,
+      "longitude": 105.4446599783662
+    },
+    {
+      "stnname": "2226",
+      "name": "Karang Inong",
+      "latitude": 4.7469459,
+      "longitude": 97.7766979
+    },
+    {
+      "stnname": "2230",
+      "name": "Bojong Datar",
+      "latitude": -6.446506,
+      "longitude": 106.02178
+    },
+    {
+      "stnname": "2239",
+      "name": "Kebun Blimbing",
+      "latitude": -7.0524337,
+      "longitude": 109.6351699
+    },
+    {
+      "stnname": "2241",
+      "name": "Kebun Kaligua",
+      "latitude": -7.2817858,
+      "longitude": 109.1114411
+    },
+    {
+      "stnname": "225",
+      "name": "Cot Girek",
+      "latitude": 4.92942,
+      "longitude": 97.3539
+    },
+    {
+      "stnname": "245",
+      "name": "Tandun",
+      "latitude": 0.598833,
+      "longitude": 100.6909792
+    },
+    {
+      "stnname": "249",
+      "name": "Padang Pelawi",
+      "latitude": -3.94718,
+      "longitude": 102.406
+    },
+    {
+      "stnname": "260",
+      "name": "Tualang Sawit",
+      "latitude": 4.50689,
+      "longitude": 97.8215
+    },
+    {
+      "stnname": "263",
+      "name": "Maroangin",
+      "latitude": -3.68068,
+      "longitude": 119.858
+    },
+    {
+      "stnname": "267",
+      "name": "Meliau",
+      "latitude": -0.07283,
+      "longitude": 110.289
+    },
+    {
+      "stnname": "289",
+      "name": "Durian Luncuk",
+      "latitude": -1.9403741091914788,
+      "longitude": 103.12551540064932
+    },
+    {
+      "stnname": "292",
+      "name": "Berangir",
+      "latitude": 2.2246933060483327,
+      "longitude": 99.76069636085936
+    }
+  ],
+  "full_roster": [
+    {
+      "stnname": "200",
+      "name": "Bekri",
+      "latitude": -5.2057508,
+      "longitude": 104.792489
+    },
+    {
+      "stnname": "201",
+      "name": "Padang Ratu",
+      "latitude": -5.0302857,
+      "longitude": 104.6358081
+    },
+    {
+      "stnname": "202",
+      "name": "Sungai Lengi",
+      "latitude": -3.552060266701056,
+      "longitude": 103.83772702175445
+    },
+    {
+      "stnname": "203",
+      "name": "Betung Krawo",
+      "latitude": -2.788742551184165,
+      "longitude": 104.22740293973244
+    },
+    {
+      "stnname": "205",
+      "name": "PMO_Kebun Gamboeng",
+      "latitude": -7.1478857,
+      "longitude": 107.5146708
+    },
+    {
+      "stnname": "209",
+      "name": "Gunung Pamela",
+      "latitude": 3.3428,
+      "longitude": 98.828
+    },
+    {
+      "stnname": "210",
+      "name": "Sarang Giting",
+      "latitude": 3.42404,
+      "longitude": 98.9594
+    },
+    {
+      "stnname": "2101",
+      "name": "Bandar Selamat",
+      "latitude": 2.6686942,
+      "longitude": 99.5415009
+    },
+    {
+      "stnname": "2105",
+      "name": "Sisumut",
+      "latitude": 1.962738231552108,
+      "longitude": 100.10753496436782
+    },
+    {
+      "stnname": "2106",
+      "name": "Wilmar Burnai Timur",
+      "latitude": -3.6235393738368455,
+      "longitude": 104.85301583577734
+    },
+    {
+      "stnname": "211",
+      "name": "PPKS Marihat",
+      "latitude": 2.91996,
+      "longitude": 99.0901
+    },
+    {
+      "stnname": "2114",
+      "name": "Wilmar EMU CKP",
+      "latitude": -2.5868628,
+      "longitude": 112.505806
+    },
+    {
+      "stnname": "2116",
+      "name": "Sei Dadap",
+      "latitude": 2.953745,
+      "longitude": 99.668627
+    },
+    {
+      "stnname": "2117",
+      "name": "Labuhan Haji",
+      "latitude": 2.536322074501821,
+      "longitude": 99.70538352914691
+    },
+    {
+      "stnname": "2118",
+      "name": "Rantau Prapat",
+      "latitude": 2.118762082931541,
+      "longitude": 99.80197794681806
+    },
+    {
+      "stnname": "2119",
+      "name": "Wilmar KSI",
+      "latitude": -2.5947448763797656,
+      "longitude": 112.50732801333676
+    },
+    {
+      "stnname": "2120",
+      "name": "Sei Kebara",
+      "latitude": 1.7402634226813645,
+      "longitude": 100.25389232442902
+    },
+    {
+      "stnname": "2121",
+      "name": "Ambalutu",
+      "latitude": 2.863813733729323,
+      "longitude": 99.4619321920678
+    },
+    {
+      "stnname": "2122",
+      "name": "Muara Opu",
+      "latitude": 1.3095248,
+      "longitude": 98.8558431
+    },
+    {
+      "stnname": "2123",
+      "name": "Bandar Betsy",
+      "latitude": 3.2055885,
+      "longitude": 99.259469
+    },
+    {
+      "stnname": "2124",
+      "name": "Pulau Mandi",
+      "latitude": 2.8674871,
+      "longitude": 99.5013493
+    },
+    {
+      "stnname": "2125",
+      "name": "Sei Putih",
+      "latitude": 3.410056303628423,
+      "longitude": 98.88279865390165
+    },
+    {
+      "stnname": "2126",
+      "name": "Merbau Selatan",
+      "latitude": 2.208477599761028,
+      "longitude": 99.83440545979192
+    },
+    {
+      "stnname": "2127",
+      "name": "Tanah Raja",
+      "latitude": 3.534632980092025,
+      "longitude": 99.04735491638584
+    },
+    {
+      "stnname": "2128",
+      "name": "Silau Dunia",
+      "latitude": 3.282251887518337,
+      "longitude": 98.95825542662034
+    },
+    {
+      "stnname": "2129",
+      "name": "Gunung Para",
+      "latitude": 3.164771343591032,
+      "longitude": 99.10764257305443
+    },
+    {
+      "stnname": "2132",
+      "name": "Wilmar Murini Sam Sam",
+      "latitude": 1.0607930987752985,
+      "longitude": 101.23938600987138
+    },
+    {
+      "stnname": "2133",
+      "name": "Dolok Ilir",
+      "latitude": 3.119778900829492,
+      "longitude": 99.16050316938538
+    },
+    {
+      "stnname": "2134",
+      "name": "Toba Sari",
+      "latitude": 2.8373499771872157,
+      "longitude": 98.85897725352449
+    },
+    {
+      "stnname": "2135",
+      "name": "Kedaton",
+      "latitude": -5.35861558364148,
+      "longitude": 105.36896829875268
+    },
+    {
+      "stnname": "2136",
+      "name": "Gunung Bayu",
+      "latitude": 3.145568117719985,
+      "longitude": 99.37143716238128
+    },
+    {
+      "stnname": "2137",
+      "name": "Panai Jaya",
+      "latitude": 2.433765957125573,
+      "longitude": 100.27176150517197
+    },
+    {
+      "stnname": "2138",
+      "name": "Pasir Mandoge",
+      "latitude": 2.7708582350775,
+      "longitude": 99.31981176354982
+    },
+    {
+      "stnname": "2139",
+      "name": "Mayang",
+      "latitude": 3.029094187171964,
+      "longitude": 99.33301107793376
+    },
+    {
+      "stnname": "214",
+      "name": "Sei Daun",
+      "latitude": 1.6695,
+      "longitude": 100.313
+    },
+    {
+      "stnname": "2140",
+      "name": "Dolok Sinumbah",
+      "latitude": 3.1131151661058225,
+      "longitude": 99.3296115986694
+    },
+    {
+      "stnname": "2141",
+      "name": "Pabatu",
+      "latitude": 3.286529,
+      "longitude": 99.110878
+    },
+    {
+      "stnname": "2142",
+      "name": "Air Batu",
+      "latitude": 2.860210819200727,
+      "longitude": 99.63801196263098
+    },
+    {
+      "stnname": "2143",
+      "name": "Balimbingan",
+      "latitude": 2.8892999333413574,
+      "longitude": 99.15034296819609
+    },
+    {
+      "stnname": "2144",
+      "name": "Pagar Alam",
+      "latitude": -4.026432307558183,
+      "longitude": 103.18800334345376
+    },
+    {
+      "stnname": "2147",
+      "name": "Kebun Batujamus",
+      "latitude": -7.538340910267302,
+      "longitude": 111.0496961208136
+    },
+    {
+      "stnname": "2148",
+      "name": "Kebun Balong",
+      "latitude": -6.460735105748454,
+      "longitude": 110.8356588272789
+    },
+    {
+      "stnname": "2149",
+      "name": "Tinjowan",
+      "latitude": 3.0839948782996447,
+      "longitude": 99.51266686178676
+    },
+    {
+      "stnname": "215",
+      "name": "Ophir",
+      "latitude": 0.01134,
+      "longitude": 99.83
+    },
+    {
+      "stnname": "2150",
+      "name": "Bukit Lima",
+      "latitude": 2.9406686241424738,
+      "longitude": 99.34772170213564
+    },
+    {
+      "stnname": "2151",
+      "name": "Padang Matinggi",
+      "latitude": 3.0750887425835427,
+      "longitude": 99.50305436172532
+    },
+    {
+      "stnname": "2152",
+      "name": "Timur",
+      "latitude": 0.3593627484269688,
+      "longitude": 99.30120299084176
+    },
+    {
+      "stnname": "2153",
+      "name": "Tandem",
+      "latitude": 3.635875525761388,
+      "longitude": 98.51528888312424
+    },
+    {
+      "stnname": "2154",
+      "name": "Air Tenang",
+      "latitude": 3.6217128,
+      "longitude": 98.1729058
+    },
+    {
+      "stnname": "2155",
+      "name": "Bah Jambi",
+      "latitude": 2.9876302120777933,
+      "longitude": 99.22315832363272
+    },
+    {
+      "stnname": "2156",
+      "name": "Meranti Paham ",
+      "latitude": 2.3355059426357574,
+      "longitude": 100.1876520002817
+    },
+    {
+      "stnname": "2157",
+      "name": "Marjandi",
+      "latitude": 2.9261849018796204,
+      "longitude": 98.9563350940678
+    },
+    {
+      "stnname": "2158",
+      "name": "Tanah Itam Ulu",
+      "latitude": 3.195151696355837,
+      "longitude": 99.45770279154088
+    },
+    {
+      "stnname": "2159",
+      "name": "Huta Padang",
+      "latitude": 2.885273105011393,
+      "longitude": 99.4191590731234
+    },
+    {
+      "stnname": "216",
+      "name": "Tanjung Garbus",
+      "latitude": 3.52501,
+      "longitude": 98.871
+    },
+    {
+      "stnname": "2160",
+      "name": "Gunung Monako",
+      "latitude": 3.225241743138952,
+      "longitude": 98.99994793074904
+    },
+    {
+      "stnname": "2164",
+      "name": "Longkali",
+      "latitude": -1.42,
+      "longitude": 116.25
+    },
+    {
+      "stnname": "2165",
+      "name": "Sungai Dekan",
+      "latitude": -0.09,
+      "longitude": 110.38
+    },
+    {
+      "stnname": "2166",
+      "name": "Danau Salak",
+      "latitude": -3.32,
+      "longitude": 114.95
+    },
+    {
+      "stnname": "2167",
+      "name": "Rimba Belian",
+      "latitude": -0.0327527,
+      "longitude": 110.4613682
+    },
+    {
+      "stnname": "2168",
+      "name": "Pandawa",
+      "latitude": -2.033,
+      "longitude": 116.068
+    },
+    {
+      "stnname": "2169",
+      "name": "Wilmar Sarana Titian Permata 2",
+      "latitude": -2.885,
+      "longitude": 112.54
+    },
+    {
+      "stnname": "217",
+      "name": "Balap",
+      "latitude": 0.31769,
+      "longitude": 99.167
+    },
+    {
+      "stnname": "2170",
+      "name": "Wilmar Karunia Kencana Permai Sejati",
+      "latitude": -2.24,
+      "longitude": 112.52
+    },
+    {
+      "stnname": "2171",
+      "name": "Wilmar Daya Landak Plantation",
+      "latitude": 0.329,
+      "longitude": 110.127
+    },
+    {
+      "stnname": "2172",
+      "name": "Ngabang",
+      "latitude": 0.3396376,
+      "longitude": 109.9038862
+    },
+    {
+      "stnname": "2173",
+      "name": "Wilmar Bumipratama Khatulistiwa",
+      "latitude": 0.0423213055986253,
+      "longitude": 109.3935094316883
+    },
+    {
+      "stnname": "2174",
+      "name": "Kembayan",
+      "latitude": 0.469577,
+      "longitude": 110.3587285
+    },
+    {
+      "stnname": "2175",
+      "name": "Wilmar Agro Nusa Investama",
+      "latitude": 1.2710731,
+      "longitude": 109.4349025
+    },
+    {
+      "stnname": "2176",
+      "name": "Sei Siasam",
+      "latitude": 0.5505027109408489,
+      "longitude": 100.49898115677084
+    },
+    {
+      "stnname": "2177",
+      "name": "Lubuk Dalam",
+      "latitude": 0.6264638114917556,
+      "longitude": 101.78208846155869
+    },
+    {
+      "stnname": "2178",
+      "name": "Tanjung Medan",
+      "latitude": 1.556078821505288,
+      "longitude": 100.56325101673124
+    },
+    {
+      "stnname": "2179",
+      "name": "Sei Pagar",
+      "latitude": 0.326288,
+      "longitude": 101.352241
+    },
+    {
+      "stnname": "218",
+      "name": "Batang Toru",
+      "latitude": 1.4864,
+      "longitude": 99.0505
+    },
+    {
+      "stnname": "2180",
+      "name": "Tanah Putih",
+      "latitude": 1.7425679895759478,
+      "longitude": 100.51239304219467
+    },
+    {
+      "stnname": "2181",
+      "name": "Sei Rokan",
+      "latitude": 0.74,
+      "longitude": 100.59
+    },
+    {
+      "stnname": "2182",
+      "name": "Air Molek 2",
+      "latitude": -0.4094513084919175,
+      "longitude": 102.1999030832712
+    },
+    {
+      "stnname": "2183",
+      "name": "Air Molek 1",
+      "latitude": -0.4094612815140749,
+      "longitude": 102.19988292914474
+    },
+    {
+      "stnname": "2184",
+      "name": "Glantangan",
+      "latitude": -8.33,
+      "longitude": 113.696
+    },
+    {
+      "stnname": "2185",
+      "name": "Ngrangkah Pawon",
+      "latitude": -7.9011146,
+      "longitude": 112.2247266
+    },
+    {
+      "stnname": "2186",
+      "name": "Pangkalan 50 Kota",
+      "latitude": 0.0934492965545542,
+      "longitude": 100.67189772507685
+    },
+    {
+      "stnname": "2187",
+      "name": "Rimbo Dua",
+      "latitude": -1.3817259409201677,
+      "longitude": 102.17591728281636
+    },
+    {
+      "stnname": "2188",
+      "name": "Bunut",
+      "latitude": -1.9102376215825372,
+      "longitude": 103.40380888548492
+    },
+    {
+      "stnname": "2189",
+      "name": "Bukit Cermin",
+      "latitude": -2.4374438,
+      "longitude": 102.5355412
+    },
+    {
+      "stnname": "219",
+      "name": "Aek Nabara Utara",
+      "latitude": 2.0578,
+      "longitude": 99.9568
+    },
+    {
+      "stnname": "2190",
+      "name": "Tanjung Lebar",
+      "latitude": -2.0180429034519527,
+      "longitude": 103.54654187169508
+    },
+    {
+      "stnname": "2191",
+      "name": "Lagan",
+      "latitude": -1.101506350763098,
+      "longitude": 103.6884778745425
+    },
+    {
+      "stnname": "2192",
+      "name": "Batanghari",
+      "latitude": -1.7212894,
+      "longitude": 103.4050856
+    },
+    {
+      "stnname": "2193",
+      "name": "Bukit Kausar",
+      "latitude": -1.242688,
+      "longitude": 102.599687
+    },
+    {
+      "stnname": "2194",
+      "name": "Laras",
+      "latitude": 3.091844,
+      "longitude": 99.202888
+    },
+    {
+      "stnname": "2195",
+      "name": "Marihat",
+      "latitude": 2.9194421329251377,
+      "longitude": 99.08231871573192
+    },
+    {
+      "stnname": "2196",
+      "name": "Tonduhan",
+      "latitude": 2.827984200019764,
+      "longitude": 99.2117574989727
+    },
+    {
+      "stnname": "2197",
+      "name": "Wilmar Wonosari",
+      "latitude": 2.1501066782337053,
+      "longitude": 99.99485749685272
+    },
+    {
+      "stnname": "2198",
+      "name": "Hanusentra Agro Lestari",
+      "latitude": 1.1704219452215396,
+      "longitude": 117.95331510005424
+    },
+    {
+      "stnname": "2199",
+      "name": "Hapesong ",
+      "latitude": 1.452212730288131,
+      "longitude": 99.0689653851014
+    },
+    {
+      "stnname": "220",
+      "name": "Sei Silau",
+      "latitude": 2.93497,
+      "longitude": 99.5098
+    },
+    {
+      "stnname": "2206",
+      "name": "Pelaihari",
+      "latitude": -3.72483,
+      "longitude": 114.787
+    },
+    {
+      "stnname": "2207",
+      "name": "BP1-AFDKB",
+      "latitude": 1.0762175321729928,
+      "longitude": 117.722953701006
+    },
+    {
+      "stnname": "2209",
+      "name": "Kaliselogiri",
+      "latitude": -8.092720446323066,
+      "longitude": 114.35335120239334
+    },
+    {
+      "stnname": "221",
+      "name": "Sei Baruhur",
+      "latitude": 1.77153,
+      "longitude": 100.255
+    },
+    {
+      "stnname": "2210",
+      "name": "Wilmar AMP",
+      "latitude": -0.1353286781815965,
+      "longitude": 100.00785207638972
+    },
+    {
+      "stnname": "2211",
+      "name": "Sungai Lembu",
+      "latitude": -8.52,
+      "longitude": 114.08
+    },
+    {
+      "stnname": "2212",
+      "name": "Palem Segar Lestari SKE",
+      "latitude": 3.821506606597031,
+      "longitude": 117.61358644742216
+    },
+    {
+      "stnname": "2213",
+      "name": "Ngrangkah Pawon 2",
+      "latitude": -7.868595394826218,
+      "longitude": 112.23965450436076
+    },
+    {
+      "stnname": "2214",
+      "name": "Kayan Wilayah 1",
+      "latitude": 2.682492533898542,
+      "longitude": 117.60619243600053
+    },
+    {
+      "stnname": "2215",
+      "name": "Pancur Angkrek",
+      "latitude": -7.9559579,
+      "longitude": 114.0599231
+    },
+    {
+      "stnname": "2216",
+      "name": "Senabing",
+      "latitude": -3.602844534847626,
+      "longitude": 103.12461074154032
+    },
+    {
+      "stnname": "2217",
+      "name": "Kayan Wilayah 2",
+      "latitude": 2.671007778758577,
+      "longitude": 117.69723840541462
+    },
+    {
+      "stnname": "2218",
+      "name": "Talo Pino",
+      "latitude": -4.251580332708067,
+      "longitude": 102.72007053682891
+    },
+    {
+      "stnname": "222",
+      "name": "Rambutan",
+      "latitude": 3.37936,
+      "longitude": 99.1416
+    },
+    {
+      "stnname": "2222",
+      "name": "Tulung Buyut",
+      "latitude": -4.6139319,
+      "longitude": 104.635985
+    },
+    {
+      "stnname": "2223",
+      "name": "Way Lima",
+      "latitude": -5.4198519,
+      "longitude": 105.0676954
+    },
+    {
+      "stnname": "2224",
+      "name": "Bergen",
+      "latitude": -5.3262579652059525,
+      "longitude": 105.4446599783662
+    },
+    {
+      "stnname": "2225",
+      "name": "Julok Rayeuk Selatan",
+      "latitude": 4.825713,
+      "longitude": 97.621665
+    },
+    {
+      "stnname": "2226",
+      "name": "Karang Inong",
+      "latitude": 4.7469459,
+      "longitude": 97.7766979
+    },
+    {
+      "stnname": "2227",
+      "name": "Rancabali",
+      "latitude": -7.155064513566731,
+      "longitude": 107.36460776493456
+    },
+    {
+      "stnname": "2228",
+      "name": "Cikasungka",
+      "latitude": -6.552524,
+      "longitude": 106.538476
+    },
+    {
+      "stnname": "2229",
+      "name": "Panglejar",
+      "latitude": -6.696478,
+      "longitude": 107.734486
+    },
+    {
+      "stnname": "2230",
+      "name": "Bojong Datar",
+      "latitude": -6.446506,
+      "longitude": 106.02178
+    },
+    {
+      "stnname": "2231",
+      "name": "Cisalak Baru",
+      "latitude": -6.373543,
+      "longitude": 106.302348
+    },
+    {
+      "stnname": "2232",
+      "name": "Cibungur",
+      "latitude": -6.798116,
+      "longitude": 106.706378
+    },
+    {
+      "stnname": "2236",
+      "name": "Kebun Kawung",
+      "latitude": -7.347672,
+      "longitude": 108.7961671
+    },
+    {
+      "stnname": "2237",
+      "name": "Kebun Merbuh",
+      "latitude": -7.0695191,
+      "longitude": 110.2538768
+    },
+    {
+      "stnname": "2238",
+      "name": "Kebun Siluwok",
+      "latitude": -6.9673231,
+      "longitude": 109.9885404
+    },
+    {
+      "stnname": "2239",
+      "name": "Kebun Blimbing",
+      "latitude": -7.0524337,
+      "longitude": 109.6351699
+    },
+    {
+      "stnname": "224",
+      "name": "Adolina",
+      "latitude": 3.54959,
+      "longitude": 98.9273
+    },
+    {
+      "stnname": "2240",
+      "name": "Kebun Jollong",
+      "latitude": -6.6505185,
+      "longitude": 110.9119635
+    },
+    {
+      "stnname": "2241",
+      "name": "Kebun Kaligua",
+      "latitude": -7.2817858,
+      "longitude": 109.1114411
+    },
+    {
+      "stnname": "2243",
+      "name": "PMO_Kebun Rancabali",
+      "latitude": -7.1571572,
+      "longitude": 107.3634863
+    },
+    {
+      "stnname": "2244",
+      "name": "PMO_Kebun Ciater",
+      "latitude": -6.739283,
+      "longitude": 107.640137
+    },
+    {
+      "stnname": "225",
+      "name": "Cot Girek",
+      "latitude": 4.92942,
+      "longitude": 97.3539
+    },
+    {
+      "stnname": "227",
+      "name": "PMO_Kebun Gedeh",
+      "latitude": -6.802516,
+      "longitude": 107.040665
+    },
+    {
+      "stnname": "228",
+      "name": "PPKS Sembawa",
+      "latitude": -2.9274436,
+      "longitude": 104.5336997
+    },
+    {
+      "stnname": "243",
+      "name": "Sei Galuh",
+      "latitude": 0.54928,
+      "longitude": 101.23
+    },
+    {
+      "stnname": "244",
+      "name": "Sosa",
+      "latitude": 1.04253,
+      "longitude": 100.012
+    },
+    {
+      "stnname": "245",
+      "name": "Tandun",
+      "latitude": 0.598833,
+      "longitude": 100.6909792
+    },
+    {
+      "stnname": "246",
+      "name": "Ajamu",
+      "latitude": 2.46137,
+      "longitude": 100.162
+    },
+    {
+      "stnname": "247",
+      "name": "Pulu Raja",
+      "latitude": 2.70051,
+      "longitude": 99.6222
+    },
+    {
+      "stnname": "248",
+      "name": "Bentayan",
+      "latitude": -2.4558,
+      "longitude": 104.199
+    },
+    {
+      "stnname": "249",
+      "name": "Padang Pelawi",
+      "latitude": -3.94718,
+      "longitude": 102.406
+    },
+    {
+      "stnname": "250",
+      "name": "Rimbo Satu",
+      "latitude": -1.39357,
+      "longitude": 102.032
+    },
+    {
+      "stnname": "251",
+      "name": "Rejosari",
+      "latitude": -5.29735,
+      "longitude": 105.178
+    },
+    {
+      "stnname": "252",
+      "name": "Kebun Getas",
+      "latitude": -7.26756,
+      "longitude": 110.516
+    },
+    {
+      "stnname": "253",
+      "name": "Membang Muda",
+      "latitude": 2.55156,
+      "longitude": 99.6632
+    },
+    {
+      "stnname": "254",
+      "name": "Dusun Hulu",
+      "latitude": 3.09945,
+      "longitude": 99.339
+    },
+    {
+      "stnname": "255",
+      "name": "Wonosari",
+      "latitude": -7.82022,
+      "longitude": 112.642
+    },
+    {
+      "stnname": "257",
+      "name": "Bangun",
+      "latitude": 2.96806,
+      "longitude": 99.1621
+    },
+    {
+      "stnname": "258",
+      "name": "Sei Meranti",
+      "latitude": 1.64057,
+      "longitude": 100.415
+    },
+    {
+      "stnname": "260",
+      "name": "Tualang Sawit",
+      "latitude": 4.50689,
+      "longitude": 97.8215
+    },
+    {
+      "stnname": "262",
+      "name": "Sawit Sebrang",
+      "latitude": 3.7986,
+      "longitude": 98.2533
+    },
+    {
+      "stnname": "263",
+      "name": "Maroangin",
+      "latitude": -3.68068,
+      "longitude": 119.858
+    },
+    {
+      "stnname": "264",
+      "name": "Luwu",
+      "latitude": -2.55576,
+      "longitude": 120.822
+    },
+    {
+      "stnname": "266",
+      "name": "Tabara",
+      "latitude": -1.67525,
+      "longitude": 116.131
+    },
+    {
+      "stnname": "267",
+      "name": "Meliau",
+      "latitude": -0.07283,
+      "longitude": 110.289
+    },
+    {
+      "stnname": "268",
+      "name": "Aek Torop",
+      "latitude": 2.055985348847198,
+      "longitude": 100.1049276896343
+    },
+    {
+      "stnname": "269",
+      "name": "Kertajaya",
+      "latitude": -6.62067,
+      "longitude": 105.996
+    },
+    {
+      "stnname": "270",
+      "name": "Sukamaju",
+      "latitude": -6.91059,
+      "longitude": 106.927
+    },
+    {
+      "stnname": "272",
+      "name": "Aek Nabara Selatan",
+      "latitude": 2.057897720970179,
+      "longitude": 99.9553241323615
+    },
+    {
+      "stnname": "283",
+      "name": "Pulau Tiga",
+      "latitude": 4.184910177045931,
+      "longitude": 97.93607288322715
+    },
+    {
+      "stnname": "286",
+      "name": "Kebun Lama",
+      "latitude": 4.4635387065361085,
+      "longitude": 97.95894002071408
+    },
+    {
+      "stnname": "287",
+      "name": "Julok Rayeuk Utara",
+      "latitude": 4.897220445747345,
+      "longitude": 97.60399840091917
+    },
+    {
+      "stnname": "288",
+      "name": "Solok Selatan",
+      "latitude": -1.3951979281979676,
+      "longitude": 101.47648802594266
+    },
+    {
+      "stnname": "289",
+      "name": "Durian Luncuk",
+      "latitude": -1.9403741091914788,
+      "longitude": 103.12551540064932
+    },
+    {
+      "stnname": "291",
+      "name": "Bah Birong Ulu",
+      "latitude": 2.81834193545267,
+      "longitude": 98.98806158358212
+    },
+    {
+      "stnname": "292",
+      "name": "Berangir",
+      "latitude": 2.2246933060483327,
+      "longitude": 99.76069636085936
+    },
+    {
+      "stnname": "293",
+      "name": "Torgamba",
+      "latitude": 1.712307586526438,
+      "longitude": 100.27894577579096
+    },
+    {
+      "stnname": "294",
+      "name": "Bukit Tujuh",
+      "latitude": 1.5665607699370103,
+      "longitude": 100.26511506221236
+    },
+    {
+      "stnname": "295",
+      "name": "Sei Kopas",
+      "latitude": 2.7924349173400143,
+      "longitude": 99.3761593356842
+    },
+    {
+      "stnname": "296",
+      "name": "Sawit Langkat",
+      "latitude": 3.701234193964426,
+      "longitude": 98.29418656602854
+    },
+    {
+      "stnname": "298",
+      "name": "Aek Raso",
+      "latitude": 1.7034562311189727,
+      "longitude": 100.17349979907486
+    },
+    {
+      "stnname": "299",
+      "name": "Betung",
+      "latitude": -2.8466814,
+      "longitude": 104.1597856
+    },
+    {
+      "stnname": "7",
+      "name": "PPKS Bukit Sentang",
+      "latitude": 3.957602431192961,
+      "longitude": 98.3150895503592
+    }
+  ]
+}

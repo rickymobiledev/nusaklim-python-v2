@@ -1,0 +1,425 @@
+{
+  "info": {
+    "_postman_id": "9a6b1f2e-5c3d-4a7a-8f1e-nusaklim0001",
+    "name": "NusaKlim Weather AI REST API",
+    "description": "Layanan REST API Sistem Prediksi Cuaca 7 Hari Berbasis Machine Learning & Agroklimat untuk 183 Stasiun AWS PPKS.\n\nKelompok endpoint:\n- Weather Forecast (7-Day): /forecast/{id} (lengkap + agronomi, tanpa auth) vs /weather/{id} & /weather (nilai fisik ringkas untuk integrasi eksternal, butuh X-API-Key)\n- MLOps & Automation: /retrain (retrain dari data harian yg sudah ada) vs /ingest (cleaning data mentah baru + retrain, butuh X-API-Key)\n- AWS Stations Metadata, Open-Meteo Benchmarking, System Health & Diagnostics\n\nImport environment `NusaKlim_Local.postman_environment.json` di sebelah collection ini supaya variabel base_url & api_key sudah terisi.\n\nCATATAN BODY: tidak ada endpoint yang menerima JSON. Input lewat path ({{station_id}}) atau query (?stationIds=...). /retrain & /ingest dipicu tanpa payload (tab Body kosong itu NORMAL). Satu-satunya yang pakai body adalah POST /ingest/upload (form-data: file + mode).\n\nSwagger UI live: {{base_url}}/docs | ReDoc: {{base_url}}/redoc",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000", "type": "string" },
+    { "key": "station_id", "value": "227", "type": "string" },
+    { "key": "bulk_station_ids", "value": "227,210,2207", "type": "string" },
+    { "key": "api_key", "value": "nusaklim-dev-key-change-me", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "System Health & Diagnostics",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/health",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "health"]
+            },
+            "description": "Menjalankan 1x inference percobaan (stasiun 227) untuk mengukur latency riil, sekaligus memastikan model bundle berhasil dimuat. Tanpa auth."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "{",
+                  "    const data = pm.response.json();",
+                  "    pm.test('Status Healthy & model termuat', () => {",
+                  "        pm.expect(data.status).to.eql('Healthy');",
+                  "        pm.expect(data.model_loaded).to.eql(true);",
+                  "        pm.expect(data.total_active_stations).to.be.above(180);",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "AWS Stations Metadata",
+      "item": [
+        {
+          "name": "Daftar Seluruh 183 Stasiun",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/stations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "stations"]
+            },
+            "description": "Metadata lokasi (lat/lon/elevasi/provinsi/estate) seluruh stasiun AWS PPKS yang terdaftar. Tanpa auth."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "{",
+                  "    const data = pm.response.json();",
+                  "    pm.test('total_stations & stations array konsisten', () => {",
+                  "        pm.expect(data.total_stations).to.eql(data.stations.length);",
+                  "        pm.expect(data.stations[0]).to.have.property('station_id');",
+                  "        pm.expect(data.stations[0]).to.have.property('lat');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Detail Satu Stasiun",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/stations/{{station_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "stations", "{{station_id}}"]
+            },
+            "description": "Metadata satu stasiun berdasarkan station_id. Stasiun yang tidak ada di registry resmi tetap mengembalikan data (lokasi dialokasikan deterministik per region), bukan 404. Tanpa auth."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "{",
+                  "    const data = pm.response.json();",
+                  "    pm.test('station_id sesuai yang diminta', () => {",
+                  "        pm.expect(data.station_id).to.eql(pm.collectionVariables.get('station_id'));",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Weather Forecast (7-Day)",
+      "item": [
+        {
+          "name": "Forecast Lengkap + Agronomi (internal)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/forecast/{{station_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "forecast", "{{station_id}}"]
+            },
+            "description": "Format LENGKAP untuk frontend/dashboard internal NusaKlim: suhu min/max, kondisi cuaca, ikon, peluang hujan, DAN rekomendasi agronomi per hari. Tanpa auth. Untuk integrasi server eksternal yang hanya butuh nilai fisik mentah, pakai 'Weather (Nilai Fisik, Satu Stasiun)' di bawah."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "{",
+                  "    const data = pm.response.json();",
+                  "    pm.test('7 hari forecast dengan rekomendasi agronomi', () => {",
+                  "        pm.expect(data.forecast).to.have.lengthOf(7);",
+                  "        pm.expect(data.forecast[0]).to.have.property('agronomic_advisory');",
+                  "        pm.expect(data.forecast[0].horizon).to.eql('H+1');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Weather (Nilai Fisik, Satu Stasiun)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/weather/{{station_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "weather", "{{station_id}}"]
+            },
+            "description": "Format RINGKAS untuk server eksternal: nilai fisik mentah saja (temperature/humidity/radiation/rainfall/airPressure/windSpeed/windDirectionDeg), tanpa rekomendasi agronomi. Response menyertakan `dataSource` ('model' = prediksi sungguhan, 'fallback_statistik' = stasiun tanpa histori) dan `generatedAt`. BUTUH header X-API-Key."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "{",
+                  "    const data = pm.response.json().data;",
+                  "    pm.test('7 hari forecast format fisik + dataSource', () => {",
+                  "        pm.expect(data.forecast).to.have.lengthOf(7);",
+                  "        pm.expect(['model', 'fallback_statistik']).to.include(data.dataSource);",
+                  "        pm.expect(data.forecast[0]).to.have.property('windDirectionDeg');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Weather (Nilai Fisik, Bulk Multi-Stasiun)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/weather?stationIds={{bulk_station_ids}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "weather"],
+              "query": [
+                { "key": "stationIds", "value": "{{bulk_station_ids}}", "description": "Daftar station_id dipisah koma, maks 50" }
+              ]
+            },
+            "description": "Versi batch dari /weather/{station_id} - satu panggilan untuk beberapa stasiun sekaligus (maks 50). Kegagalan satu station_id tidak menggagalkan stasiun lain - cek array `errors`. BUTUH header X-API-Key."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "{",
+                  "    const data = pm.response.json();",
+                  "    pm.test('data[] & errors[] ada di response', () => {",
+                  "        pm.expect(data).to.have.property('data');",
+                  "        pm.expect(data).to.have.property('errors');",
+                  "        pm.expect(data.data.length).to.be.above(0);",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Weather - Tanpa API Key (expect 401)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/weather/{{station_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "weather", "{{station_id}}"]
+            },
+            "description": "Contoh negative test: memanggil endpoint ber-auth tanpa header X-API-Key harus ditolak 401."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 401 tanpa API key', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Open-Meteo Benchmarking",
+      "item": [
+        {
+          "name": "Komparasi NusaKlim AI vs Open-Meteo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/compare/{{station_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "compare", "{{station_id}}"]
+            },
+            "description": "Membandingkan prediksi suhu NusaKlim AI dengan Open-Meteo global (real-time via API Open-Meteo, fallback estimasi bias kalau API tidak terjangkau). Tanpa auth."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200', () => pm.response.to.have.status(200));",
+                  "{",
+                  "    const data = pm.response.json();",
+                  "    pm.test('evaluation_summary & 7 hari comparison_series', () => {",
+                  "        pm.expect(data).to.have.property('evaluation_summary');",
+                  "        pm.expect(data.comparison_series).to.have.lengthOf(7);",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "MLOps & Automation",
+      "item": [
+        {
+          "name": "Trigger Retrain (dari data harian yang sudah ada)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/retrain",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retrain"]
+            },
+            "description": "Melatih ulang 49 sub-model dari nusaklim_daily_aggregated.csv yang SUDAH ADA (~21 menit). TIDAK membaca ulang file data mentah - kalau ada data sensor baru yang belum diagregasi, endpoint ini tidak akan melihatnya. Untuk data mentah baru pakai /ingest. Tanpa auth. BODY: KOSONG (memang tidak butuh payload, cukup klik Send; input hanya lewat URL). Hanya 1 job retrain/ingest boleh berjalan bersamaan (409 kalau sedang training)."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 (diterima) atau 409 (training lain sedang berjalan)', () => {",
+                  "    pm.expect([200, 409]).to.include(pm.response.code);",
+                  "});",
+                  "if (pm.response.code === 200) {",
+                  "    const data = pm.response.json();",
+                  "    pm.test('response Accepted dengan task_id', () => {",
+                  "        pm.expect(data.status).to.eql('Accepted');",
+                  "        pm.expect(data).to.have.property('task_id');",
+                  "    });",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Trigger Ingest (data mentah baru -> cleaning -> retrain)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/v1/ingest",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "ingest"]
+            },
+            "description": "Panggil SETELAH file data mentah baru (format nusaklim-aws-reduce.csv) sudah ditaruh di server. Urutan: (1) cleaning & agregasi harian dari seluruh raw data (~3 menit), (2) kalau sukses, retrain 49 sub-model (~21 menit). Kalau tahap 1 gagal, tahap 2 otomatis dibatalkan. Total ~24 menit. BUTUH header X-API-Key. BODY: KOSONG (tidak butuh payload, cukup set header X-API-Key lalu Send). Hanya 1 job retrain/ingest boleh berjalan bersamaan (409 kalau sedang training)."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 (diterima) atau 409 (training lain sedang berjalan)', () => {",
+                  "    pm.expect([200, 409]).to.include(pm.response.code);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Upload CSV Data Baru -> Ingest (form-data: file + mode)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "X-API-Key", "value": "{{api_key}}", "type": "text" }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "file", "type": "file", "src": [], "description": "CSV data mentah baru. Header wajib: stnname,utctime,tempout,humout,windspd,winddir,bar,solar,rain15 (created_at/updated_at opsional)" },
+                { "key": "mode", "value": "append", "type": "text", "description": "append (default: hanya baris lebih baru dari data terakhir tiap stasiun yang ditambahkan) atau replace (ganti seluruh raw CSV)" }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/ingest/upload",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "ingest", "upload"]
+            },
+            "description": "Body: form-data. Field `file` bertipe File (pilih CSV), field `mode` bertipe Text (`append`/`replace`). Setelah file digabung ke raw CSV di server, pipeline cleaning -> agregasi harian -> retrain berjalan di background (~24 menit). BUTUH header X-API-Key. 400 jika kolom wajib tidak lengkap, 409 jika job lain sedang berjalan."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 200 (diterima), 400 (CSV tidak valid) atau 409 (training lain berjalan)', () => {",
+                  "    pm.expect([200, 400, 409]).to.include(pm.response.code);",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "response": []
+        },
+        {
+          "name": "Ingest - Tanpa API Key (expect 401)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/ingest",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "ingest"]
+            },
+            "description": "Contoh negative test: memicu /ingest tanpa header X-API-Key harus ditolak 401."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status 401 tanpa API key', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ],
+          "response": []
+        }
+      ]
+    }
+  ]
+}

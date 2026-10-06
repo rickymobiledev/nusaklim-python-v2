@@ -1,5 +1,5 @@
 # ==============================================================================
-# STATIONS REGISTRY & METADATA DATABASE (184 STASIUN AWS PPKS)
+# STATIONS REGISTRY & METADATA DATABASE (183 STASIUN AWS PPKS)
 # ==============================================================================
 
 import pandas as pd
@@ -36,7 +36,7 @@ def get_station_metadata(station_id: str) -> dict:
         meta['status'] = 'Active'
         return meta
     
-    # Hash-based deterministic coordinate allocation for other 184 stations
+    # Hash-based deterministic coordinate allocation for other 183 stations
     h_idx = abs(hash(stn_str)) % len(REGION_PROFILES)
     base = REGION_PROFILES[h_idx]
     
