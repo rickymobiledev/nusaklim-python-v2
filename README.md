@@ -91,7 +91,40 @@ uv run python scripts/import_data.py --chunk-size 200000   # Mengatur ukuran bat
 uv run python scripts/import_data.py --limit-rows 50000    # Uji coba cepat dengan limit baris
 ```
 
+### 4. Backup & Restore Database
+Buat salinan cadangan (backup) database PostgreSQL kapan saja dan simpan ke folder `data/`:
+
+```powershell
+# Windows PowerShell / CMD:
+uv run python scripts/backup_postgres.py
+# atau launcher:
+.\scripts\backup_postgres.bat
+```
+
+```bash
+# Bash (Linux / macOS / Git Bash):
+bash scripts/backup_postgres.sh
+```
+
+**Opsi Backup:**
+```powershell
+uv run python scripts/backup_postgres.py --status           # Cek ukuran database & file backup di folder data/
+uv run python scripts/backup_postgres.py --format sql       # Backup dalam format teks SQL mentah
+uv run python scripts/backup_postgres.py --schema-only      # Hanya backup skema DDL (tanpa data)
+uv run python scripts/backup_postgres.py -o data/my.dump    # Menentukan nama file keluaran khusus
+```
+
+**Restore Database dari Backup:**
+```powershell
+# Restore dari file custom .dump:
+pg_restore -h 127.0.0.1 -p 5432 -U postgres -d nusaklim --clean --if-exists data\nusaklim_backup_YYYYMMDD_HHMMSS.dump
+
+# Atau restore dari format plain SQL:
+psql -h 127.0.0.1 -p 5432 -U postgres -d nusaklim -f data\nusaklim_backup_YYYYMMDD_HHMMSS.sql
+```
+
 ## Pelatihan Model (Training) dari Database PostgreSQL
+
 
 Setelah data mentah tersimpan di PostgreSQL, latih model prediksi cuaca 7 hari secara langsung dari database:
 

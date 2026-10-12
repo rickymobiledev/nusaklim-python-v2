@@ -12,6 +12,8 @@
 *.xls
 *.docx
 *.doc
+*.dump
+*.sql
 
 # 2. Python Virtual Environments & Packages
 .venv/
