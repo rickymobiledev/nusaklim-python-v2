@@ -796,7 +796,7 @@
     "Horizon": "H+1",
     "Algoritma": "GRU (Recurrent Neural Network)",
     "FiturSet": "Sequence 14-Hari (DL)",
-    "MAE": 0.8072,
+    "MAE": 0.835,
     "RMSE": 2.9986,
     "R2": 0.9919,
     "Training_s": 283.17,

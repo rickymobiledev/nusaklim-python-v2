@@ -186,6 +186,7 @@ Membandingkan, untuk 7 indikator cuaca di 30 stasiun sampel acak: **Model Lokal*
 ### Laporan 3b
 - `station_sampling.py`: ditambah `eligible_stations()` (≥365 hari latih, ≥25 dari 30 hari uji valid pada 7 indikator H+1) → 94 stasiun; `local_30` diambil acak (seed 42) dari 94 itu; `global_10` tidak berubah.
 - `local_vs_global_stats.py` (baru): satu sumber hitungan kemenangan per stasiun dan `recommend()` (Lokal hanya jika menang di lebih banyak stasiun DAN unggul pada rata-rata metrik). Dipakai oleh `generate_local_benchmark_figures.py` dan `generate_per_station_pdf.py`. Bug lama: teks mencetak jumlah kemenangan Lokal untuk model yang direkomendasikan, sehingga angka tertukar.
+- `generate_per_station_pdf.py`: Tabel 3.1 ditambahkan kolom **MAE (median)** mendampingi MAE (rata-rata), melengkapi kolom R² yang sudah memiliki median, agar lebih tahan terhadap outlier stasiun ekstrem.
 
 ### Laporan 5
 - `open_meteo_benchmark.py` ditulis ulang: data per jam (Historical Forecast API; identik dengan archive API untuk periode uji) dirangkum harian WIB (rata-rata; jumlah untuk hujan; arah angin dari rata-rata vektor lalu dikategorikan dengan batas sudut yang sama dengan data AWS). Menghasilkan `fig_openmeteo_ratio_heatmap.png`, `fig_openmeteo_ts_{222,2179,248,267}.png`, dan menambah `indicator_summary` serta `indicators` per stasiun di `openmeteo_benchmark_summary.json` (kunci lama tetap ada untuk kompatibilitas).

@@ -24,7 +24,7 @@ def test_root_redirect():
     print("[PASS] GET / -> Redirects to /docs successfully.")
 
 def test_health_endpoint():
-    response = client.get("/api/v1/health")
+    response = client.get("/api/v1/health", headers=AUTH_HEADERS)
     assert response.status_code == 200, f"Health check failed: {response.text}"
     data = response.json()
     assert data["status"] == "Healthy"
@@ -33,7 +33,7 @@ def test_health_endpoint():
     print(f"[PASS] GET /api/v1/health -> Status: {data['status']}, Latency: {data['inference_latency_ms']} ms, Stations: {data['total_active_stations']}")
 
 def test_stations_list():
-    response = client.get("/api/v1/stations")
+    response = client.get("/api/v1/stations", headers=AUTH_HEADERS)
     assert response.status_code == 200
     data = response.json()
     assert data["total_stations"] >= 180
@@ -44,7 +44,7 @@ def test_stations_list():
     print(f"[PASS] GET /api/v1/stations -> Successfully returned {data['total_stations']} AWS stations.")
 
 def test_station_detail():
-    response = client.get("/api/v1/stations/227")
+    response = client.get("/api/v1/stations/227", headers=AUTH_HEADERS)
     assert response.status_code == 200
     data = response.json()
     assert data["station_id"] == "227"
@@ -53,7 +53,7 @@ def test_station_detail():
 
 def test_forecast_7_days():
     t0 = time.time()
-    response = client.get("/api/v1/forecast/227")
+    response = client.get("/api/v1/forecast/227", headers=AUTH_HEADERS)
     latency = (time.time() - t0) * 1000
     assert response.status_code == 200, f"Forecast failed: {response.text}"
     data = response.json()
@@ -73,7 +73,7 @@ def test_forecast_7_days():
         print(f"         Advisory: '{item['agronomic_advisory'][:60]}...'")
 
 def test_compare_endpoint():
-    response = client.get("/api/v1/compare/227")
+    response = client.get("/api/v1/compare/227", headers=AUTH_HEADERS)
     assert response.status_code == 200
     data = response.json()
     assert "evaluation_summary" in data
@@ -84,6 +84,13 @@ def test_weather_requires_api_key():
     response = client.get("/api/v1/weather/227")
     assert response.status_code == 401, f"Expected 401 without API key, got {response.status_code}"
     print("[PASS] GET /api/v1/weather/227 (tanpa X-API-Key) -> 401 Unauthorized seperti diharapkan.")
+
+def test_all_endpoints_require_api_key():
+    for path in ("/api/v1/health", "/api/v1/stations", "/api/v1/forecast/227", "/api/v1/compare/227"):
+        assert client.get(path).status_code == 401, f"{path} harus 401 tanpa X-API-Key"
+        assert client.get(path, headers={"X-API-Key": "salah"}).status_code == 401, f"{path} harus 401 dengan key salah"
+    assert client.post("/api/v1/retrain").status_code == 401
+    print("[PASS] Semua endpoint -> 401 tanpa/dengan X-API-Key salah.")
 
 def test_weather_physical_format():
     response = client.get("/api/v1/weather/227", headers=AUTH_HEADERS)
@@ -115,7 +122,7 @@ def test_weather_bulk_exceeds_limit():
     print(f"[PASS] GET /api/v1/weather (>{settings.max_bulk_stations} station_id) -> 400 Bad Request seperti diharapkan.")
 
 def test_retrain_trigger():
-    response = client.post("/api/v1/retrain")
+    response = client.post("/api/v1/retrain", headers=AUTH_HEADERS)
     # 409 valid kalau ada job retrain/ingest lain yang kebetulan masih berjalan (test lock konkurensi)
     assert response.status_code in (200, 409), f"Unexpected status: {response.status_code} - {response.text}"
     data = response.json()
@@ -148,6 +155,18 @@ def test_ingest_upload_rejects_invalid_csv():
     assert response.status_code in (400, 409), f"Unexpected status: {response.status_code} - {response.text}"
     print(f"[PASS] POST /api/v1/ingest/upload (CSV kolom salah) -> HTTP {response.status_code} seperti diharapkan.")
 
+def test_ingest_json_requires_api_key():
+    response = client.post("/api/v1/ingest/json", json={"records": [{"stnname": "227", "utctime": 1787136600}]})
+    assert response.status_code == 401, f"Expected 401 without API key, got {response.status_code}"
+    print("[PASS] POST /api/v1/ingest/json (tanpa X-API-Key) -> 401 Unauthorized seperti diharapkan.")
+
+def test_ingest_json_rejects_invalid_payload():
+    # Sengaja payload tidak valid agar pipeline 24 menit TIDAK terpicu
+    for body in ({"records": []}, {"records": [{"stnname": "227"}]}, {"mode": "x", "records": [{"stnname": "227", "utctime": 1}]}):
+        response = client.post("/api/v1/ingest/json", headers=AUTH_HEADERS, json=body)
+        assert response.status_code == 422, f"Expected 422 for {body}, got {response.status_code}"
+    print("[PASS] POST /api/v1/ingest/json (payload tidak valid) -> 422 seperti diharapkan.")
+
 TEST_FUNCS = [
     test_root_redirect,
     test_health_endpoint,
@@ -156,6 +175,7 @@ TEST_FUNCS = [
     test_forecast_7_days,
     test_compare_endpoint,
     test_weather_requires_api_key,
+    test_all_endpoints_require_api_key,
     test_weather_physical_format,
     test_weather_bulk,
     test_weather_bulk_exceeds_limit,
@@ -163,6 +183,8 @@ TEST_FUNCS = [
     test_ingest_requires_api_key,
     test_ingest_upload_requires_api_key,
     test_ingest_upload_rejects_invalid_csv,
+    test_ingest_json_requires_api_key,
+    test_ingest_json_rejects_invalid_payload,
     test_ingest_trigger,
 ]
 

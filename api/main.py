@@ -13,14 +13,14 @@ from fastapi.security.api_key import APIKeyHeader
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 
-from api.config import settings, DEFAULT_DEV_API_KEY
+from api.config import settings
 from api.stations_db import get_all_stations, get_station_metadata
 from api.models_schema import (
     StationsListResponse, StationInfo, ForecastResponse,
     ComparisonResponse, OpenMeteoComparisonItem, HealthResponse, RetrainResponse,
-    PhysicalForecastResponse, PhysicalForecastBulkResponse
+    PhysicalForecastResponse, PhysicalForecastBulkResponse, IngestJsonRequest
 )
-from api.ingest_upload import validate_csv_header, UploadValidationError
+from api.ingest_upload import validate_csv_header, records_to_csv, UploadValidationError
 from api.pipeline_runner import run_pipeline
 from api.forecast_service import engine
 from api.openmeteo_service import fetch_openmeteo_forecast
@@ -64,24 +64,16 @@ app.add_middleware(
 
 STARTUP_TIME = time.time()
 
-if settings.weather_api_key == DEFAULT_DEV_API_KEY:
-    print("=" * 70)
-    print("[SECURITY WARNING] NUSAKLIM_API_KEY tidak di-set - endpoint /weather & /ingest")
-    print("masih pakai API key default pengembangan yang ada di source code!")
-    print("WAJIB set environment variable NUSAKLIM_API_KEY sebelum deploy ke production.")
-    print("=" * 70)
-
-api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False, description="API key untuk endpoint integrasi eksternal (/weather, /ingest).")
+api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False, description="API key untuk seluruh endpoint API.")
 
 async def verify_weather_api_key(x_api_key: str | None = Security(api_key_header)):
-    """Dipakai khusus endpoint eksternal (/weather, /ingest) - endpoint internal lain
-    (/forecast, /stations, /retrain, dst) tetap tanpa auth agar frontend NusaKlim
-    yang sudah berjalan tidak perlu diubah."""
+    """Dipakai di SEMUA endpoint API (dipasang global via app.router.dependencies)."""
     if x_api_key is None or not secrets.compare_digest(x_api_key, settings.weather_api_key):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="API key tidak valid atau tidak disertakan. Sertakan header X-API-Key."
         )
+
 
 UNAUTHORIZED_RESPONSE = {401: {"description": "API key tidak valid atau header X-API-Key tidak disertakan."}}
 SERVER_ERROR_RESPONSE = {500: {"description": "Gagal memproses permintaan (mis. model belum termuat, station_id tidak valid)."}}
@@ -111,6 +103,11 @@ def _release_training_slot():
 @app.get("/", include_in_schema=False)
 async def root():
     return RedirectResponse(url="/docs")
+
+# Auth global: semua route yang didaftarkan SETELAH baris ini wajib X-API-Key.
+# Root ("/" -> redirect ke /docs) sengaja didaftarkan sebelumnya agar tetap terbuka;
+# /docs, /redoc, /openapi.json bukan route aplikasi sehingga juga terbuka.
+app.router.dependencies.append(Depends(verify_weather_api_key))
 
 @app.get(
     f"{settings.api_prefix}/health",
@@ -166,7 +163,7 @@ async def get_station_detail(station_id: str):
     tags=["Weather Forecast (7-Day)"],
     summary="Dapatkan Ramalan Cuaca 7 Hari Lengkap dengan Rekomendasi Agronomi",
     description="Format LENGKAP untuk frontend/dashboard internal NusaKlim: suhu min/max, kondisi cuaca, ikon, "
-                "peluang hujan, DAN rekomendasi agronomi per hari (pemupukan/panen/dsb). Tanpa auth. "
+                "peluang hujan, DAN rekomendasi agronomi per hari (pemupukan/panen/dsb). "
                 "Untuk integrasi server eksternal yang hanya butuh nilai fisik mentah, pakai `/weather/{station_id}` saja.",
     response_description="Ramalan H+1 s/d H+7 beserta metadata stasiun & info model yang dipakai.",
     responses=SERVER_ERROR_RESPONSE
@@ -188,9 +185,8 @@ async def get_forecast(station_id: str):
     summary="Ramalan Cuaca 7 Hari - Banyak Stasiun Sekaligus (Format Nilai Fisik)",
     description="Versi batch dari `/weather/{station_id}` - satu panggilan untuk beberapa stasiun sekaligus "
                 f"(maks {settings.max_bulk_stations}). Kegagalan satu station_id (mis. tidak valid) tidak "
-                "menggagalkan stasiun lain - cek array `errors` di response. Butuh header `X-API-Key`.",
+                "menggagalkan stasiun lain - cek array `errors` di response.",
     response_description="Array hasil per stasiun yang sukses (`data`) + array kegagalan per stasiun (`errors`).",
-    dependencies=[Depends(verify_weather_api_key)],
     responses={**UNAUTHORIZED_RESPONSE, 400: {"description": "stationIds kosong atau melebihi batas maksimum."}}
 )
 async def get_weather_bulk(stationIds: str = Query(..., description=f"Daftar station_id dipisah koma, maks {settings.max_bulk_stations}. Contoh: 227,210,2207")):
@@ -213,9 +209,8 @@ async def get_weather_bulk(stationIds: str = Query(..., description=f"Daftar sta
     description="Format RINGKAS untuk server eksternal lain yang menarik data ke sistemnya sendiri: nilai fisik "
                 "mentah saja (tanpa rekomendasi agronomi/ikon). Setiap response menyertakan `dataSource` "
                 "(`\"model\"` = prediksi sungguhan, `\"fallback_statistik\"` = stasiun tanpa histori, BUKAN "
-                "prediksi nyata) dan `generatedAt` agar konsumen tahu validitas & kesegaran data. Butuh header `X-API-Key`.",
+                "prediksi nyata) dan `generatedAt` agar konsumen tahu validitas & kesegaran data.",
     response_description="Ramalan fisik H+1 s/d H+7 satu stasiun, dibungkus `{data: {...}}`.",
-    dependencies=[Depends(verify_weather_api_key)],
     responses={**UNAUTHORIZED_RESPONSE, **SERVER_ERROR_RESPONSE}
 )
 async def get_weather(station_id: str):
@@ -366,10 +361,9 @@ def background_ingest_task(task_id: str, staging_path: str | None = None, mode: 
                 "ditaruh di server - BUKAN `/retrain`. Urutan proses: (1) `process_nusaklim.py` - cleaning & "
                 "agregasi harian dari SELURUH raw data (~3 menit utk 14,8 juta+ baris), (2) kalau tahap 1 sukses, "
                 "`retrain_pipeline.py` - retrain 49 sub-model (~21 menit). Kalau tahap 1 gagal, tahap 2 OTOMATIS "
-                "DIBATALKAN agar model produksi tidak terlatih dari data rusak/parsial. Total ~24 menit. Butuh header `X-API-Key`. "
+                "DIBATALKAN agar model produksi tidak terlatih dari data rusak/parsial. Total ~24 menit. "
                 "Hanya 1 job retrain/ingest boleh berjalan bersamaan - panggilan saat job lain masih jalan akan ditolak (409).",
     response_description="Konfirmasi bahwa job ingest diterima & berjalan di background, beserta task_id & estimasi waktu.",
-    dependencies=[Depends(verify_weather_api_key)],
     responses={**UNAUTHORIZED_RESPONSE, **TRAINING_IN_PROGRESS_RESPONSE}
 )
 async def trigger_ingest(background_tasks: BackgroundTasks):
@@ -399,9 +393,8 @@ async def trigger_ingest(background_tasks: BackgroundTasks):
                 "Field **`mode`**: `append` (default) = hanya baris yang LEBIH BARU dari data terakhir tiap stasiun yang ditambahkan ke "
                 "raw CSV di server (baris tumpang tindih/duplikat diabaikan, jadi cukup kirim data baru saja); `replace` = file ini "
                 "menggantikan seluruh raw CSV (raw lama disimpan sebagai `.bak`). Setelah merge, pipeline `/ingest` berjalan "
-                "di background (~24 menit). Butuh header `X-API-Key`. Hanya 1 job retrain/ingest boleh berjalan bersamaan (409).",
+                "di background (~24 menit). Hanya 1 job retrain/ingest boleh berjalan bersamaan (409).",
     response_description="Konfirmasi file diterima & pipeline berjalan di background, beserta task_id.",
-    dependencies=[Depends(verify_weather_api_key)],
     responses={**UNAUTHORIZED_RESPONSE, **TRAINING_IN_PROGRESS_RESPONSE, 400: {"description": "File bukan CSV valid / kolom wajib tidak lengkap."}}
 )
 async def trigger_ingest_upload(
@@ -435,6 +428,56 @@ async def trigger_ingest_upload(
     return RetrainResponse(
         status="Accepted",
         message=f"File '{file.filename}' diterima (mode={mode}). Merge ke raw CSV, cleaning & agregasi, lalu retrain "
+                 "berjalan di background (estimasi ~24 menit).",
+        task_id=task_id,
+        timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S WIB")
+    )
+
+@app.post(
+    f"{settings.api_prefix}/ingest/json",
+    response_model=RetrainResponse,
+    tags=["MLOps & Automation"],
+    summary="Kirim Data Mentah Baru via JSON -> Merge -> Cleaning -> Agregasi Harian -> Retraining",
+    description="Alternatif `/ingest/upload` TANPA file: kirim data mentah baru langsung sebagai body JSON "
+                "`{\"mode\": \"append\", \"records\": [{stnname, utctime, tempout, humout, windspd, winddir, bar, solar, rain15}, ...]}`. "
+                "`utctime` = Unix epoch detik (UTC); sensor kosong boleh `null`/dihilangkan. Maks "
+                f"{settings.max_ingest_records:,} baris per request (pecah jadi beberapa request kalau lebih, `mode=append` aman "
+                "dipanggil berulang karena baris tumpang tindih/duplikat diabaikan). Setelah merge, pipeline berjalan di "
+                "background (~24 menit) - sama seperti `/ingest/upload`. Hanya 1 job retrain/ingest boleh berjalan bersamaan (409).",
+    response_description="Konfirmasi payload diterima & pipeline berjalan di background, beserta task_id.",
+    responses={**UNAUTHORIZED_RESPONSE, **TRAINING_IN_PROGRESS_RESPONSE,
+               400: {"description": "Jumlah baris melebihi batas."}, 422: {"description": "Struktur/tipe payload tidak valid."}}
+)
+async def trigger_ingest_json(payload: IngestJsonRequest, background_tasks: BackgroundTasks):
+    if len(payload.records) > settings.max_ingest_records:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Maksimum {settings.max_ingest_records:,} baris per request, diterima {len(payload.records):,}. Pecah jadi beberapa request."
+        )
+    if not _try_acquire_training_slot():
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Proses retrain/ingest lain sedang berjalan. Coba lagi setelah selesai."
+        )
+    task_id = f"ingest-json-{datetime.now().strftime('%Y%m%d%H%M%S')}"
+    staging_path = os.path.join(settings.upload_staging_dir, f"{task_id}.csv")
+    scheduled = False
+    try:
+        os.makedirs(settings.upload_staging_dir, exist_ok=True)
+        n = records_to_csv([r.model_dump() for r in payload.records], staging_path)
+        validate_csv_header(staging_path)
+        background_tasks.add_task(background_ingest_task, task_id, staging_path, payload.mode)
+        scheduled = True
+    except UploadValidationError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    finally:
+        if not scheduled:
+            if os.path.exists(staging_path):
+                os.remove(staging_path)
+            _release_training_slot()
+    return RetrainResponse(
+        status="Accepted",
+        message=f"{n:,} baris JSON diterima (mode={payload.mode}). Merge ke raw CSV, cleaning & agregasi, lalu retrain "
                  "berjalan di background (estimasi ~24 menit).",
         task_id=task_id,
         timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S WIB")

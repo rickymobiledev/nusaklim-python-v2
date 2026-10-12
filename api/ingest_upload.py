@@ -97,3 +97,17 @@ def merge_upload(staging_path: str, raw_path: str, mode: str, keep_source: bool 
 
     return {"mode": "append", "rows_in_upload": seen_in_upload, "rows_added": added,
             "rows_skipped": seen_in_upload - added}
+
+
+def records_to_csv(records: list[dict], out_path: str) -> int:
+    """Tulis payload JSON (list baris) ke CSV staging berformat sama dengan raw CSV,
+    agar bisa memakai jalur merge_upload + pipeline yang sama dengan /ingest/upload.
+    Nilai kosong ditulis '---' (konvensi raw CSV). Return jumlah baris."""
+    header = REQUIRED_COLUMNS + ["created_at", "updated_at"]
+    df = pd.DataFrame.from_records(records).reindex(columns=header)
+    for c in ["tempout", "humout", "windspd", "winddir", "bar", "solar", "rain15"]:
+        df[c] = df[c].astype(object).where(df[c].notna(), "---")
+    df["created_at"] = df["created_at"].where(df["created_at"].notna(), "")
+    df["updated_at"] = df["updated_at"].where(df["updated_at"].notna(), "")
+    df.to_csv(out_path, index=False)
+    return len(df)

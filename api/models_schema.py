@@ -2,7 +2,7 @@
 # PYDANTIC SCHEMAS FOR API REQUEST & RESPONSE VALIDATION
 # ==============================================================================
 
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Literal
 from pydantic import BaseModel, Field
 
 class StationInfo(BaseModel):
@@ -113,3 +113,27 @@ class PhysicalForecastBulkError(BaseModel):
 class PhysicalForecastBulkResponse(BaseModel):
     data: List[PhysicalForecastData]
     errors: List[PhysicalForecastBulkError] = Field(default_factory=list)
+
+
+class IngestRecord(BaseModel):
+    """Satu baris data mentah AWS (kolom sama dengan nusaklim-aws-reduce.csv).
+    Nilai sensor yang kosong/tidak terbaca boleh dikirim null atau dihilangkan (disimpan sebagai '---')."""
+    stnname: str = Field(..., description="ID stasiun, mis. \"227\"", examples=["227"])
+    utctime: int = Field(..., description="Waktu pengukuran, Unix epoch DETIK (UTC)", examples=[1787136600])
+    tempout: Optional[float] = Field(None, description="Suhu luar (°F, sama seperti raw CSV)")
+    humout: Optional[float] = Field(None, description="Kelembapan (%)")
+    windspd: Optional[float] = Field(None, description="Kecepatan angin")
+    winddir: Optional[float] = Field(None, description="Arah angin (derajat)")
+    bar: Optional[float] = Field(None, description="Tekanan udara")
+    solar: Optional[float] = Field(None, description="Radiasi matahari")
+    rain15: Optional[float] = Field(None, description="Curah hujan per 15 menit")
+    created_at: Optional[str] = Field(None, description="Opsional, format \"YYYY-MM-DD HH:MM:SS.000\"")
+    updated_at: Optional[str] = Field(None, description="Opsional")
+
+
+class IngestJsonRequest(BaseModel):
+    mode: Literal["append", "replace"] = Field(
+        "append",
+        description="`append` (default): hanya baris yang LEBIH BARU dari data terakhir tiap stasiun yang ditambahkan. "
+                    "`replace`: payload menggantikan SELURUH raw CSV (raw lama disimpan sebagai .bak).")
+    records: List[IngestRecord] = Field(..., min_length=1, description="Daftar baris data mentah.")

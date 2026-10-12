@@ -1,7 +1,7 @@
 import os
 from pydantic import BaseModel
 
-DEFAULT_DEV_API_KEY = "nusaklim-dev-key-change-me"
+API_KEY = "nusaklim-secret-key-2026"
 
 class Settings(BaseModel):
     app_name: str = "NusaKlim Weather AI REST API"
@@ -13,14 +13,13 @@ Layanan REST API Sistem Prediksi Cuaca 7 Hari Berbasis Machine Learning & Agrokl
 - **Weather Forecast (7-Day)** - ramalan H+1 s/d H+7 per stasiun. Ada 2 format:
   - `/forecast/{station_id}` - format lengkap + rekomendasi agronomi, dipakai frontend/dashboard internal NusaKlim.
   - `/weather/{station_id}` & `/weather` (bulk) - format nilai fisik ringkas (stationId/temperature/humidity/radiation/.../units),
-    untuk **ditarik server eksternal lain**. Butuh header `X-API-Key`.
+    untuk **ditarik server eksternal lain**.
 - **MLOps & Automation** - `/retrain` (latih ulang model dari data harian yang sudah ada) vs `/ingest` (proses data mentah baru
-  `nusaklim-aws-reduce.csv` dari awal, lalu retrain). Keduanya `/ingest` butuh `X-API-Key`.
+  `nusaklim-aws-reduce.csv` dari awal, lalu retrain).
 - **AWS Stations Metadata**, **Open-Meteo Benchmarking**, **System Health & Diagnostics** - pendukung.
 
 ### Autentikasi
-Endpoint yang ditandai gembok (`/weather`, `/weather/{station_id}`, `/ingest`) butuh header `X-API-Key`. Endpoint lain
-(termasuk `/forecast`, `/retrain`) tanpa auth - dikonsumsi oleh frontend internal yang sudah berjalan.
+Semua endpoint API butuh header `X-API-Key` (klik **Authorize** di Swagger). `/docs` & `/redoc` tetap terbuka.
 
 ### Alur Data Baru -> Forecast Baru
 1. Taruh file data mentah baru di folder `data_raw/incoming/` dengan nama `nusaklim-aws-reduce_YYYYMMDD-YYYYMMDD.csv`
@@ -47,10 +46,9 @@ Endpoint yang ditandai gembok (`/weather`, `/weather/{station_id}`, `/ingest`) b
     api_prefix: str = "/api/v1"
     cors_origins: list[str] = ["*"]
 
-    # API Key untuk endpoint integrasi server-ke-server (/weather, /weather/{id}).
-    # WAJIB di-override via environment variable NUSAKLIM_API_KEY di production -
-    # nilai default di bawah hanya untuk pengembangan lokal.
-    weather_api_key: str = os.environ.get("NUSAKLIM_API_KEY", DEFAULT_DEV_API_KEY)
+    # API Key tunggal untuk SEMUA endpoint (header X-API-Key).
+    weather_api_key: str = API_KEY
     max_bulk_stations: int = 50
+    max_ingest_records: int = 100_000
 
 settings = Settings()

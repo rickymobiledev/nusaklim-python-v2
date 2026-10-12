@@ -18,8 +18,9 @@ BASE_DIR = r"D:\Projects\Kodepanda\Nusaklim\nusaklim"
 FIG_DIR = os.path.join(BASE_DIR, "figures_benchmark")
 os.makedirs(FIG_DIR, exist_ok=True)
 
+from sklearn.metrics import mean_absolute_error
 from retrain_pipeline import (build_features_and_targets, DATA_PATH, CLASSIFICATION_TARGET,
-                               REGRESSION_TARGETS, multi_metric_rank)
+                               REGRESSION_TARGETS, multi_metric_rank, wind_majority_baseline)
 
 REG_TARGETS = list(REGRESSION_TARGETS.keys())
 LABELS = {**REGRESSION_TARGETS, CLASSIFICATION_TARGET: 'Arah Mata Angin (kategori)'}
@@ -78,7 +79,8 @@ for ax, h in zip(axes, ['H+1', 'H+7']):
     width = 0.38
     ax.bar(x - width/2, sub['Accuracy'], width, label='Accuracy', color='#7C3AED')
     ax.bar(x + width/2, sub['F1_Macro'], width, label='F1-Macro', color='#DB2777')
-    ax.axhline(0.568, color='#64748B', linestyle=':', linewidth=1.3, label='Baseline Mayoritas (56.8%)')
+    _cls, _share = wind_majority_baseline(int(h.split('+')[1]))
+    ax.axhline(_share, color='#64748B', linestyle=':', linewidth=1.3, label=f'Baseline Mayoritas ({_share * 100:.1f}%)')
     ax.set_xticks(x)
     ax.set_xticklabels(sub['AlgoShort'], rotation=30, fontsize=8)
     ax.set_title(f'Klasifikasi Arah Angin ({h})', fontsize=10.5, fontweight='bold')
@@ -149,15 +151,24 @@ for stn in stations_5:
         h_range = list(range(1, 8))
         dates = [issue_date + pd.Timedelta(days=h) for h in h_range]
         preds = [models[f'{var}_h{h}'].predict(X_issue)[0] for h in h_range]
+        if var == 'rainfall_total_mm':
+            preds = [max(0.0, p) for p in preds]
         actuals = []
         for d in dates:
             row = stn_data[stn_data['date_dt'] == d]
             actuals.append(row[var].values[0] if not row.empty and not pd.isna(row[var].values[0]) else np.nan)
 
+        valid_acts, valid_preds = [], []
+        for a, p in zip(actuals, preds):
+            if not np.isnan(a):
+                valid_acts.append(a)
+                valid_preds.append(p)
+        mae_str = f"MAE: {mean_absolute_error(valid_acts, valid_preds):.2f}" if valid_acts else "MAE: N/A"
+
         ax.plot(dates, actuals, marker='o', color='#0F172A', linewidth=1.8, label='Aktual')
         ax.plot(dates, preds, marker='x', color='#DC2626', linewidth=1.5, linestyle='--',
                 label=f'Prediksi ({algo_used[f"{var}_h1"]})')
-        ax.set_title(LABELS[var], fontsize=10, fontweight='bold')
+        ax.set_title(f"{LABELS[var]}  [{mae_str}]", fontsize=9.2, fontweight='bold')
         ax.set_xticks(dates)
         ax.set_xticklabels([f'H+{h}' for h in h_range], fontsize=7.5)
         ax.tick_params(axis='y', labelsize=7.5)

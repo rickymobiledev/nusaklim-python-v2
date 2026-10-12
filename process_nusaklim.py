@@ -220,7 +220,8 @@ def run_nusaklim_pipeline(
         
         rain_tot = min(300.0, d['rain_sum']) if d['rain_cnt'] > 0 and d['rain_sum'] <= 350.0 else (np.nan if d['rain_cnt'] == 0 else min(300.0, d['rain_sum']))
         # Rata-rata harian (W/m2), bukan SUM: SUM bergantung pada jumlah pembacaan per hari (<=200)
-        solar_tot = d['solar_sum'] / d['solar_cnt'] if d['solar_cnt'] > 0 else np.nan
+        # UPDATE: Dikembalikan ke SUM sesuai permintaan, nilai harian dalam skala puluh ribuan
+        solar_tot = d['solar_sum']
         
         # Kategorisasi Arah Angin (Notulen Poin 4)
         if np.isnan(winddir_mean):

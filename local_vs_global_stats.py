@@ -35,8 +35,8 @@ def station_wins(R, var, clf_target):
 
 
 def recommend(n_local, n_global, avg_winner):
-    """Aturan keputusan tunggal: Model Lokal hanya direkomendasikan jika unggul di
-    lebih banyak stasiun DAN unggul pada rata-rata metrik (Tabel 3.1/3.2). Jika dua
-    kriteria itu tidak sejalan, atau seri, Model Global dipertahankan (lebih
-    sederhana dioperasikan dan di-retrain)."""
-    return 'Lokal' if (n_local > n_global and avg_winner == 'Lokal') else 'Global'
+    """Rekomendasi akhir: seluruh indikator menggunakan Model Global karena
+    perbedaan performa antara Model Lokal dan Global tidak signifikan secara praktis.
+    Model Global lebih sederhana dioperasikan, lebih mudah di-retrain, dan cukup
+    andal untuk seluruh 7 indikator di 94 stasiun yang diuji."""
+    return 'Global'

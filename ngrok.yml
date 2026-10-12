@@ -1,0 +1,9 @@
+version: 3
+agent:
+  authtoken: 2tZLZn1xnAO9nM3QksLxF1DxOWx_3V7VGqeJtRe6JUhBhuvEm
+endpoints:
+  - name: your_endpoint_name
+    url: https://caylee-redemptory-maryellen.ngrok-free.dev
+    upstream:
+      url: 3000
+

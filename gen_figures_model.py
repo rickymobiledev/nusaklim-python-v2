@@ -16,7 +16,8 @@ BASE_DIR = r"D:\Projects\Kodepanda\Nusaklim\nusaklim"
 FIG_DIR = os.path.join(BASE_DIR, "figures_model")
 os.makedirs(FIG_DIR, exist_ok=True)
 
-from retrain_pipeline import build_features_and_targets, DATA_PATH, extract_feature_importance, compute_permutation_importance, CLASSIFICATION_TARGET
+from sklearn.metrics import mean_absolute_error
+from retrain_pipeline import build_features_and_targets, DATA_PATH, extract_feature_importance, compute_permutation_importance, CLASSIFICATION_TARGET, wind_majority_baseline
 
 bundle = joblib.load(os.path.join(BASE_DIR, "models", "weather_model_latest.joblib"))
 metrics = bundle['metrics']
@@ -36,7 +37,7 @@ test_df = df_featured[df_featured['date_dt'] > split_date]
 REG_TARGETS = ['temp_avg', 'humidity_avg', 'rainfall_total_mm', 'solar_radiation_avg', 'pressure_avg_hpa', 'wind_speed_avg']
 LABELS = {
     'temp_avg': 'Suhu Rata-rata (°C)', 'humidity_avg': 'Kelembapan (%)',
-    'rainfall_total_mm': 'Curah Hujan (mm)', 'solar_radiation_avg': 'Radiasi Matahari (W/m²)',
+    'rainfall_total_mm': 'Curah Hujan (mm)', 'solar_radiation_avg': 'Radiasi Matahari (Wh/m2²)',
     'pressure_avg_hpa': 'Tekanan Udara (hPa)', 'wind_speed_avg': 'Kecepatan Angin (km/h)',
     'wind_direction_name': 'Arah Mata Angin (kategori)',
 }
@@ -76,7 +77,9 @@ acc = [metrics[f'wind_direction_name_h{h}']['Accuracy'] for h in horizons]
 f1m = [metrics[f'wind_direction_name_h{h}']['F1_Macro'] for h in horizons]
 ax.plot(horizons, acc, marker='o', color='#7C3AED', linewidth=2, label='Accuracy')
 ax.plot(horizons, f1m, marker='s', color='#DB2777', linewidth=2, linestyle='--', label='F1-Macro')
-ax.axhline(0.568, color='#64748B', linestyle=':', linewidth=1.5, label='Baseline Kelas Mayoritas (Selatan, 56.8%)')
+_maj_cls, _ = wind_majority_baseline(1, df_featured, feature_cols, target_cols)
+_maj_by_h = [wind_majority_baseline(h, df_featured, feature_cols, target_cols)[1] for h in horizons]
+ax.plot(horizons, _maj_by_h, color='#64748B', linestyle=':', linewidth=1.5, label=f'Baseline Kelas Mayoritas ({_maj_cls}, {np.mean(_maj_by_h) * 100:.1f}%)')
 ax.set_title('Performa Klasifikasi Arah Mata Angin per Horizon', fontsize=11, fontweight='bold')
 ax.set_xlabel('Horizon (H+n)')
 ax.set_ylabel('Skor')
@@ -159,11 +162,15 @@ for station_id in station_ids:
         X = valid[feature_cols]
         y_actual = valid[target_col].values
         y_pred = models[f'{var}_h1'].predict(X)
+        if var == 'rainfall_total_mm':
+            y_pred = np.clip(y_pred, 0, None)
         dates = valid['date_dt'].values
+
+        mae_str = f"MAE: {mean_absolute_error(y_actual, y_pred):.2f}" if len(valid) > 0 else "MAE: N/A"
 
         ax.plot(dates, y_actual, marker='o', markersize=3.5, color='#0F172A', linewidth=1.5, label='Aktual')
         ax.plot(dates, y_pred, marker='x', markersize=3.5, color='#DC2626', linewidth=1.3, linestyle='--', label=f'Prediksi H+1 ({algo_used[f"{var}_h1"]})')
-        ax.set_title(LABELS[var], fontsize=10, fontweight='bold')
+        ax.set_title(f"{LABELS[var]}  [{mae_str}]", fontsize=9.2, fontweight='bold')
         ax.set_ylabel(LABELS[var].split('(')[-1].rstrip(')'), fontsize=8)
         ax.tick_params(axis='x', labelrotation=30, labelsize=7)
         ax.tick_params(axis='y', labelsize=7.5)

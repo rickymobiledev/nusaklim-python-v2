@@ -9,7 +9,7 @@
     { "key": "base_url", "value": "http://127.0.0.1:8000", "type": "string" },
     { "key": "station_id", "value": "227", "type": "string" },
     { "key": "bulk_station_ids", "value": "227,210,2207", "type": "string" },
-    { "key": "api_key", "value": "nusaklim-dev-key-change-me", "type": "string" }
+    { "key": "api_key", "value": "nusaklim-secret-key-2026", "type": "string" }
   ],
   "item": [
     {
