@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 from api.config import settings
+from api.weather_store import load_daily
 from api.stations_db import get_station_metadata
 from api.models_schema import (
     DailyForecastItem, ForecastResponse, StationInfo,
@@ -51,9 +52,9 @@ class ForecastEngine:
         else:
             print("[Warning] Model bundle not found. Inference will run in fallback mode.")
 
-        print(f"[Engine] Loading Daily Aggregated Data from {settings.daily_csv_path}...")
-        if os.path.exists(settings.daily_csv_path):
-            self.df_daily = pd.read_csv(settings.daily_csv_path)
+        print(f"[Engine] Loading Daily Aggregated Data ({settings.storage_backend})...")
+        if settings.storage_backend == "postgres" or os.path.exists(settings.daily_csv_path):
+            self.df_daily = load_daily()
             self.df_daily['date'] = pd.to_datetime(self.df_daily['date'])
             self.df_daily['stnname'] = self.df_daily['stnname'].astype(str)
             print(f"[Engine] Loaded {len(self.df_daily):,} historical station days.")

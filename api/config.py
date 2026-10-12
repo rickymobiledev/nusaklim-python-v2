@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Literal
 from pydantic import AliasChoices, Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -66,9 +67,13 @@ Semua endpoint API butuh header `X-API-Key` (klik **Authorize** di Swagger). `/d
     weather_api_key: str = Field(min_length=1, repr=False)
     max_bulk_stations: int = Field(default=50, gt=0)
     max_ingest_records: int = Field(default=100_000, gt=0)
+    storage_backend: Literal["csv", "postgres"] = "csv"
+    database_url: str = Field(default="", repr=False)
 
     @model_validator(mode="after")
     def resolve_paths(self):
+        if self.storage_backend == "postgres" and not self.database_url:
+            raise ValueError("NUSAKLIM_DATABASE_URL wajib diisi untuk storage_backend=postgres")
         def absolute(value: str, parent: str | Path) -> str:
             path = Path(value).expanduser()
             return str((path if path.is_absolute() else Path(parent) / path).resolve())

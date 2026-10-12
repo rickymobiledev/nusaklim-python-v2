@@ -59,6 +59,7 @@ dependencies = [
     "pip==24.0",
     "platformdirs==4.2.2",
     "plotly==7.0.0",
+    "psycopg[binary]>=3.2,<4",
     "pycparser==3.0",
     "pydantic==2.13.5",
     "pydantic-core==2.46.5",

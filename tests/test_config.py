@@ -90,6 +90,13 @@ class SettingsTests(unittest.TestCase):
         with self.assertRaises(ValidationError):
             config.Settings(_env_file=None)
 
+    def test_postgres_requires_url_and_hides_it_in_repr(self):
+        with self.assertRaises(ValidationError):
+            config.Settings(_env_file=None, storage_backend="postgres")
+        settings = config.Settings(_env_file=None, storage_backend="postgres",
+                                   database_url="postgresql://user:secret@localhost/weather")
+        self.assertNotIn("secret", repr(settings))
+
     def test_server_uses_configured_host_port_and_reload(self):
         settings = config.Settings(_env_file=None, host="0.0.0.0", port=9010, reload=False)
         with patch.object(serve, "settings", settings), patch("sys.argv", ["serve", "--open-browser"]), \

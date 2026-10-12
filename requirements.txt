@@ -99,3 +99,4 @@ tomli==2.0.1
 typeguard==4.3.0
 wheel==0.45.1
 zipp==3.19.2
+psycopg[binary]>=3.2,<4
