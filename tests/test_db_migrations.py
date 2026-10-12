@@ -34,6 +34,7 @@ class PostgresMigrationTests(unittest.TestCase):
             base_dir=self.root.name,
             raw_csv_path=str(Path(self.root.name) / "raw.csv"),
             daily_csv_path=str(Path(self.root.name) / "daily.csv"),
+            device_csv_path=str(Path(self.root.name) / "devices.csv"),
         )
         settings_patch.start()
         self.addCleanup(settings_patch.stop)
@@ -59,6 +60,7 @@ class PostgresMigrationTests(unittest.TestCase):
             ).fetchone()[0], 0)
             applied = self.migrations.apply_migrations(conn)
             self.assertEqual(applied, [item["version"] for item in statuses])
+            conn.execute("INSERT INTO weather_stations (id, name) VALUES ('001', 'Station 001')")
             conn.execute("INSERT INTO weather_raw (stnname, utctime) VALUES ('001', '1787136600')")
         with self.connect() as conn:
             self.assertEqual(self.migrations.apply_migrations(conn), [])
@@ -125,7 +127,7 @@ class PostgresMigrationTests(unittest.TestCase):
         self.assertTrue(result["migrations"])
         self.assertEqual(result["raw"]["rows_added"], 5)
         self.assertEqual(result["daily_rows"], 1)
-        self.assertEqual(result["verification"], dict(raw_rows=5, daily_rows=1, raw_stations=1, daily_stations=1))
+        self.assertEqual(result["verification"], dict(stations=1, raw_rows=5, daily_rows=1, raw_stations=1, daily_stations=1))
         repeated = self.cli.migrate(raw_csv=raw_path, daily_csv=daily_path, chunk_size=2)
         self.assertEqual(repeated["migrations"], [])
         self.assertEqual(repeated["raw"]["rows_added"], 0)
@@ -135,10 +137,24 @@ class PostgresMigrationTests(unittest.TestCase):
     def test_raw_only_import_builds_daily_database_without_training(self):
         raw_path = self.write_history()
         result = self.cli.migrate(raw_csv=raw_path, chunk_size=2)
-        self.assertEqual(result["verification"], dict(raw_rows=5, daily_rows=1, raw_stations=1, daily_stations=1))
+        self.assertEqual(result["verification"], dict(stations=1, raw_rows=5, daily_rows=1, raw_stations=1, daily_stations=1))
         with self.connect() as conn:
             daily = conn.execute("SELECT stnname, records_count FROM weather_daily").fetchall()
             self.assertEqual(daily, [("001", 5)])
+
+    def test_cli_imports_device_csv(self):
+        device_path = Path(self.root.name) / "devices.csv"
+        pd.DataFrame([
+            dict(id="001", name="PPKS 001", brand="Davis", latitude=3.5, longitude=98.5),
+            dict(id="002", name="PPKS 002", brand="Meteo", latitude=2.5, longitude=99.5),
+        ]).to_csv(device_path, index=False)
+        result = self.cli.migrate(device_csv=device_path)
+        self.assertEqual(result["stations"]["stations_saved"], 2)
+        self.assertEqual(result["verification"]["stations"], 2)
+        with self.connect() as conn:
+            stations = self.store.load_stations(conn=conn)
+            self.assertEqual(len(stations), 2)
+            self.assertEqual(stations.iloc[0]["name"], "PPKS 001")
 
 
 if __name__ == "__main__":

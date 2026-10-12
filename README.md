@@ -137,10 +137,13 @@ uv sync --locked
 uv run python -m api.migrate_postgres
 ```
 
-Perintah tanpa argumen menerapkan versi SQL dari `migrations/postgres`. Versi
-dan checksum dicatat dalam ledger `nusaklim_schema_migrations`; jalankan lagi
-untuk menerapkan migrasi yang belum tercatat. Periksa hasilnya kapan saja dengan
-perintah read-only:
+Perintah tanpa argumen menerapkan versi SQL dari `migrations/postgres` (termasuk pembuatan
+tabel `weather_stations` beserta relasi foreign key dari `weather_raw` dan `weather_daily`
+ke stasiun). Metadata stasiun dari `data/device_nusaklim.csv` otomatis diimpor/di-upsert ke tabel
+`weather_stations`. Anda juga dapat menentukan file CSV device tertentu dengan opsi `--device-csv <path>`
+atau melewati impor device dengan `--skip-device`. Versi dan checksum dicatat dalam ledger
+`nusaklim_schema_migrations`; jalankan lagi untuk menerapkan migrasi yang belum tercatat. Periksa
+hasilnya kapan saja dengan perintah read-only:
 
 ```powershell
 uv run python -m api.migrate_postgres --status

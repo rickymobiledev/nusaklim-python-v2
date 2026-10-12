@@ -4,6 +4,7 @@ Raw sensor values stay as text to preserve historical error markers for QC.
 The observation key is (stnname, utctime); append preserves the first reading.
 """
 from decimal import Decimal, InvalidOperation
+from pathlib import Path
 
 import pandas as pd
 import psycopg
@@ -18,8 +19,14 @@ DAILY_COLUMNS = [
     "solar_radiation_avg", "wind_speed_avg", "wind_speed_max", "wind_direction_deg",
     "wind_direction_name", "records_count",
 ]
+STATION_COLUMNS = [
+    "id", "name", "brand", "latitude", "longitude", "created_at", "updated_at",
+    "company_id", "company_code", "company_name", "company_image_url",
+    "company_created_at", "company_updated_at",
+]
 RAW_NAMES = ", ".join(RAW_COLUMNS)
 DAILY_NAMES = ", ".join(DAILY_COLUMNS)
+STATION_NAMES = ", ".join(STATION_COLUMNS)
 
 
 def connect():
@@ -49,6 +56,88 @@ def _raw_row(record):
     return row
 
 
+def _station_row(record):
+    row = []
+    for c in STATION_COLUMNS:
+        val = record.get(c)
+        if val is None or pd.isna(val):
+            row.append(None)
+        elif c in ("latitude", "longitude"):
+            try:
+                row.append(float(val))
+            except (ValueError, TypeError):
+                row.append(None)
+        else:
+            s = str(val).strip()
+            row.append(s if s else None)
+    if not row[0]:
+        return None
+    if not row[1]:
+        row[1] = f"Station {row[0]}"
+    return tuple(row)
+
+
+def import_stations_csv(path=None):
+    csv_path = Path(path if path is not None else settings.device_csv_path).resolve()
+    if not csv_path.is_file():
+        raise FileNotFoundError(f"File CSV stasiun tidak ditemukan: {csv_path}")
+    df = pd.read_csv(csv_path, dtype=str)
+    df.columns = df.columns.str.strip()
+    missing = {"id", "name"} - set(df.columns)
+    if missing:
+        raise ValueError("Kolom CSV stasiun tidak lengkap: " + ", ".join(sorted(missing)))
+
+    rows = []
+    for record in df.to_dict("records"):
+        r = _station_row(record)
+        if r is not None:
+            rows.append(r)
+
+    with connect() as conn:
+        initialize(conn)
+        conn.execute("SELECT pg_advisory_xact_lock(72410615)")
+        query = f"""
+            INSERT INTO weather_stations ({STATION_NAMES})
+            VALUES ({', '.join(['%s'] * len(STATION_COLUMNS))})
+            ON CONFLICT (id) DO UPDATE SET
+                name = EXCLUDED.name,
+                brand = EXCLUDED.brand,
+                latitude = EXCLUDED.latitude,
+                longitude = EXCLUDED.longitude,
+                updated_at = EXCLUDED.updated_at,
+                company_id = EXCLUDED.company_id,
+                company_code = EXCLUDED.company_code,
+                company_name = EXCLUDED.company_name,
+                company_image_url = EXCLUDED.company_image_url,
+                company_created_at = EXCLUDED.company_created_at,
+                company_updated_at = EXCLUDED.company_updated_at;
+        """
+        with conn.cursor() as cur:
+            cur.executemany(query, rows)
+    return {"rows_in_file": len(df), "stations_saved": len(rows)}
+
+
+def ensure_stations_exist(conn, station_ids):
+    if not station_ids:
+        return
+    cleaned = []
+    seen = set()
+    for sid in station_ids:
+        if sid is None or pd.isna(sid):
+            continue
+        s = str(sid).strip()
+        if s and s not in seen:
+            seen.add(s)
+            cleaned.append((s, f"Station {s}"))
+    if not cleaned:
+        return
+    with conn.cursor() as cur:
+        cur.executemany(
+            "INSERT INTO weather_stations (id, name) VALUES (%s, %s) ON CONFLICT (id) DO NOTHING",
+            cleaned,
+        )
+
+
 def _ingest_batches(batches, mode="append"):
     if mode != "append":
         raise UploadValidationError("PostgreSQL hanya mendukung mode append; replace seluruh riwayat tidak didukung.")
@@ -59,6 +148,9 @@ def _ingest_batches(batches, mode="append"):
         conn.execute("SELECT pg_advisory_xact_lock(72410612)")
         conn.execute("CREATE TEMP TABLE incoming_weather (LIKE weather_raw) ON COMMIT DROP")
         for records in batches:
+            station_ids = [r.get("stnname") if hasattr(r, "get") else getattr(r, "stnname", None)
+                           for r in records]
+            ensure_stations_exist(conn, station_ids)
             with conn.cursor() as cur:
                 with cur.copy(f"COPY incoming_weather ({RAW_NAMES}) FROM STDIN") as copy:
                     for record in records:
@@ -99,6 +191,8 @@ def save_daily(frame):
         initialize(conn)
         # DELETE + COPY in one transaction: readers see the complete old or new dataset.
         conn.execute("SELECT pg_advisory_xact_lock(72410613)")
+        if "stnname" in frame.columns:
+            ensure_stations_exist(conn, frame["stnname"].dropna().unique())
         conn.execute("DELETE FROM weather_daily")
         with conn.cursor() as cur:
             with cur.copy(f"COPY weather_daily ({DAILY_NAMES}) FROM STDIN") as copy:
@@ -123,14 +217,36 @@ def load_daily():
     return frame
 
 
+def load_stations(conn=None):
+    if conn is not None:
+        rows = conn.execute(f"SELECT {STATION_NAMES} FROM weather_stations ORDER BY id").fetchall()
+        return pd.DataFrame.from_records(rows, columns=STATION_COLUMNS)
+    if settings.storage_backend == "csv":
+        csv_path = Path(settings.device_csv_path)
+        if not csv_path.is_file():
+            return pd.DataFrame(columns=STATION_COLUMNS)
+        df = pd.read_csv(csv_path, dtype=str)
+        df.columns = df.columns.str.strip()
+        for col in STATION_COLUMNS:
+            if col not in df.columns:
+                df[col] = None
+        return df[STATION_COLUMNS]
+    with connect() as conn_obj:
+        rows = conn_obj.execute(f"SELECT {STATION_NAMES} FROM weather_stations ORDER BY id").fetchall()
+    return pd.DataFrame.from_records(rows, columns=STATION_COLUMNS)
+
+
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Inisialisasi PostgreSQL / impor riwayat cuaca")
+    parser.add_argument("--device-csv", help="Impor CSV stasiun/device ke weather_stations")
     parser.add_argument("--raw-csv", help="Impor CSV mentah lama; aman diulang, duplikat diabaikan")
     parser.add_argument("--daily-csv", help="Impor snapshot CSV harian untuk training/forecast")
     args = parser.parse_args()
     with connect() as conn:
         initialize(conn)
+    if args.device_csv:
+        print(import_stations_csv(args.device_csv))
     if args.raw_csv:
         print(import_raw_csv(args.raw_csv))
     if args.daily_csv:

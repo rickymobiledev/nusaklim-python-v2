@@ -54,6 +54,7 @@ Semua endpoint API butuh header `X-API-Key` (klik **Authorize** di Swagger). `/d
     upload_staging_dir: str = "staging"
     model_bundle_path: str = "models/weather_model_latest.joblib"
     openmeteo_summary_path: str = "openmeteo_benchmark_summary.json"
+    device_csv_path: str = "data/device_nusaklim.csv"
     
     # API Settings
     api_prefix: str = "/api/v1"
@@ -81,7 +82,7 @@ Semua endpoint API butuh header `X-API-Key` (klik **Authorize** di Swagger). `/d
         self.project_root = absolute(self.project_root, CHECKOUT_ROOT)
         self.base_dir = absolute(self.base_dir or self.project_root, self.project_root)
         for name in ("daily_csv_path", "raw_data_dir", "log_dir",
-                     "model_bundle_path", "openmeteo_summary_path"):
+                     "model_bundle_path", "openmeteo_summary_path", "device_csv_path"):
             setattr(self, name, absolute(getattr(self, name), self.base_dir))
         for name in ("raw_csv_path", "incoming_dir", "archive_dir",
                      "rejected_dir", "upload_staging_dir"):

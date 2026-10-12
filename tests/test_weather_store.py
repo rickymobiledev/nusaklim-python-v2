@@ -160,6 +160,52 @@ class WeatherStoreTests(unittest.TestCase):
         model.fit(valid[cols], valid[targets["temp_avg_h1"]])
         self.assertEqual(len(model.predict(valid[cols].iloc[-1:])), 1)
 
+    def test_import_and_load_stations(self):
+        with tempfile.TemporaryDirectory() as root:
+            csv_path = Path(root) / "stations.csv"
+            pd.DataFrame([
+                dict(id="001", name="PPKS Bukit Sentang", brand="Davis", latitude="3.95", longitude="98.31"),
+                dict(id="211", name="PPKS Marihat", brand="Davis", latitude="2.91", longitude="99.09"),
+            ]).to_csv(csv_path, index=False)
+            res = store.import_stations_csv(csv_path)
+            self.assertEqual(res["rows_in_file"], 2)
+            self.assertEqual(res["stations_saved"], 2)
+
+            # Idempotency / upsert update
+            pd.DataFrame([
+                dict(id="001", name="PPKS Bukit Sentang Updated", brand="Davis New", latitude="3.96", longitude="98.32"),
+            ]).to_csv(csv_path, index=False)
+            res2 = store.import_stations_csv(csv_path)
+            self.assertEqual(res2["stations_saved"], 1)
+
+        stations = store.load_stations()
+        self.assertEqual(len(stations), 2)
+        s001 = stations[stations.id == "001"].iloc[0]
+        self.assertEqual(s001["name"], "PPKS Bukit Sentang Updated")
+        self.assertEqual(s001["brand"], "Davis New")
+
+    def test_import_stations_validations(self):
+        with tempfile.TemporaryDirectory() as root:
+            # Missing file
+            with self.assertRaises(FileNotFoundError):
+                store.import_stations_csv(Path(root) / "nonexistent.csv")
+
+            # Missing required columns
+            bad_csv = Path(root) / "bad.csv"
+            pd.DataFrame([{"wrong_col": "value"}]).to_csv(bad_csv, index=False)
+            with self.assertRaises(ValueError):
+                store.import_stations_csv(bad_csv)
+
+    def test_ensure_stations_exist(self):
+        with self.db_connect() as conn:
+            store.ensure_stations_exist(conn, ["999", "888"])
+            count = conn.execute("SELECT count(*) FROM weather_stations WHERE id IN ('999', '888')").fetchone()[0]
+            self.assertEqual(count, 2)
+            # Idempotent call
+            store.ensure_stations_exist(conn, ["999"])
+            count2 = conn.execute("SELECT count(*) FROM weather_stations WHERE id IN ('999', '888')").fetchone()[0]
+            self.assertEqual(count2, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

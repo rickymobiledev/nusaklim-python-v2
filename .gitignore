@@ -30,6 +30,8 @@ parts/
 sdist/
 var/
 wheels/
+data/nusaklim-aws-reduce.csv
+!data/device_nusaklim.csv
 *.egg-info/
 .installed.cfg
 *.egg

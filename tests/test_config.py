@@ -24,6 +24,7 @@ class SettingsTests(unittest.TestCase):
         self.assertEqual(settings.base_dir, str(config.CHECKOUT_ROOT))
         self.assertEqual(settings.model_bundle_path, str(config.CHECKOUT_ROOT / "models" / "weather_model_latest.joblib"))
         self.assertEqual(settings.incoming_dir, str(config.CHECKOUT_ROOT / "data_raw" / "incoming"))
+        self.assertEqual(settings.device_csv_path, str(config.CHECKOUT_ROOT / "data" / "device_nusaklim.csv"))
 
     def test_project_root_from_dotenv_controls_default_paths(self):
         with tempfile.TemporaryDirectory() as root:
@@ -35,6 +36,7 @@ class SettingsTests(unittest.TestCase):
             self.assertEqual(Path(settings.base_dir), project_root)
             self.assertEqual(Path(settings.model_bundle_path), project_root / "models" / "weather_model_latest.joblib")
             self.assertEqual(Path(settings.incoming_dir), project_root / "data_raw" / "incoming")
+            self.assertEqual(Path(settings.device_csv_path), project_root / "data" / "device_nusaklim.csv")
             os.environ["NUSAKLIM_PROJECT_ROOT"] = str(Path(root) / "override")
             settings = config.Settings(_env_file=env_file)
             self.assertEqual(Path(settings.base_dir), Path(root) / "override")
