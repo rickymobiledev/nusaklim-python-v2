@@ -1,9 +1,19 @@
-import os
-from pydantic import BaseModel
+from pathlib import Path
+from pydantic import AliasChoices, Field, model_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
-API_KEY = "nusaklim-secret-key-2026"
+# Locate .env independently of the configurable project/data root.
+CHECKOUT_ROOT = Path(__file__).resolve().parent.parent
 
-class Settings(BaseModel):
+class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_prefix="NUSAKLIM_",
+        env_file=CHECKOUT_ROOT / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+        populate_by_name=True,
+        hide_input_in_errors=True,
+    )
     app_name: str = "NusaKlim Weather AI REST API"
     app_version: str = "1.0.0"
     app_description: str = """
@@ -30,25 +40,48 @@ Semua endpoint API butuh header `X-API-Key` (klik **Authorize** di Swagger). `/d
 """
     
     # Paths
-    base_dir: str = r"D:\Projects\Kodepanda\Nusaklim\nusaklim"
-    daily_csv_path: str = r"D:\Projects\Kodepanda\Nusaklim\nusaklim\nusaklim_daily_aggregated.csv"
-    raw_data_dir: str = r"D:\Projects\Kodepanda\Nusaklim\nusaklim\data_raw"
-    raw_csv_path: str = r"D:\Projects\Kodepanda\Nusaklim\nusaklim\data_raw\nusaklim-aws-reduce.csv"
-    incoming_dir: str = r"D:\Projects\Kodepanda\Nusaklim\nusaklim\data_raw\incoming"
-    archive_dir: str = r"D:\Projects\Kodepanda\Nusaklim\nusaklim\data_raw\archive"
-    rejected_dir: str = r"D:\Projects\Kodepanda\Nusaklim\nusaklim\data_raw\rejected"
-    log_dir: str = r"D:\Projects\Kodepanda\Nusaklim\nusaklim\logs"
-    upload_staging_dir: str = r"D:\Projects\Kodepanda\Nusaklim\nusaklim\data_raw\staging"
-    model_bundle_path: str = r"D:\Projects\Kodepanda\Nusaklim\nusaklim\models\weather_model_latest.joblib"
-    openmeteo_summary_path: str = r"D:\Projects\Kodepanda\Nusaklim\nusaklim\openmeteo_benchmark_summary.json"
+    project_root: str = Field(default=str(CHECKOUT_ROOT), min_length=1,
+                              validation_alias=AliasChoices("NUSAKLIM_PROJECT_ROOT", "PROJECT_ROOT"))
+    base_dir: str = ""
+    daily_csv_path: str = "nusaklim_daily_aggregated.csv"
+    raw_data_dir: str = "data_raw"
+    raw_csv_path: str = "nusaklim-aws-reduce.csv"
+    incoming_dir: str = "incoming"
+    archive_dir: str = "archive"
+    rejected_dir: str = "rejected"
+    log_dir: str = "logs"
+    upload_staging_dir: str = "staging"
+    model_bundle_path: str = "models/weather_model_latest.joblib"
+    openmeteo_summary_path: str = "openmeteo_benchmark_summary.json"
     
     # API Settings
     api_prefix: str = "/api/v1"
     cors_origins: list[str] = ["*"]
+    host: str = Field(default="127.0.0.1", min_length=1)
+    port: int = Field(default=8000, ge=1, le=65535,
+                      validation_alias=AliasChoices("NUSAKLIM_PORT", "PORT"))
+    reload: bool = True
 
     # API Key tunggal untuk SEMUA endpoint (header X-API-Key).
-    weather_api_key: str = API_KEY
-    max_bulk_stations: int = 50
-    max_ingest_records: int = 100_000
+    weather_api_key: str = Field(min_length=1, repr=False)
+    max_bulk_stations: int = Field(default=50, gt=0)
+    max_ingest_records: int = Field(default=100_000, gt=0)
+
+    @model_validator(mode="after")
+    def resolve_paths(self):
+        def absolute(value: str, parent: str | Path) -> str:
+            path = Path(value).expanduser()
+            return str((path if path.is_absolute() else Path(parent) / path).resolve())
+
+        self.project_root = absolute(self.project_root, CHECKOUT_ROOT)
+        self.base_dir = absolute(self.base_dir or self.project_root, self.project_root)
+        for name in ("daily_csv_path", "raw_data_dir", "log_dir",
+                     "model_bundle_path", "openmeteo_summary_path"):
+            setattr(self, name, absolute(getattr(self, name), self.base_dir))
+        for name in ("raw_csv_path", "incoming_dir", "archive_dir",
+                     "rejected_dir", "upload_staging_dir"):
+            setattr(self, name, absolute(getattr(self, name), self.raw_data_dir))
+        return self
 
 settings = Settings()
+PROJECT_ROOT = Path(settings.project_root)

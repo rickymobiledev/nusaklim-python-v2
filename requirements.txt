@@ -46,6 +46,7 @@ pip==24.0
 plotly==7.0.0
 pycparser==3.0
 pydantic==2.13.5
+pydantic-settings==2.15.0
 pydantic-core==2.46.5
 pydyf==0.12.1
 pyparsing==3.3.2

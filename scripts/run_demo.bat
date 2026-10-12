@@ -81,7 +81,7 @@ echo ======================================================================
 echo Memulai Server API NusaKlim...
 echo Tekan Ctrl+C di terminal ini jika ingin menghentikan server.
 echo ======================================================================
-uv run uvicorn api.main:app --host 127.0.0.1 --port 8000 --reload
+uv run python -m api.serve --open-browser
 pause
 goto menu
 

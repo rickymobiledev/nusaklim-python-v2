@@ -71,3 +71,6 @@ scratch/
 
 # Secrets lokal
 ngrok.yml
+.env
+.env.*
+!.env.example

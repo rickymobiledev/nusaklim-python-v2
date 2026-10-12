@@ -38,7 +38,7 @@ MENU
         4) uv run python demo_performa_model.py --indikator hujan ;;
         5)
             echo "Tekan Ctrl+C untuk menghentikan server."
-            uv run uvicorn api.main:app --host 127.0.0.1 --port 8000 --reload
+            uv run python -m api.serve --open-browser
             ;;
         6)
             open_path "$PWD/logs/demo"
