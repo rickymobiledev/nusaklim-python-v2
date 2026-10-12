@@ -31,6 +31,7 @@ import joblib
 
 from api.config import settings
 from api.ingest_upload import merge_upload, validate_csv_header, UploadValidationError
+from api.retention import run_all_retention
 
 NAME_PATTERN = re.compile(r"^nusaklim-aws-reduce_\d{8}-\d{8}\.csv$")
 TAIL_LINES = 25
@@ -203,6 +204,20 @@ def run_pipeline(task_id: str, trigger: str, extra_files: list[tuple[str, str]] 
         t_retrain = time.time()
         _run_script("retrain", os.path.join(settings.base_dir, "retrain_pipeline.py"), run_log)
         entry.update(_verify_new_bundle(t_retrain))
+
+        try:
+            ret_stats = run_all_retention(exclude_logs={os.path.basename(run_log)})
+            n_del_b = len(ret_stats.get("models", {}).get("deleted", []))
+            n_del_l = len(ret_stats.get("logs", {}).get("deleted", []))
+            freed = ret_stats.get("freed_bytes", 0)
+            with open(run_log, "a", encoding="utf-8") as f:
+                f.write(
+                    f"\n[retention] Pembersihan otomatis: {n_del_b} bundle model, "
+                    f"{n_del_l} run log dihapus ({freed:,} bytes dibebaskan)\n"
+                )
+        except Exception as ret_err:
+            with open(run_log, "a", encoding="utf-8") as f:
+                f.write(f"\n[retention] Peringatan: Pembersihan retensi file gagal: {ret_err}\n")
 
         if on_success:
             try:

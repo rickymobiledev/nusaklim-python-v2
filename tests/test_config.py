@@ -79,7 +79,9 @@ class SettingsTests(unittest.TestCase):
     def test_invalid_port_and_limits_fail(self):
         for name, value in (("NUSAKLIM_PORT", "0"), ("NUSAKLIM_PORT", "65536"),
                             ("NUSAKLIM_PORT", "bad"), ("NUSAKLIM_MAX_BULK_STATIONS", "0"),
-                            ("NUSAKLIM_MAX_INGEST_RECORDS", "-1")):
+                            ("NUSAKLIM_MAX_INGEST_RECORDS", "-1"),
+                            ("NUSAKLIM_MAX_MODEL_BUNDLES", "0"),
+                            ("NUSAKLIM_MAX_RUN_LOGS", "0")):
             with self.subTest(name=name, value=value), patch.dict(os.environ, {name: value}):
                 with self.assertRaises(ValidationError):
                     config.Settings(_env_file=None)

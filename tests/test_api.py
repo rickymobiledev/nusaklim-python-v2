@@ -165,7 +165,34 @@ def test_ingest_json_rejects_invalid_payload():
     for body in ({"records": []}, {"records": [{"stnname": "227"}]}, {"mode": "x", "records": [{"stnname": "227", "utctime": 1}]}):
         response = client.post("/api/v1/ingest/json", headers=AUTH_HEADERS, json=body)
         assert response.status_code == 422, f"Expected 422 for {body}, got {response.status_code}"
-    print("[PASS] POST /api/v1/ingest/json (payload tidak valid) -> 422 seperti diharapkan.")
+def test_ingest_json_no_retrain():
+    body = {
+        "mode": "append",
+        "trigger_retrain": False,
+        "records": [{"stnname": "227", "utctime": 1787136600, "tempout": 78.5}]
+    }
+    response = client.post("/api/v1/ingest/json", headers=AUTH_HEADERS, json=body)
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
+    data = response.json()
+    assert data["status"] == "Accepted"
+    assert "batch-ingest-" in data["task_id"]
+    assert "tanpa retrain" in data["message"]
+    print(f"[PASS] POST /api/v1/ingest/json (trigger_retrain=False) -> {data['message']}")
+
+def test_ingest_upload_no_retrain():
+    csv_bytes = b"stnname,utctime,tempout,humout,windspd,winddir,bar,solar,rain15\n227,1787136600,78.5,85.0,2.0,180.0,29.9,500.0,0.0\n"
+    response = client.post(
+        "/api/v1/ingest/upload",
+        headers=AUTH_HEADERS,
+        data={"mode": "append", "trigger_retrain": "false"},
+        files={"file": ("test.csv", csv_bytes, "text/csv")}
+    )
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
+    data = response.json()
+    assert data["status"] == "Accepted"
+    assert "batch-upload-" in data["task_id"]
+    assert "tanpa retrain" in data["message"]
+    print(f"[PASS] POST /api/v1/ingest/upload (trigger_retrain=False) -> {data['message']}")
 
 TEST_FUNCS = [
     test_root_redirect,
@@ -185,6 +212,8 @@ TEST_FUNCS = [
     test_ingest_upload_rejects_invalid_csv,
     test_ingest_json_requires_api_key,
     test_ingest_json_rejects_invalid_payload,
+    test_ingest_json_no_retrain,
+    test_ingest_upload_no_retrain,
     test_ingest_trigger,
 ]
 

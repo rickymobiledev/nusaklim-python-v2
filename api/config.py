@@ -68,6 +68,8 @@ Semua endpoint API butuh header `X-API-Key` (klik **Authorize** di Swagger). `/d
     weather_api_key: str = Field(min_length=1, repr=False)
     max_bulk_stations: int = Field(default=50, gt=0)
     max_ingest_records: int = Field(default=100_000, gt=0)
+    max_model_bundles: int = Field(default=10, gt=0, description="Maksimum bundle model berstempel waktu yang dipertahankan di models/.")
+    max_run_logs: int = Field(default=30, gt=0, description="Maksimum file log eksekusi pipeline yang dipertahankan di logs/runs/.")
     storage_backend: Literal["csv", "postgres"] = "csv"
     database_url: str = Field(default="", repr=False)
 
