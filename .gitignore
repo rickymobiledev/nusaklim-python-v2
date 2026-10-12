@@ -68,3 +68,6 @@ desktop.ini
 tmp/
 temp/
 scratch/
+
+# Secrets lokal
+ngrok.yml

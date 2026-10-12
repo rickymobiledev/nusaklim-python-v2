@@ -37,7 +37,7 @@ test_df = df_featured[df_featured['date_dt'] > split_date]
 REG_TARGETS = ['temp_avg', 'humidity_avg', 'rainfall_total_mm', 'solar_radiation_avg', 'pressure_avg_hpa', 'wind_speed_avg']
 LABELS = {
     'temp_avg': 'Suhu Rata-rata (°C)', 'humidity_avg': 'Kelembapan (%)',
-    'rainfall_total_mm': 'Curah Hujan (mm)', 'solar_radiation_avg': 'Radiasi Matahari (Wh/m2²)',
+    'rainfall_total_mm': 'Curah Hujan (mm)', 'solar_radiation_avg': 'Radiasi Matahari (Wh/m²)',
     'pressure_avg_hpa': 'Tekanan Udara (hPa)', 'wind_speed_avg': 'Kecepatan Angin (km/h)',
     'wind_direction_name': 'Arah Mata Angin (kategori)',
 }
