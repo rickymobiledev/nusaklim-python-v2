@@ -202,7 +202,27 @@ tersedia dari root proyek maupun direktori lain:
 bash scripts/migrate_postgres.sh --raw-csv ./data/nusaklim-aws-reduce.csv
 ```
 
-Setelah migrasi dan impor selesai, aktifkan backend PostgreSQL di `.env`, lalu
+### Melatih Ulang Model dari PostgreSQL
+
+Untuk melatih model prediksi cuaca 7 hari secara langsung dari data PostgreSQL (termasuk agregasi otomatis `weather_raw` ke `weather_daily` jika belum ada):
+
+```powershell
+# Jalankan alur training lengkap dari PostgreSQL:
+uv run python scripts/train_postgres.py
+
+# Atau gunakan script launcher di Windows / Bash:
+.\scripts\train_postgres.bat
+# bash scripts/train_postgres.sh
+
+# Opsi khusus:
+uv run python scripts/train_postgres.py --status        # Cek kesiapan data & model terkini
+uv run python scripts/train_postgres.py --clean-only    # Hanya agregasi weather_raw -> weather_daily
+uv run python scripts/train_postgres.py --train-only    # Latih model dari weather_daily yang sudah ada
+uv run python scripts/train_postgres.py --force-clean   # Paksa agregasi ulang dari data mentah
+uv run python scripts/train_postgres.py --set-active    # Otomatis aktifkan backend postgres di .env
+```
+
+Setelah migrasi, impor, dan training selesai, aktifkan backend PostgreSQL di `.env`, lalu
 jalankan API:
 
 ```dotenv
