@@ -1,7 +1,7 @@
 # ==============================================================================
 # ORKESTRATOR PIPELINE DATA BARU -> CLEANING -> AGREGASI -> RETRAIN (+ LOG)
 # Dipakai oleh POST /ingest, /ingest/upload, /retrain, dan CLI:
-#     python -m api.pipeline_runner            (proses semua file di data_raw/incoming/)
+#     uv run python -m api.pipeline_runner            (proses semua file di data_raw/incoming/)
 #
 # Struktur folder (lihat api/config.py):
 #   data_raw/nusaklim-aws-reduce.csv   master (gabungan seluruh data mentah)
