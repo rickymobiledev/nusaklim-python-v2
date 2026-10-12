@@ -149,6 +149,23 @@ hasilnya kapan saja dengan perintah read-only:
 uv run python -m api.migrate_postgres --status
 ```
 
+Untuk impor data stasiun (`data/device_nusaklim.csv`) dan data cuaca mentah (`data/nusaklim-aws-reduce.csv`) ke PostgreSQL dengan performa tinggi (streaming COPY, progress bar, estimasi ETA, dan auto-resolve foreign key):
+
+```powershell
+# Impor stasiun dan data cuaca sekaligus:
+uv run python scripts/import_data.py
+
+# Atau gunakan script launcher di Windows / Bash:
+.\scripts\import_data.bat
+# bash scripts/import_data.sh
+
+# Opsi khusus:
+uv run python scripts/import_data.py --stations-only       # Hanya stasiun
+uv run python scripts/import_data.py --weather-only        # Hanya data cuaca
+uv run python scripts/import_data.py --chunk-size 200000   # Batch 200k baris
+uv run python scripts/import_data.py --status              # Cek status & jumlah baris DB
+```
+
 Untuk impor satu kali seluruh sejarah raw dari `data/nusaklim-aws-reduce.csv`
 sekaligus menjalankan cleaning ke database:
 
