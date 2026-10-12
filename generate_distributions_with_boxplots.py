@@ -50,9 +50,9 @@ vars_config = [
     },
     {
         'col': 'solar_radiation_avg',
-        'name': 'Akumulasi Radiasi Solar (W/m²)',
+        'name': 'Akumulasi Radiasi Solar (Wh/m² total harian)',
         'color': '#EA580C',
-        'unit': 'W/m²',
+        'unit': 'Wh/m²',
         'data': df[df['solar_radiation_avg'] > 0]['solar_radiation_avg'].dropna()
     },
     {

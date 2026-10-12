@@ -217,7 +217,7 @@ axes[0, 0].legend(loc='upper right')
 axes[0, 0].set_title('Tren Rangkaian Waktu Cuaca Harian Nasional – Parameter Tambahan (2022 - 2026)', fontweight='bold', fontsize=13)
 
 axes[0, 1].plot(daily_b.index, solar_ma, color='#EA580C', lw=1.3, label='Radiasi Solar (7-day MA)')
-axes[0, 1].set_ylabel('Radiasi Solar (W/m²)', fontweight='bold', fontsize=11)
+axes[0, 1].set_ylabel('Radiasi Solar (Wh/m² total harian)', fontweight='bold', fontsize=11)
 axes[0, 1].legend(loc='upper right')
 
 axes[1, 0].plot(daily_b.index, windspd_ma, color='#7C3AED', lw=1.3, label='Kecepatan Angin (7-day MA)')
