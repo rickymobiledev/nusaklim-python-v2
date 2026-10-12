@@ -55,7 +55,7 @@ with open(os.path.join(BASE_DIR, "openmeteo_benchmark_summary.json"), encoding="
     _OM = json.load(_f)
 OM_AVG = _OM['open_meteo_metrics']
 _ISUM = _OM['indicator_summary']
-_IND_ORDER = ['temp_avg', 'humidity_avg', 'rainfall_total_mm', 'solar_radiation_avg', 'pressure_avg_hpa', 'wind_speed_avg', 'wind_direction_name']
+_IND_ORDER = ['temp_avg', 'humidity_avg', 'rainfall_total_mm', 'pressure_avg_hpa', 'wind_speed_avg', 'wind_direction_name']
 
 
 def _join_labels(items):
@@ -164,7 +164,7 @@ cover_meta = [
     [Paragraph('<b>Dataset Bersih Terstandar</b>', style_table_cell_bold), Paragraph(f'14.823.713 baris interval bersih (969 MB) &amp; {idn(N_RAW_ROWS)} baris harian (10 MB)', style_table_cell)],
     [Paragraph('<b>Model Champion Produksi</b>', style_table_cell_bold), Paragraph(f'<b>Algoritma Juara per-Variabel ({"/".join(_ALGO_SET)}, H+1 s/d H+7)</b> | Akurasi Suhu MAE &plusmn;{_metrics["temp_avg_h1"]["MAE"]:.2f}&deg;C di H+1 | Retrain Penuh &plusmn;21 Menit', style_table_cell_bold)],
     [Paragraph('<b>Layanan Backend &amp; API</b>', style_table_cell_bold), Paragraph('REST API FastAPI Modular (&lt; 30 ms latensi inferensi) + Rekomendasi Agronomi Kebun', style_table_cell)],
-    [Paragraph('<b>Validasi Data Aktual</b>', style_table_cell_bold), Paragraph(f'Dibandingkan dengan Open-Meteo pada 7 indikator di 4 stasiun: NusaKlim lebih akurat pada {_join_labels(_NK_BETTER)}; Open-Meteo lebih akurat pada {_join_labels(_OM_BETTER)}', style_table_cell_bold)],
+    [Paragraph('<b>Validasi Data Aktual</b>', style_table_cell_bold), Paragraph(f'Dibandingkan dengan Open-Meteo pada 6 indikator di 4 stasiun (Radiasi tidak dibandingkan: satuan berbeda): NusaKlim lebih akurat pada {_join_labels(_NK_BETTER)}; Open-Meteo lebih akurat pada {_join_labels(_OM_BETTER)}', style_table_cell_bold)],
     [Paragraph('<b>Tim Penyusun</b>', style_table_cell_bold), Paragraph('Tim Data Analyst &amp; AI Engineering PPKS | Tanggal: Oktober 2026', style_table_cell)],
 ]
 tbl_cov = Table(cover_meta, colWidths=[135, 380])
@@ -229,7 +229,7 @@ story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBef
 story.append(Paragraph('<b>A. Apa yang Dilakukan pada Tahap Ini:</b>', style_h2))
 story.append(Paragraph(
     '&bull;&nbsp; Meringkas 14,8 juta data interval 15-menit (96 observasi per hari) menjadi 1 baris ringkasan harian per stasiun.<br/>'
-    '&bull;&nbsp; Menerapkan formula Notulen Rapat PPKS 20 Agustus 2026: <b>SUM</b> untuk Curah Hujan &amp; Radiasi Solar; <b>MEAN</b> untuk Suhu, RH, Tekanan Barometer, dan Kecepatan Angin.<br/>'
+    '&bull;&nbsp; Menerapkan formula meteorologi terstandarisasi: <b>SUM</b> untuk Curah Hujan; <b>SUM</b> juga untuk Radiasi Solar (total harian berskala ribuan, sesuai Notulen Poin 12; nilainya bergantung pada jumlah pembacaan yang diterima); <b>MEAN</b> untuk Suhu, Kelembapan, Tekanan Barometer, dan Kecepatan Angin.<br/>'
     '&bull;&nbsp; Mengekstrak parameter ekstrem harian: Suhu Min (T<sub>min</sub>), Suhu Max (T<sub>max</sub>), RH Min (RH<sub>min</sub>), RH Max (RH<sub>max</sub>), dan Angin Maksimum.<br/>'
     '&bull;&nbsp; Mengonversi derajat arah angin ke 4 arah mata angin kardinal: Utara (&gt;315&deg; atau &le;45&deg;), Timur (&gt;45&deg; s/d &le;135&deg;), Selatan (&gt;135&deg; s/d &le;225&deg;), Barat (&gt;225&deg; s/d &le;315&deg;).<br/>'
     f'&bull;&nbsp; Menghasilkan dataset bersih harian (<i>Golden Dataset</i>): <code>nusaklim_daily_aggregated.csv</code> ({idn(N_RAW_ROWS)} baris, 10,12 MB).',
@@ -251,9 +251,10 @@ story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBef
 
 story.append(Paragraph('<b>A. Apa yang Dilakukan pada Tahap Ini:</b>', style_h2))
 story.append(Paragraph(
-    f'&bull;&nbsp; <b>Membangun {N_FEATURE} Fitur Prediktor:</b> Riwayat 1/3/7 hari sebelumnya &amp; rata-rata 7 hari untuk 6 variabel cuaca, perubahan tekanan harian, rentang suhu harian, Day of the Year (sin/cos), dan arah angin hari ini (satu-satunya fitur yang dipakai langsung dari dataset). Seluruh fitur berasal dari data pengamatan nyata. Fitur identitas stasiun (ID/nama sebagai kategori) sengaja <b>tidak diikutsertakan</b> karena hanya pengenal unik, bukan variabel fisis cuaca &ndash; lihat <i>Laporan Model Prediksi Cuaca 7 Hari</i> Bab 2.1.<br/>'
-    f'&bull;&nbsp; <b>Melatih Model Multi-Horizon Mandiri:</b> Membangun model regresi &amp; klasifikasi independen untuk masing-masing horizon H+1 hingga H+7, dengan <b>algoritma juara dipilih per-variabel</b> dari hasil benchmarking (Suhu/Kelembapan/Tekanan/Angin: Ridge Regression; Hujan/Radiasi/Arah Angin: LightGBM - lihat <i>Laporan Model Prediksi Cuaca 7 Hari</i> Tabel 3.3), tetap sebagai <b>1 model global</b> yang dilatih dari gabungan seluruh 183 stasiun.<br/>'
-    f'&bull;&nbsp; <b>Evaluasi pada Data Uji Riil:</b> Menguji performa model pada 30 hari observasi aktual terakhir yang sama sekali tidak dipakai saat melatih model (21 Juli 2026 &ndash; 19 Agustus 2026, &plusmn;{idn(N_TEST_REF)} titik sampel per target).<br/>'
+    f'&bull;&nbsp; <b>Membangun {N_FEATURE} Fitur Prediktor:</b> Riwayat lag 1/3/7 hari &amp; rata-rata 7 hari untuk variabel cuaca, perubahan tekanan harian, rentang suhu harian, Day of the Year (sin/cos), serta jangkar arah angin hari berjalan. Fitur identitas stasiun (ID/nama sebagai kategori) sengaja <b>tidak diikutsertakan</b> agar model tidak overfitting pada lokasi tertentu (Bab 2.1 Laporan 3).<br/>'
+    f'&bull;&nbsp; <b>Melatih Model Multi-Horizon Mandiri:</b> Membangun {7*7} sub-model independen (H+1 s/d H+7) dengan algoritma juara per-variabel: Ridge Regression (Suhu, Kelembapan, Radiasi, Tekanan, Kecepatan Angin), Random Forest (Curah Hujan), dan LightGBM (Arah Angin).<br/>'
+    f'&bull;&nbsp; <b>Evaluasi pada Data Uji Riil:</b> Menguji performa model pada 30 hari blind test (21 Juli &ndash; 19 Agustus 2026, mencakup seluruh 161 stasiun aktif, &plusmn;{idn(N_TEST_REF)} titik observasi). Grafik evaluasi Gambar 7 &amp; 8 dilengkapi nilai metrik MAE per stasiun.<br/>'
+    f'&bull;&nbsp; <b>Penyajian Ramalan Agronomi:</b> Nilai radiasi matahari disajikan dalam skala akumulasi energi harian (Wh/m&sup2;/hari, berkisar ribuan: ~4.200 Wh/m&sup2;) sesuai kebutuhan operasional lapangan kebun sawit.<br/>'
     f'&bull;&nbsp; <b>Penyimpanan Bundle Produksi:</b> Model dibundel dalam file <code>models/weather_model_latest.joblib</code> ({MODEL_MB:.1f} MB).',
     style_body
 ))
@@ -297,25 +298,25 @@ story.append(Paragraph(
 story.append(PageBreak())
 
 # ==================== HALAMAN 5: TAHAP 4 & 5 ====================
-story.append(Paragraph('5. Tahap 4: Benchmarking 5 Algoritma per Variabel (ML vs Deep Learning)', style_h1))
+story.append(Paragraph('5. Tahap 4: Benchmarking Algoritma &amp; Studi Model Lokal vs Global (Laporan 3 &amp; 3b)', style_h1))
 story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=5))
 
-story.append(Paragraph('<b>A. Apa yang Dilakukan pada Tahap Ini:</b>', style_h2))
+story.append(Paragraph('<b>A. Benchmarking 5 Algoritma (ML vs Deep Learning):</b>', style_h2))
 story.append(Paragraph(
-    'Melatih dan mengevaluasi 5 algoritma (LightGBM, Ridge Regression, Random Forest, LSTM, GRU) untuk <b>ketujuh variabel target sekaligus</b> pada horizon H+1 &amp; H+7 &ndash; bukan hanya Curah Hujan seperti iterasi benchmark sebelumnya &ndash; karena algoritma terbaik untuk satu variabel terbukti belum tentu terbaik untuk variabel lain (lihat <i>Laporan Model Prediksi Cuaca 7 Hari</i> Bab 3.4). Kriteria juara: rata-rata peringkat gabungan MAE+RMSE+R&sup2; (regresi) atau F1-Macro (klasifikasi), bukan MAE/Accuracy saja.',
+    'Mengevaluasi 5 algoritma (LightGBM, Ridge Regression, Random Forest, LSTM, GRU) untuk <b>ketujuh variabel target sekaligus</b> pada horizon H+1 &amp; H+7. Kriteria juara produksi dipilih dari model ML yang siap deploy secara operasional, cepat, dan ringan:',
     style_body
 ))
 
 bench_data = [
-    [Paragraph('Variabel Target', style_table_header), Paragraph('Algoritma Juara (Dipakai Produksi)', style_table_header), Paragraph('Kategori', style_table_header)],
+    [Paragraph('Variabel Target', style_table_header), Paragraph('Algoritma Juara Produksi', style_table_header), Paragraph('Alasan Pemilihan Teknis', style_table_header)],
 ]
 for var, label in REGRESSION_TARGETS.items():
     algo = _algo_used[f'{var}_h1']
-    cat = 'Linear (ML)' if algo.startswith('Ridge') else 'Gradient Boosting (ML)'
-    bench_data.append([Paragraph(f'<b>{label}</b>', style_table_cell_bold), Paragraph(algo, style_table_cell), Paragraph(cat, style_table_cell_center)])
+    reason = 'Error terkecil, reguler, sangat stabil terhadap multikolinearitas temporal' if algo.startswith('Ridge') else 'Paling adaptif menangkap pola non-linear dan nilai ekstrem hujan'
+    bench_data.append([Paragraph(f'<b>{label}</b>', style_table_cell_bold), Paragraph(algo, style_table_cell), Paragraph(reason, style_table_cell)])
 _wd_algo = _algo_used[f'{CLASSIFICATION_TARGET}_h1']
-bench_data.append([Paragraph('<b>Arah Mata Angin</b>', style_table_cell_bold), Paragraph(_wd_algo, style_table_cell), Paragraph('Gradient Boosting (ML)', style_table_cell_center)])
-tbl_b = Table(bench_data, colWidths=[150, 215, 150])
+bench_data.append([Paragraph('<b>Arah Mata Angin</b>', style_table_cell_bold), Paragraph(_wd_algo, style_table_cell), Paragraph('F1-Macro tertinggi pada klasifikasi 4 kelas arah mata angin', style_table_cell)])
+tbl_b = Table(bench_data, colWidths=[130, 185, 200])
 tbl_b.setStyle(TableStyle([
     ('BACKGROUND', (0, 0), (-1, 0), COLOR_PRIMARY),
     ('BOX', (0, 0), (-1, -1), 1, COLOR_PRIMARY),
@@ -324,9 +325,15 @@ tbl_b.setStyle(TableStyle([
     ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
 ]))
 story.append(tbl_b)
+
 story.append(Spacer(1, 3))
+story.append(Paragraph('<b>B. Studi Khusus Laporan 3b: Pengujian 94 Stasiun Berdata Lengkap (Model Lokal vs Global):</b>', style_h2))
 story.append(Paragraph(
-    'Ketika seluruh 5 algoritma (termasuk LSTM &amp; GRU) diikutsertakan, Deep Learning justru unggul di 5 dari 7 indikator secara informasional. Namun DL <b>tidak dipakai sebagai model produksi</b> untuk iterasi ini &ndash; model PyTorch-nya tidak disimpan/diintegrasikan ke jalur inferensi, dan dilatih hanya 10 epoch (indikatif, bukan hasil teroptimasi penuh) &ndash; sehingga algoritma produksi yang benar-benar dipakai (tabel di atas) tetap dipilih hanya dari 3 algoritma ML yang siap di-deploy. Rinciannya ada di <i>Laporan Model Prediksi Cuaca 7 Hari</i> Bab 3.4.',
+    'Untuk menguji apakah stasiun perlu model lokal mandiri: dari 183 stasiun disaring <b>94 stasiun yang memiliki data lengkap</b> (&ge;365 hari latih dan &ge;25 hari uji valid pada 7 indikator). Sebanyak 658 sub-model lokal dilatih. Evaluasi difokuskan pada metrik error fisik (MAE rata-rata &amp; median, RMSE rata-rata &amp; median, tanpa R&sup2;). '
+    '<b>Hasil:</b> Meski Model Lokal unggul di lebih banyak stasiun untuk beberapa indikator (Tekanan Udara, Kecepatan Angin), '
+    'selisih MAE dan RMSE secara absolut tidak signifikan. <b>Model Global direkomendasikan untuk seluruh 7 indikator</b> '
+    'karena lebih sederhana dioperasikan dan di-retrain (satu model untuk semua stasiun). '
+    'Arsitektur produksi tetap menggunakan Model Global sebagai tulang punggung utama sistem.',
     style_body
 ))
 
@@ -381,7 +388,7 @@ for _ri, _k in enumerate(_IND_ORDER, start=1):
 tbl_om = Table(om_tbl_data, colWidths=[130, 90, 90, 205])
 tbl_om.setStyle(TableStyle(om_cmds))
 story.append(tbl_om)
-story.append(Paragraph('Rincian per stasiun beserta kurva aktual vs Open-Meteo vs NusaKlim untuk ketujuh indikator ada di Laporan 5.', style_body))
+story.append(Paragraph('Rincian per stasiun beserta kurva aktual vs Open-Meteo vs NusaKlim untuk keenam indikator (tanpa Radiasi, satuannya tidak sebanding) ada di Laporan 5.', style_body))
 
 story.append(Spacer(1, 4))
 story.append(Paragraph('<b>B. Alasan Hasil Berbeda Antar Indikator:</b>', style_h2))
@@ -460,11 +467,11 @@ docs_data = [
     [Paragraph('No', style_table_header), Paragraph('Nama File Laporan PDF Resmi', style_table_header), Paragraph('Topik Bahasan &amp; Lingkup Teknis', style_table_header)],
     [Paragraph('<b>1</b>', style_table_cell_center), Paragraph('<code>1.Laporan_Data_Cleaning_Interval_NusaKlim_PPKS.pdf</code>', style_table_cell_bold), Paragraph('Pembersihan 14,8 Juta Baris Data Interval 10-15 Menit &amp; Kamus Data.', style_table_cell)],
     [Paragraph('<b>2</b>', style_table_cell_center), Paragraph('<code>2.Laporan_Preprocessing_dan_EDA_NusaKlim_PPKS.pdf</code>', style_table_cell_bold), Paragraph('Agregasi Harian, Kepatuhan Notulen Rapat &amp; 8 Visualisasi Analisis EDA.', style_table_cell)],
-    [Paragraph('<b>3</b>', style_table_cell_center), Paragraph('<code>3.Laporan_Model_Prediksi_Cuaca_7Hari_PPKS.pdf</code>', style_table_cell_bold), Paragraph('Pelatihan &amp; Validasi Model Prediksi 7-Hari Multi-Horizon, termasuk Benchmarking ML vs Deep Learning (Bab 3.4).', style_table_cell)],
-    [Paragraph('<b>3b</b>', style_table_cell_center), Paragraph('<code>3b.Laporan_Analisis_Model_Per_Stasiun_vs_Global_PPKS.pdf</code>', style_table_cell_bold), Paragraph('Studi Lanjutan: Model Global (Gabungan) vs Model Per-Stasiun Lokal.', style_table_cell)],
+    [Paragraph('<b>3</b>', style_table_cell_center), Paragraph('<code>3.Laporan_Model_Prediksi_Cuaca_7Hari_PPKS.pdf</code>', style_table_cell_bold), Paragraph('Pelatihan &amp; Validasi Model Prediksi 7-Hari Multi-Horizon, termasuk Benchmarking ML vs Deep Learning (Bab 3.4), Gambar Berlabel MAE &amp; Radiasi Wh/m&sup2;.', style_table_cell)],
+    [Paragraph('<b>3b</b>', style_table_cell_center), Paragraph('<code>3b.Laporan_Analisis_Model_Per_Stasiun_vs_Global_PPKS.pdf</code>', style_table_cell_bold), Paragraph('Studi Lanjutan: Model Global (Gabungan) vs Model Per-Stasiun Lokal pada 94 Stasiun Penuh Berdata Lengkap (MAE &amp; RMSE Median, Tanpa R&sup2;).', style_table_cell)],
     [Paragraph('<b>4</b>', style_table_cell_center), Paragraph('<code>4.Laporan_Audit_Gap_Data_dan_Ketahanan_Model_PPKS.pdf</code>', style_table_cell_bold), Paragraph('Audit Kontinuitas Data (84,5% Kelengkapan) &amp; Uji Ketahanan Stress-Test.', style_table_cell)],
     [Paragraph('<b>5</b>', style_table_cell_center), Paragraph('<code>5.Laporan_Komparasi_NusaKlim_vs_OpenMeteo_PPKS.pdf</code>', style_table_cell_bold), Paragraph('Validasi terhadap Data Aktual &amp; Komparasi Akurasi Open-Meteo API (Langkah 2).', style_table_cell)],
-    [Paragraph('<b>6</b>', style_table_cell_center), Paragraph('<code>6.Dokumentasi_Lengkap_Pengerjaan_Proyek_NusaKlim_PPKS.pdf</code>', style_table_cell_bold), Paragraph('<b>Dokumentasi Master End-to-End Arsitektur, Flowchart, &amp; Implementasi.</b>', style_table_cell_bold)],
+    [Paragraph('<b>6</b>', style_table_cell_center), Paragraph('<code>6.Dokumentasi_Lengkap_Pengerjaan_Proyek_NusaKlim_PPKS.pdf</code>', style_table_cell_bold), Paragraph('<b>Dokumentasi Master End-to-End Arsitektur, Flowchart, &amp; Rangkuman Seluruh Laporan 1 s/d 5 Terkini.</b>', style_table_cell_bold)],
 ]
 tbl_docs = Table(docs_data, colWidths=[20, 255, 240])
 tbl_docs.setStyle(TableStyle([

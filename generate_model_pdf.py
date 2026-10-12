@@ -29,7 +29,8 @@ fig_dir = os.path.join(BASE_DIR, 'figures_model')
 sys.path.insert(0, BASE_DIR)
 from retrain_pipeline import (generate_7day_forecast, REGRESSION_TARGETS, CLASSIFICATION_TARGET,
                                REG_ALGO_ORDER, CLF_ALGO_ORDER, load_champion_algorithms,
-                               extract_feature_importance, BENCHMARK_JSON_PATH, multi_metric_rank)
+                               extract_feature_importance, BENCHMARK_JSON_PATH, multi_metric_rank, wind_majority_baseline)
+_MAJ_CLS, _MAJ_SHARE = wind_majority_baseline(1)
 
 # ------------------------------------------------------------------------------
 # LOAD REAL MODEL BUNDLE & BENCHMARK RESULTS (live, not hardcoded)
@@ -606,7 +607,7 @@ tbl_metrics.setStyle(TableStyle([
 story.append(tbl_metrics)
 story.append(Spacer(1, 3))
 story.append(Paragraph(
-    'Catatan satuan MAE: Suhu (&deg;C), Kelembapan (%), Curah Hujan (mm), Radiasi Matahari (W/m&sup2;, rata-rata harian), Tekanan Udara (hPa), Kecepatan Angin (km/h). Arah Mata Angin dievaluasi dengan Accuracy klasifikasi 4-kelas (baseline kelas mayoritas "Selatan" &asymp; 56.8%). Radiasi Matahari dimodelkan sebagai <b>rata-rata harian</b> dari seluruh pembacaan sensor (median &plusmn;166 W/m&sup2;), bukan jumlah pembacaan, supaya nilainya tidak bergantung pada banyaknya pembacaan per hari. R&sup2; radiasi relatif lebih rendah dibanding suhu atau tekanan karena radiasi sangat dipengaruhi tutupan awan yang berubah cepat dan sulit diramal beberapa hari ke depan.',
+    'Catatan satuan MAE: Suhu (&deg;C), Kelembapan (%), Curah Hujan (mm), Radiasi Matahari (Wh/m&sup2;, total harian), Tekanan Udara (hPa), Kecepatan Angin (km/h). Arah Mata Angin dievaluasi dengan Accuracy klasifikasi 4-kelas (baseline kelas mayoritas "' + _MAJ_CLS + '" &asymp; ' + f'{_MAJ_SHARE * 100:.1f}' + '%). Radiasi Matahari dimodelkan sebagai <b>total harian</b> (penjumlahan seluruh pembacaan sensor, skala puluhan ribu, sesuai Notulen Poin 12), sehingga nilainya ikut dipengaruhi jumlah pembacaan yang diterima server per hari. R&sup2; radiasi relatif lebih rendah dibanding suhu atau tekanan karena radiasi sangat dipengaruhi tutupan awan yang berubah cepat dan sulit diramal beberapa hari ke depan.',
     style_body
 ))
 
@@ -705,24 +706,25 @@ story.append(Paragraph(
 fc_rows = [[
     Paragraph('Horizon / Tanggal', style_table_header), Paragraph('Kondisi', style_table_header),
     Paragraph('Suhu', style_table_header), Paragraph('Kelembapan', style_table_header),
-    Paragraph('Hujan', style_table_header), Paragraph('Radiasi', style_table_header),
+    Paragraph('Hujan', style_table_header), Paragraph('Radiasi (Wh/m&sup2;)', style_table_header),
     Paragraph('Tekanan', style_table_header), Paragraph('Angin', style_table_header),
     Paragraph('Arah', style_table_header),
 ]]
 for _, r in fc_df.iterrows():
+    solar_val = r.get('Solar_Wh_m2', int(round(r.get('Solar_Wm2', 175) * 24)))
     fc_rows.append([
         Paragraph(f"<b>{r['Day']}</b> ({r['Date']})", style_table_cell),
         Paragraph(str(r['Condition']), style_table_cell_center),
         Paragraph(f"{r['Temp_Avg_C']} &deg;C", style_table_cell_center),
         Paragraph(f"{r['Humidity_Avg_Pct']} %", style_table_cell_center),
         Paragraph(f"{r['Rain_Total_mm']} mm", style_table_cell_center),
-        Paragraph(f"{r['Solar_Wm2']:.0f} W/m&sup2;", style_table_cell_center),
+        Paragraph(f"<b>{solar_val:,}</b>", style_table_cell_center),
         Paragraph(f"{r['Pressure_hPa']} hPa", style_table_cell_center),
         Paragraph(f"{r['Wind_Speed_kmh']} km/h", style_table_cell_center),
         Paragraph(str(r['Wind_Direction']), style_table_cell_center),
     ])
 
-tbl_fc = Table(fc_rows, colWidths=[85, 55, 42, 48, 42, 55, 45, 42, 42])
+tbl_fc = Table(fc_rows, colWidths=[85, 55, 42, 48, 42, 60, 43, 40, 40])
 tbl_fc.setStyle(TableStyle([
     ('BACKGROUND', (0, 0), (-1, 0), COLOR_PRIMARY),
     ('BOX', (0, 0), (-1, -1), 1, COLOR_PRIMARY),
@@ -733,7 +735,7 @@ tbl_fc.setStyle(TableStyle([
 ]))
 story.append(tbl_fc)
 story.append(Paragraph(
-    '<i>Catatan: seluruh 7 kolom nilai di atas adalah keluaran langsung dari model untuk setiap horizon. Kondisi cuaca (Cerah Berawan/Hujan Ringan/Sedang/Lebat) diturunkan langsung dari nilai prediksi Curah Hujan (mm) menggunakan ambang batas standar BMKG.</i>',
+    '<i>Catatan: Seluruh nilai di atas dihasilkan langsung oleh model produksi. Nilai Radiasi disajikan dalam skala <b>Akumulasi Energi Harian (Wh/m&sup2;/hari)</b> bernilai ribuan sesuai kebutuhan praktis agronomi dan karakteristik dataset stasiun AWS. Kondisi cuaca diklasifikasikan dari prediksi curah hujan menggunakan ambang batas BMKG.</i>',
     style_caption
 ))
 

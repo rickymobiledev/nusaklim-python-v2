@@ -8,7 +8,7 @@ stasiun) - Laporan 3b (revisi 01-10-2026).
 Desain (revisi Notulen 01-10-2026, menggantikan desain "2 algoritma ML tetap"
 sebelumnya):
   - SEJALAN dengan Laporan 3 Tabel 3.3 dan Laporan 4 Bab 3.4: setiap indikator
-    punya algoritma juaranya sendiri (mis. Suhu->Ridge, Curah Hujan->LightGBM),
+    punya algoritma juaranya sendiri (mis. Suhu->Ridge, Curah Hujan->Random Forest),
     BUKAN 2 algoritma yang sama dipaksakan ke semua 7 indikator. Algoritma per
     indikator diambil langsung dari bundle['algo_used'] produksi, sehingga
     Laporan 3b konsisten dengan keputusan algoritma produksi yang sebenarnya.

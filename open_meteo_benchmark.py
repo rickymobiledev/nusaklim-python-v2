@@ -77,7 +77,8 @@ INDICATORS = [
     ('temp_avg', 'Suhu Rata-rata', '°C', 'temp_avg', 'om_temp'),
     ('humidity_avg', 'Kelembapan', '%', 'humidity_avg', 'om_rh'),
     ('rainfall_total_mm', 'Curah Hujan', 'mm', 'rainfall_total_mm', 'om_rain'),
-    ('solar_radiation_avg', 'Radiasi Matahari', 'W/m²', 'solar_radiation_avg', 'om_solar'),
+    # Radiasi Matahari DIKELUARKAN dari pembandingan (revisi 12-10-2026): kolom solar_radiation_avg AWS kini TOTAL harian
+    # (SUM, skala puluhan ribu; Notulen Poin 12) sedangkan Open-Meteo shortwave_radiation adalah rata-rata W/m2 -> satuan tidak sebanding.
     ('pressure_avg_hpa', 'Tekanan Udara', 'hPa', 'pressure_avg_hpa', 'om_pressure'),
     ('wind_speed_avg', 'Kecepatan Angin', 'km/h', 'wind_speed_avg', 'om_wind'),
     ('wind_direction_name', 'Arah Mata Angin', 'kategori', 'wind_direction_name', 'om_winddir_cat'),
@@ -317,7 +318,7 @@ for sid in stn_ids:
     m = merged_by_station[sid]
     meta = test_stations[sid]
     res = station_results[sid]['indicators']
-    fig, axes = plt.subplots(4, 2, figsize=(13, 15), dpi=200)
+    fig, axes = plt.subplots(3, 2, figsize=(13, 11.5), dpi=200)
     axes = axes.flatten()
     for ax, (key, label, unit, act_col, om_col) in zip(axes, INDICATORS):
         x = res[key]
@@ -351,7 +352,7 @@ for sid in stn_ids:
                   va='top', fontsize=9, color='#1E3A8A')
     fig.suptitle(f"Kurva Perbandingan Data Aktual AWS vs Open-Meteo vs Prediksi H+1 NusaKlim — Stasiun {sid} {meta['name']}",
                  fontsize=12, fontweight='bold', color='#1E3A8A', y=0.995)
-    plt.tight_layout(rect=[0, 0, 1, 0.985])
+    plt.tight_layout(rect=[0, 0, 1, 0.985], h_pad=3.0)
     ts_path = os.path.join(fig_dir, f'fig_openmeteo_ts_{sid}.png')
     plt.savefig(ts_path)
     plt.close()

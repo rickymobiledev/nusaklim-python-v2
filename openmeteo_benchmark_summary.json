@@ -6,8 +6,7 @@
   "algo_used": {
     "temp_avg": "Ridge Regression (Linear Baseline)",
     "humidity_avg": "Ridge Regression (Linear Baseline)",
-    "rainfall_total_mm": "LightGBM (Gradient Boosting)",
-    "solar_radiation_avg": "Ridge Regression (Linear Baseline)",
+    "rainfall_total_mm": "Random Forest (Ensemble Bagging)",
     "pressure_avg_hpa": "Ridge Regression (Linear Baseline)",
     "wind_speed_avg": "Ridge Regression (Linear Baseline)",
     "wind_direction_name": "LightGBM (Gradient Boosting)"
@@ -18,7 +17,7 @@
       "unit": "°C",
       "metric": "MAE",
       "om_avg": 0.9902,
-      "nk_avg": 0.7555,
+      "nk_avg": 0.758,
       "nk_wins": 3,
       "om_wins": 1,
       "ties": 0,
@@ -30,7 +29,7 @@
       "unit": "%",
       "metric": "MAE",
       "om_avg": 6.8595,
-      "nk_avg": 2.5917,
+      "nk_avg": 2.5855,
       "nk_wins": 3,
       "om_wins": 1,
       "ties": 0,
@@ -42,31 +41,19 @@
       "unit": "mm",
       "metric": "MAE",
       "om_avg": 3.5173,
-      "nk_avg": 4.5503,
+      "nk_avg": 4.2955,
       "nk_wins": 2,
       "om_wins": 2,
       "ties": 0,
       "n_stations": 4,
       "winner_avg": "Open-Meteo"
     },
-    "solar_radiation_avg": {
-      "label": "Radiasi Matahari",
-      "unit": "W/m²",
-      "metric": "MAE",
-      "om_avg": 64.2265,
-      "nk_avg": 40.2562,
-      "nk_wins": 3,
-      "om_wins": 1,
-      "ties": 0,
-      "n_stations": 4,
-      "winner_avg": "NusaKlim"
-    },
     "pressure_avg_hpa": {
       "label": "Tekanan Udara",
       "unit": "hPa",
       "metric": "MAE",
       "om_avg": 0.5062,
-      "nk_avg": 0.7482,
+      "nk_avg": 0.7445,
       "nk_wins": 1,
       "om_wins": 3,
       "ties": 0,
@@ -78,7 +65,7 @@
       "unit": "km/h",
       "metric": "MAE",
       "om_avg": 6.1088,
-      "nk_avg": 0.18,
+      "nk_avg": 0.1825,
       "nk_wins": 4,
       "om_wins": 0,
       "ties": 0,
@@ -90,7 +77,7 @@
       "unit": "kategori",
       "metric": "Accuracy",
       "om_avg": 0.4583,
-      "nk_avg": 0.7417,
+      "nk_avg": 0.75,
       "nk_wins": 4,
       "om_wins": 0,
       "ties": 0,
@@ -116,8 +103,8 @@
             "bias": -1.517
           },
           "nk": {
-            "value": 0.756,
-            "bias": -0.189
+            "value": 0.759,
+            "bias": -0.192
           },
           "winner": "NusaKlim"
         },
@@ -131,8 +118,8 @@
             "bias": 2.01
           },
           "nk": {
-            "value": 3.249,
-            "bias": 0.258
+            "value": 3.241,
+            "bias": 0.31
           },
           "winner": "Open-Meteo"
         },
@@ -146,25 +133,10 @@
             "bias": 3.897
           },
           "nk": {
-            "value": 6.325,
-            "bias": 2.243
+            "value": 6.51,
+            "bias": 2.477
           },
           "winner": "NusaKlim"
-        },
-        "solar_radiation_avg": {
-          "label": "Radiasi Matahari",
-          "unit": "W/m²",
-          "metric": "MAE",
-          "n": 30,
-          "om": {
-            "value": 45.772,
-            "bias": 14.12
-          },
-          "nk": {
-            "value": 64.692,
-            "bias": -12.268
-          },
-          "winner": "Open-Meteo"
         },
         "pressure_avg_hpa": {
           "label": "Tekanan Udara",
@@ -176,8 +148,8 @@
             "bias": -1.287
           },
           "nk": {
-            "value": 0.808,
-            "bias": 0.057
+            "value": 0.809,
+            "bias": 0.034
           },
           "winner": "NusaKlim"
         },
@@ -205,7 +177,7 @@
             "value": 0.6333
           },
           "nk": {
-            "value": 0.8333
+            "value": 0.7667
           },
           "winner": "NusaKlim"
         }
@@ -218,11 +190,11 @@
         "rainfall_mae": 6.737
       },
       "nusaklim_ai": {
-        "temp_mae": 0.756,
-        "temp_rmse": 0.933,
-        "temp_bias": -0.189,
-        "humidity_mae": 3.249,
-        "rainfall_mae": 6.325
+        "temp_mae": 0.759,
+        "temp_rmse": 0.93,
+        "temp_bias": -0.192,
+        "humidity_mae": 3.241,
+        "rainfall_mae": 6.51
       }
     },
     "2179": {
@@ -243,7 +215,7 @@
           },
           "nk": {
             "value": 0.807,
-            "bias": -0.321
+            "bias": -0.337
           },
           "winner": "Open-Meteo"
         },
@@ -257,8 +229,8 @@
             "bias": 4.144
           },
           "nk": {
-            "value": 2.054,
-            "bias": -1.066
+            "value": 2.02,
+            "bias": -0.929
           },
           "winner": "NusaKlim"
         },
@@ -272,23 +244,8 @@
             "bias": 4.166
           },
           "nk": {
-            "value": 3.837,
-            "bias": 3.837
-          },
-          "winner": "NusaKlim"
-        },
-        "solar_radiation_avg": {
-          "label": "Radiasi Matahari",
-          "unit": "W/m²",
-          "metric": "MAE",
-          "n": 30,
-          "om": {
-            "value": 50.552,
-            "bias": 50.009
-          },
-          "nk": {
-            "value": 27.15,
-            "bias": -7.712
+            "value": 2.955,
+            "bias": 2.939
           },
           "winner": "NusaKlim"
         },
@@ -302,8 +259,8 @@
             "bias": -0.156
           },
           "nk": {
-            "value": 0.66,
-            "bias": 0.025
+            "value": 0.653,
+            "bias": -0.009
           },
           "winner": "Open-Meteo"
         },
@@ -317,8 +274,8 @@
             "bias": 6.246
           },
           "nk": {
-            "value": 0.181,
-            "bias": -0.029
+            "value": 0.182,
+            "bias": -0.032
           },
           "winner": "NusaKlim"
         },
@@ -345,10 +302,10 @@
       },
       "nusaklim_ai": {
         "temp_mae": 0.807,
-        "temp_rmse": 0.94,
-        "temp_bias": -0.321,
-        "humidity_mae": 2.054,
-        "rainfall_mae": 3.837
+        "temp_rmse": 0.937,
+        "temp_bias": -0.337,
+        "humidity_mae": 2.02,
+        "rainfall_mae": 2.955
       }
     },
     "248": {
@@ -368,8 +325,8 @@
             "bias": 0.789
           },
           "nk": {
-            "value": 0.71,
-            "bias": -0.019
+            "value": 0.718,
+            "bias": -0.004
           },
           "winner": "NusaKlim"
         },
@@ -383,8 +340,8 @@
             "bias": -13.511
           },
           "nk": {
-            "value": 1.778,
-            "bias": -0.011
+            "value": 1.804,
+            "bias": -0.068
           },
           "winner": "NusaKlim"
         },
@@ -398,25 +355,10 @@
             "bias": 0.837
           },
           "nk": {
-            "value": 3.715,
-            "bias": 2.915
+            "value": 3.659,
+            "bias": 2.784
           },
           "winner": "Open-Meteo"
-        },
-        "solar_radiation_avg": {
-          "label": "Radiasi Matahari",
-          "unit": "W/m²",
-          "metric": "MAE",
-          "n": 30,
-          "om": {
-            "value": 80.019,
-            "bias": 79.307
-          },
-          "nk": {
-            "value": 34.198,
-            "bias": 1.432
-          },
-          "winner": "NusaKlim"
         },
         "pressure_avg_hpa": {
           "label": "Tekanan Udara",
@@ -428,8 +370,8 @@
             "bias": -0.293
           },
           "nk": {
-            "value": 0.763,
-            "bias": -0.061
+            "value": 0.754,
+            "bias": -0.075
           },
           "winner": "Open-Meteo"
         },
@@ -443,8 +385,8 @@
             "bias": 9.308
           },
           "nk": {
-            "value": 0.106,
-            "bias": 0.106
+            "value": 0.109,
+            "bias": 0.109
           },
           "winner": "NusaKlim"
         },
@@ -457,7 +399,7 @@
             "value": 0.1
           },
           "nk": {
-            "value": 0.5333
+            "value": 0.6333
           },
           "winner": "NusaKlim"
         }
@@ -470,11 +412,11 @@
         "rainfall_mae": 1.243
       },
       "nusaklim_ai": {
-        "temp_mae": 0.71,
-        "temp_rmse": 0.933,
-        "temp_bias": -0.019,
-        "humidity_mae": 1.778,
-        "rainfall_mae": 3.715
+        "temp_mae": 0.718,
+        "temp_rmse": 0.946,
+        "temp_bias": -0.004,
+        "humidity_mae": 1.804,
+        "rainfall_mae": 3.659
       }
     },
     "267": {
@@ -494,8 +436,8 @@
             "bias": -0.608
           },
           "nk": {
-            "value": 0.749,
-            "bias": -0.074
+            "value": 0.748,
+            "bias": 0.059
           },
           "winner": "NusaKlim"
         },
@@ -509,8 +451,8 @@
             "bias": -2.023
           },
           "nk": {
-            "value": 3.286,
-            "bias": 0.039
+            "value": 3.277,
+            "bias": -0.58
           },
           "winner": "NusaKlim"
         },
@@ -524,25 +466,10 @@
             "bias": 0.46
           },
           "nk": {
-            "value": 4.324,
-            "bias": 3.068
+            "value": 4.058,
+            "bias": 2.513
           },
           "winner": "Open-Meteo"
-        },
-        "solar_radiation_avg": {
-          "label": "Radiasi Matahari",
-          "unit": "W/m²",
-          "metric": "MAE",
-          "n": 30,
-          "om": {
-            "value": 80.563,
-            "bias": 78.477
-          },
-          "nk": {
-            "value": 34.985,
-            "bias": 0.808
-          },
-          "winner": "NusaKlim"
         },
         "pressure_avg_hpa": {
           "label": "Tekanan Udara",
@@ -555,7 +482,7 @@
           },
           "nk": {
             "value": 0.762,
-            "bias": 0.058
+            "bias": -0.003
           },
           "winner": "Open-Meteo"
         },
@@ -569,8 +496,8 @@
             "bias": 4.248
           },
           "nk": {
-            "value": 0.156,
-            "bias": -0.004
+            "value": 0.162,
+            "bias": 0.029
           },
           "winner": "NusaKlim"
         },
@@ -596,11 +523,11 @@
         "rainfall_mae": 1.747
       },
       "nusaklim_ai": {
-        "temp_mae": 0.749,
+        "temp_mae": 0.748,
         "temp_rmse": 1.085,
-        "temp_bias": -0.074,
-        "humidity_mae": 3.286,
-        "rainfall_mae": 4.324
+        "temp_bias": 0.059,
+        "humidity_mae": 3.277,
+        "rainfall_mae": 4.058
       }
     }
   },
@@ -612,10 +539,10 @@
     "avg_rainfall_mae": 3.517
   },
   "nusaklim_local_ai_metrics": {
-    "avg_temp_mae": 0.756,
-    "avg_temp_rmse": 0.973,
-    "avg_temp_bias": -0.151,
-    "avg_humidity_mae": 2.592,
-    "avg_rainfall_mae": 4.55
+    "avg_temp_mae": 0.758,
+    "avg_temp_rmse": 0.974,
+    "avg_temp_bias": -0.119,
+    "avg_humidity_mae": 2.586,
+    "avg_rainfall_mae": 4.295
   }
 }

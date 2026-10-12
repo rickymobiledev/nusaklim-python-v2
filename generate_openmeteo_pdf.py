@@ -27,7 +27,7 @@ with open(os.path.join(BASE_DIR, 'openmeteo_benchmark_summary.json'), encoding='
 
 ALGO_SHORT = {k: v.split(' (')[0] for k, v in OM['algo_used'].items()}
 STN_ORDER = ['222', '2179', '248', '267']
-IND_ORDER_COVER = ['temp_avg', 'humidity_avg', 'rainfall_total_mm', 'solar_radiation_avg', 'pressure_avg_hpa', 'wind_speed_avg', 'wind_direction_name']
+IND_ORDER_COVER = ['temp_avg', 'humidity_avg', 'rainfall_total_mm', 'pressure_avg_hpa', 'wind_speed_avg', 'wind_direction_name']
 
 
 def _join(items):
@@ -140,7 +140,7 @@ cover_box_content = [
     [Paragraph('<b>Stasiun Referensi</b>', style_table_cell_bold), Paragraph('4 Stasiun AWS Riil (device_nusaklim.csv): Stn 222 Rambutan (Sumut), Stn 2179 Sei Pagar (Riau), Stn 248 Bentayan (Sumsel), Stn 267 Meliau (Kalbar)', style_table_cell)],
     [Paragraph('<b>Periode Observasi</b>', style_table_cell_bold), Paragraph(f'{OM["evaluation_period"].replace(" to ", " s/d ")} (30 Hari Observasi Aktual &ndash; periode data uji yang sama dengan pengujian model produksi, data yang tidak dipakai saat melatih model)', style_table_cell)],
     [Paragraph('<b>Resolusi Grid</b>', style_table_cell_bold), Paragraph('Open-Meteo Global Forecast (grid 11 km) vs NusaKlim Local AI (Point-Telemetry Stasiun Kebun)', style_table_cell)],
-    [Paragraph('<b>Temuan Utama</b>', style_table_cell_bold), Paragraph(f'Rata-rata 4 stasiun, <b>NusaKlim lebih akurat pada {_join([OM["indicator_summary"][k]["label"] for k in IND_ORDER_COVER if OM["indicator_summary"][k]["winner_avg"] == "NusaKlim"])}</b>, sedangkan <b>Open-Meteo lebih akurat pada {_join([OM["indicator_summary"][k]["label"] for k in IND_ORDER_COVER if OM["indicator_summary"][k]["winner_avg"] == "Open-Meteo"])}</b> (ketujuh indikator dibandingkan di tiap stasiun, Bab 4)', style_table_cell_bold)],
+    [Paragraph('<b>Temuan Utama</b>', style_table_cell_bold), Paragraph(f'Rata-rata 4 stasiun, <b>NusaKlim lebih akurat pada {_join([OM["indicator_summary"][k]["label"] for k in IND_ORDER_COVER if OM["indicator_summary"][k]["winner_avg"] == "NusaKlim"])}</b>, sedangkan <b>Open-Meteo lebih akurat pada {_join([OM["indicator_summary"][k]["label"] for k in IND_ORDER_COVER if OM["indicator_summary"][k]["winner_avg"] == "Open-Meteo"])}</b> (keenam indikator dibandingkan di tiap stasiun, Bab 4; Radiasi Matahari tidak dibandingkan, lihat Bab 3)', style_table_cell_bold)],
     [Paragraph('<b>Penyusun Laporan</b>', style_table_cell_bold), Paragraph('Tim Data Analyst &amp; AI Engineering NusaKlim PPKS | Tanggal: Oktober 2026', style_table_cell)],
 ]
 tbl_cover = Table(cover_box_content, colWidths=[130, 385])
@@ -220,7 +220,7 @@ story.append(PageBreak())
 story.append(Paragraph('4. Hasil Evaluasi Komparatif Multi-Stasiun', style_h1))
 story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=5))
 
-IND_ORDER = ['temp_avg', 'humidity_avg', 'rainfall_total_mm', 'solar_radiation_avg', 'pressure_avg_hpa', 'wind_speed_avg', 'wind_direction_name']
+IND_ORDER = ['temp_avg', 'humidity_avg', 'rainfall_total_mm', 'pressure_avg_hpa', 'wind_speed_avg', 'wind_direction_name']
 ISUM = OM['indicator_summary']
 STN_PROVINCE = {'222': 'Sumut', '2179': 'Riau', '248': 'Sumsel', '267': 'Kalbar'}
 
@@ -256,7 +256,7 @@ def _join(items):
 
 story.append(Paragraph(
     f'Pengujian dilakukan pada <b>30 hari data aktual ({OM["evaluation_period"].replace(" to ", " s/d ")})</b> yang sama sekali tidak digunakan saat melatih model NusaKlim, sehingga hasilnya mencerminkan kemampuan model pada data baru. '
-    'Perbandingan dilakukan untuk <b>ketujuh indikator</b> (Suhu, Kelembapan, Curah Hujan, Radiasi Matahari, Tekanan Udara, Kecepatan Angin, Arah Mata Angin) pada <b>masing-masing stasiun</b>.',
+    'Perbandingan dilakukan untuk <b>keenam indikator</b> (Suhu, Kelembapan, Curah Hujan, Tekanan Udara, Kecepatan Angin, Arah Mata Angin) pada <b>masing-masing stasiun</b>.',
     style_body
 ))
 story.append(Paragraph('4.1 Cara Perhitungan Error', style_h2))
@@ -267,19 +267,19 @@ story.append(Paragraph(
     style_body
 ))
 story.append(Paragraph(
-    'Data Open-Meteo diambil per jam lalu dirangkum ke harian (zona waktu WIB) dengan aturan yang sama seperti data AWS: rata-rata untuk suhu, kelembapan, radiasi, tekanan, dan kecepatan angin; jumlah untuk curah hujan; arah angin dari rata-rata vektor kemudian dikategorikan memakai batas sudut yang sama dengan data AWS. '
-    'Radiasi Open-Meteo memakai radiasi gelombang pendek (shortwave) rata-rata 24 jam dalam W/m&sup2;, dan tekanan memakai tekanan permukaan (<i>surface pressure</i>).',
+    'Data Open-Meteo diambil per jam lalu dirangkum ke harian (zona waktu WIB) dengan aturan yang sama seperti data AWS: rata-rata untuk suhu, kelembapan, tekanan, dan kecepatan angin; jumlah untuk curah hujan; arah angin dari rata-rata vektor kemudian dikategorikan memakai batas sudut yang sama dengan data AWS. '
+    'Tekanan Open-Meteo memakai tekanan permukaan (<i>surface pressure</i>). <b>Radiasi Matahari sengaja tidak dibandingkan:</b> sejak revisi 12-10-2026 kolom radiasi AWS (<code>solar_radiation_avg</code>) berupa total harian (penjumlahan pembacaan, skala puluhan ribu), sedangkan radiasi gelombang pendek Open-Meteo adalah rata-rata W/m&sup2; (skala ratusan). Kedua besaran tidak sebanding satuannya, dan total AWS juga bergantung pada jumlah paket data yang diterima, sehingga tidak ada konversi yang adil.',
     style_body
 ))
 
-story.append(Paragraph('4.2 Hasil per Stasiun: 7 Indikator, Open-Meteo vs NusaKlim', style_h2))
+story.append(Paragraph('4.2 Hasil per Stasiun: 6 Indikator, Open-Meteo vs NusaKlim', style_h2))
 win_fill = colors.HexColor('#DCFCE7')
 for sid in STN_ORDER:
     s = R[sid]
     ind = s['indicators']
     n_nk = sum(1 for k in IND_ORDER if ind[k]['winner'] == 'NusaKlim')
     story.append(Paragraph(
-        f'<b>Stasiun {sid} &ndash; {s["station_name"]} ({STN_PROVINCE[sid]})</b> &mdash; NusaKlim lebih akurat pada <b>{n_nk} dari 7 indikator</b>, Open-Meteo pada {7 - n_nk}:',
+        f'<b>Stasiun {sid} &ndash; {s["station_name"]} ({STN_PROVINCE[sid]})</b> &mdash; NusaKlim lebih akurat pada <b>{n_nk} dari 6 indikator</b>, Open-Meteo pada {6 - n_nk}:',
         style_body
     ))
     rows = [[Paragraph('Indikator', style_table_header), Paragraph('Ukuran Error', style_table_header), Paragraph('Open-Meteo', style_table_header),
@@ -332,7 +332,7 @@ _wind_bias = np.mean([R[s]['indicators']['wind_speed_avg']['om']['bias'] for s i
 story.append(Paragraph(
     f'<b>Catatan agar perbandingan dibaca adil:</b> (1) Kecepatan angin sensor AWS terpasang di dalam areal kebun dan terbaca sangat rendah (rata-rata &plusmn;0,8 km/jam), sedangkan Open-Meteo menyajikan angin 10 meter pada area terbuka (rata-rata bias Open-Meteo {_wind_bias:+.1f} km/jam terhadap AWS). '
     'Besarnya selisih pada Kecepatan Angin karena itu sebagian besar adalah perbedaan titik dan ketinggian pengukuran, bukan semata kemampuan meramal. '
-    '(2) Radiasi dan Kelembapan Open-Meteo juga memiliki bias sistematis pada beberapa stasiun (lihat Gambar 2 s/d 5), sehingga keunggulan NusaKlim pada indikator tersebut mencerminkan kelebihan model yang dilatih langsung dari sensor stasiun yang sama.',
+    '(2) Kelembapan Open-Meteo juga memiliki bias sistematis pada beberapa stasiun (lihat Gambar 2 s/d 5), sehingga keunggulan NusaKlim pada indikator tersebut mencerminkan kelebihan model yang dilatih langsung dari sensor stasiun yang sama.',
     style_body
 ))
 
@@ -343,7 +343,7 @@ story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBef
 fig_bar_path = os.path.join(fig_dir, 'fig_openmeteo_ratio_heatmap.png')
 if os.path.exists(fig_bar_path):
     story.append(Image(fig_bar_path, width=17.5*cm, height=8.9*cm))
-    story.append(Paragraph('Gambar 1: Rasio error NusaKlim terhadap Open-Meteo untuk 7 indikator pada 4 stasiun. Hijau = error NusaKlim lebih kecil (NusaKlim lebih akurat), merah = error Open-Meteo lebih kecil. Angka di dalam sel adalah MAE (Accuracy untuk Arah Mata Angin) Open-Meteo (OM) dan NusaKlim (NK), serta rasio errornya.', style_caption))
+    story.append(Paragraph('Gambar 1: Rasio error NusaKlim terhadap Open-Meteo untuk 6 indikator pada 4 stasiun. Hijau = error NusaKlim lebih kecil (NusaKlim lebih akurat), merah = error Open-Meteo lebih kecil. Angka di dalam sel adalah MAE (Accuracy untuk Arah Mata Angin) Open-Meteo (OM) dan NusaKlim (NK), serta rasio errornya.', style_caption))
 
 story.append(make_callout_box(
     f'Rata-rata 4 stasiun, <b>NusaKlim lebih akurat pada {_join(NK_BETTER_AVG)}</b>, sedangkan <b>Open-Meteo lebih akurat pada {_join(OM_BETTER_AVG)}</b> '
@@ -362,7 +362,6 @@ _rain_nk_stn = [s for s in STN_ORDER if R[s]['indicators']['rainfall_total_mm'][
 _rain_om_stn = [s for s in STN_ORDER if R[s]['indicators']['rainfall_total_mm']['winner'] == 'Open-Meteo']
 _press_om = sum(1 for s in STN_ORDER if R[s]['indicators']['pressure_avg_hpa']['winner'] == 'Open-Meteo')
 _hum_bias = [R[s]['indicators']['humidity_avg']['om']['bias'] for s in STN_ORDER]
-_sol_bias = [R[s]['indicators']['solar_radiation_avg']['om']['bias'] for s in STN_ORDER]
 
 story.append(Paragraph(
     f'Hasil pada Bab 4 tidak seragam: rata-rata 4 stasiun, NusaKlim lebih akurat pada {_join(NK_BETTER_AVG)}, sedangkan Open-Meteo lebih akurat pada {_join(OM_BETTER_AVG)}. '
@@ -370,8 +369,8 @@ story.append(Paragraph(
     style_body
 ))
 story.append(Paragraph(
-    '1. <b>Indikator yang dipengaruhi kondisi mikro kebun (Suhu, Kelembapan, Radiasi, Angin):</b> NusaKlim dilatih langsung dari sensor stasiun yang sama dengan data aktual, sehingga ikut menangkap karakter mikroklimat di bawah kanopi sawit. '
-    f'Open-Meteo menyajikan nilai rata-rata grid 11 km pada area terbuka, sehingga muncul selisih sistematis, misalnya bias Kelembapan antara {min(_hum_bias):+.1f}% dan {max(_hum_bias):+.1f}% serta bias Radiasi antara {min(_sol_bias):+.0f} dan {max(_sol_bias):+.0f} W/m&sup2; terhadap sensor AWS.<br/>'
+    '1. <b>Indikator yang dipengaruhi kondisi mikro kebun (Suhu, Kelembapan, Angin):</b> NusaKlim dilatih langsung dari sensor stasiun yang sama dengan data aktual, sehingga ikut menangkap karakter mikroklimat di bawah kanopi sawit. '
+    f'Open-Meteo menyajikan nilai rata-rata grid 11 km pada area terbuka, sehingga muncul selisih sistematis, misalnya bias Kelembapan antara {min(_hum_bias):+.1f}% dan {max(_hum_bias):+.1f}% terhadap sensor AWS.<br/>'
     f'2. <b>Tekanan Udara bersifat sinoptik (skala besar):</b> pola tekanan ditentukan sistem cuaca regional yang memang diramal dengan baik oleh model fisika numerik global, sehingga Open-Meteo lebih akurat pada {_press_om} dari 4 stasiun. NusaKlim hanya memakai riwayat tekanan stasiun sendiri. Meskipun demikian, selisih absolutnya kecil (MAE kurang dari 1,5 hPa pada kedua mesin).<br/>'
     f'3. <b>Curah Hujan konvektif bersifat sangat lokal dan sulit diramal:</b> hujan tropis di perkebunan umumnya konvektif jangka pendek. Hasilnya pun terbelah: NusaKlim lebih akurat di stasiun {_join(_rain_nk_stn)}, Open-Meteo di stasiun {_join(_rain_om_stn)}; rata-rata Open-Meteo sedikit lebih unggul '
     f'(MAE {ISUM["rainfall_total_mm"]["om_avg"]:.2f} mm vs {ISUM["rainfall_total_mm"]["nk_avg"]:.2f} mm). Curah hujan tetap menjadi area prioritas perbaikan model NusaKlim.<br/>'
@@ -383,7 +382,7 @@ story.append(Spacer(1, 4))
 story.append(Paragraph('7. Validasi Rangkaian Waktu: Kurva Aktual vs Open-Meteo vs NusaKlim', style_h1))
 story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=5))
 story.append(Paragraph(
-    'Gambar 2 s/d 5 menampilkan kurva harian untuk <b>ketujuh indikator pada masing-masing stasiun</b>: garis hitam adalah data aktual sensor AWS, garis biru putus-putus adalah Open-Meteo, dan garis hijau adalah prediksi H+1 NusaKlim. '
+    'Gambar 2 s/d 5 menampilkan kurva harian untuk <b>keenam indikator pada masing-masing stasiun</b>: garis hitam adalah data aktual sensor AWS, garis biru putus-putus adalah Open-Meteo, dan garis hijau adalah prediksi H+1 NusaKlim. '
     'Judul tiap panel menyebutkan mesin yang lebih akurat pada indikator tersebut, dan legenda memuat nilai MAE (atau Accuracy untuk Arah Mata Angin).',
     style_body
 ))
@@ -396,7 +395,7 @@ for fig_i, sid in enumerate(STN_ORDER, start=2):
     story.append(PageBreak())
     if os.path.exists(fp):
         story.append(Image(fp, width=16.0*cm, height=18.46*cm))
-    story.append(Paragraph(f'Gambar {fig_i}: Kurva Perbandingan Data Aktual AWS vs Open-Meteo vs Prediksi H+1 NusaKlim untuk 7 Indikator &ndash; Stasiun {sid} {s["station_name"]} ({STN_PROVINCE[sid]}), {OM["evaluation_period"].replace(" to ", " s/d ")}.', style_caption))
+    story.append(Paragraph(f'Gambar {fig_i}: Kurva Perbandingan Data Aktual AWS vs Open-Meteo vs Prediksi H+1 NusaKlim untuk 6 Indikator &ndash; Stasiun {sid} {s["station_name"]} ({STN_PROVINCE[sid]}), {OM["evaluation_period"].replace(" to ", " s/d ")}.', style_caption))
     story.append(Paragraph(
         f'Pada Stasiun {sid} {s["station_name"]}, NusaKlim lebih akurat pada <b>{_join(nk_list) if nk_list else "-"}</b>; Open-Meteo lebih akurat pada <b>{_join(om_list) if om_list else "-"}</b>.',
         style_body
@@ -436,9 +435,9 @@ story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBef
 
 _isu = OM['indicator_summary']
 story.append(Paragraph(
-    f'1. <b>NusaKlim Layak Menjadi Mesin Utama untuk {_join(NK_BETTER_AVG)}:</b> pada pengujian 30 hari ({OM["evaluation_period"].replace(" to ", " – ")}) di 4 stasiun riil, NusaKlim memiliki error rata-rata lebih kecil (Suhu MAE {_isu["temp_avg"]["nk_avg"]:.2f}&deg;C vs {_isu["temp_avg"]["om_avg"]:.2f}&deg;C; Kelembapan {_isu["humidity_avg"]["nk_avg"]:.2f}% vs {_isu["humidity_avg"]["om_avg"]:.2f}%; Radiasi {_isu["solar_radiation_avg"]["nk_avg"]:.1f} vs {_isu["solar_radiation_avg"]["om_avg"]:.1f} W/m&sup2;; Arah Angin Accuracy {_isu["wind_direction_name"]["nk_avg"]*100:.0f}% vs {_isu["wind_direction_name"]["om_avg"]*100:.0f}%). Catatan: keunggulan Kecepatan Angin sebagian besar berasal dari perbedaan lokasi dan tinggi pengukuran (Bab 4.3).<br/>'
+    f'1. <b>NusaKlim Layak Menjadi Mesin Utama untuk {_join(NK_BETTER_AVG)}:</b> pada pengujian 30 hari ({OM["evaluation_period"].replace(" to ", " – ")}) di 4 stasiun riil, NusaKlim memiliki error rata-rata lebih kecil (Suhu MAE {_isu["temp_avg"]["nk_avg"]:.2f}&deg;C vs {_isu["temp_avg"]["om_avg"]:.2f}&deg;C; Kelembapan {_isu["humidity_avg"]["nk_avg"]:.2f}% vs {_isu["humidity_avg"]["om_avg"]:.2f}%; Arah Angin Accuracy {_isu["wind_direction_name"]["nk_avg"]*100:.0f}% vs {_isu["wind_direction_name"]["om_avg"]*100:.0f}%). Catatan: keunggulan Kecepatan Angin sebagian besar berasal dari perbedaan lokasi dan tinggi pengukuran (Bab 4.3).<br/>'
     f'2. <b>Open-Meteo Lebih Akurat pada {_join(OM_BETTER_AVG)}:</b> Curah Hujan (MAE {_isu["rainfall_total_mm"]["om_avg"]:.2f} mm vs {_isu["rainfall_total_mm"]["nk_avg"]:.2f} mm NusaKlim) dan Tekanan Udara ({_isu["pressure_avg_hpa"]["om_avg"]:.2f} hPa vs {_isu["pressure_avg_hpa"]["nk_avg"]:.2f} hPa). Disarankan menjadikan prediksi Open-Meteo sebagai fitur tambahan model untuk kedua indikator ini, atau menampilkannya berdampingan sebagai pembanding.<br/>'
-    '3. <b>Efisiensi Biaya Server Tanpa Lisensi API:</b> Menggunakan model lokal (LightGBM atau Ridge Regression per indikator) membebaskan PPKS dari ketergantungan biaya langganan API komersial berbayar saat sistem dibuka untuk ribuan mandor dan petani kelapa sawit.<br/>'
+    '3. <b>Efisiensi Biaya Server Tanpa Lisensi API:</b> Menggunakan model lokal (Ridge Regression, Random Forest, atau LightGBM per indikator) membebaskan PPKS dari ketergantungan biaya langganan API komersial berbayar saat sistem dibuka untuk ribuan mandor dan petani kelapa sawit.<br/>'
     '4. <b>Kesiapan Tahap Selanjutnya:</b> Integrasi REST API Backend FastAPI telah berhasil menghubungkan kedua mesin ini secara mulus dan siap diintegrasikan dengan Dashboard Web UI NusaKlim dalam skema dua mesin ini.',
     style_body
 ))

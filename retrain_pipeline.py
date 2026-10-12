@@ -71,7 +71,7 @@ REGRESSION_TARGETS = {
     'temp_avg': 'Suhu Rata-rata (°C)',
     'humidity_avg': 'Kelembapan (%)',
     'rainfall_total_mm': 'Curah Hujan (mm)',
-    'solar_radiation_avg': 'Radiasi Matahari (W/m²)',
+    'solar_radiation_avg': 'Radiasi Matahari (Wh/m²)',
     'pressure_avg_hpa': 'Tekanan Udara (hPa)',
     'wind_speed_avg': 'Kecepatan Angin (km/h)',
 }
@@ -213,6 +213,23 @@ def compute_permutation_importance(model, X_test, y_test, ttype, n_repeats=5, ra
 # ------------------------------------------------------------------------------
 # 1. FEATURE ENGINEERING PIPELINE (29 fitur, simetris per variabel)
 # ------------------------------------------------------------------------------
+def wind_majority_baseline(horizon=1, df_featured=None, feature_cols=None, target_cols=None, test_days=30):
+    """Baseline kelas mayoritas klasifikasi Arah Mata Angin: kelas terbanyak pada data LATIH,
+    dinilai pada data uji (test_days hari terakhir) untuk horizon tertentu. Dihitung dari data
+    (bukan angka tetap) supaya selalu sama dengan data uji yang dipakai model.
+    Kembalikan (nama_kelas, proporsi 0-1)."""
+    if df_featured is None:
+        df_featured, feature_cols, target_cols, _ = build_features_and_targets(pd.read_csv(DATA_PATH))
+    split = df_featured['date_dt'].max() - timedelta(days=test_days)
+    valid = ['Utara', 'Timur', 'Selatan', 'Barat']
+    t1 = target_cols[f'{CLASSIFICATION_TARGET}_h1']
+    majority = df_featured.loc[df_featured['date_dt'] <= split, t1].dropna().mode().iloc[0]
+    th = target_cols[f'{CLASSIFICATION_TARGET}_h{horizon}']
+    te = df_featured[df_featured['date_dt'] > split].dropna(subset=feature_cols + [th])
+    y = te[th][te[th].isin(valid)]
+    return majority, float((y == majority).mean())
+
+
 def build_features_and_targets(df_daily, horizons=range(1, 8)):
     print("Building temporal lag/rolling features and multi-horizon targets (29 fitur)...")
     df = df_daily.copy()
@@ -224,9 +241,8 @@ def build_features_and_targets(df_daily, horizons=range(1, 8)):
         df['wind_direction_name'].isin(['Utara', 'Timur', 'Selatan', 'Barat']), np.nan
     )
 
-    # QC: radiasi sudah rata-rata harian W/m2 (nilai mentah sudah difilter 0-2000 di pra-proses);
-    # rata-rata harian > 1500 W/m2 tidak masuk akal secara fisika -> NaN.
-    df.loc[df['solar_radiation_avg'] > 1500, 'solar_radiation_avg'] = np.nan
+    # QC: radiasi diubah menjadi akumulasi (SUM), filter > 1500 W/m2 tidak lagi relevan
+    # df.loc[df['solar_radiation_avg'] > 1500, 'solar_radiation_avg'] = np.nan
 
     feature_cols = []
 
@@ -424,6 +440,8 @@ def generate_7day_forecast(station_id, df_featured=None, bundle_path=None):
         wind_v = max(0.0, models[f"wind_speed_avg_h{h}"].predict(X_curr)[0])
         wind_dir = models[f"wind_direction_name_h{h}"].predict(X_curr)[0]
 
+        solar_wh_m2 = round(solar, 0)  # Nilai radiasi harian (skala puluhan ribu, berdasarkan SUM 10-menit)
+
         if r_tot < 0.5:
             condition = "Cerah Berawan"
         elif r_tot < 20.0:
@@ -440,7 +458,7 @@ def generate_7day_forecast(station_id, df_featured=None, bundle_path=None):
             'Temp_Avg_C': round(t_avg, 1),
             'Humidity_Avg_Pct': round(rh_avg, 1),
             'Rain_Total_mm': round(r_tot, 1),
-            'Solar_Wm2': round(solar, 1),
+            'Solar_Wh_m2': int(solar_wh_m2),
             'Pressure_hPa': round(press, 1),
             'Wind_Speed_kmh': round(wind_v, 1),
             'Wind_Direction': wind_dir,

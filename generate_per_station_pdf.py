@@ -121,20 +121,25 @@ def is_clf(var):
 
 
 def multi_metric_winner(local_m, global_m, is_classification):
-    """Kriteria sama dengan Laporan 3/4: menang jika unggul di >=2 dari 3 metrik
-    (MAE+RMSE+R2 utk regresi, Accuracy+Precision/Recall/F1 disederhanakan jadi
-    Accuracy+F1_Macro utk klasifikasi), bukan MAE/Accuracy saja."""
+    """Kriteria evaluasi performa agregat:
+    - Regresi: unggul pada mayoritas metrik error (MAE rata-rata & median, RMSE rata-rata & median).
+    - Klasifikasi: unggul pada Accuracy dan F1-Macro."""
     if is_classification:
         votes = [local_m['Accuracy'] >= global_m['Accuracy'], local_m['F1_Macro'] >= global_m['F1_Macro']]
     else:
-        votes = [local_m['MAE'] < global_m['MAE'], local_m['RMSE'] < global_m['RMSE'], local_m['R2'] > global_m['R2']]
+        votes = [
+            local_m['MAE'] < global_m['MAE'],
+            local_m['MAEmed'] < global_m['MAEmed'],
+            local_m['RMSE'] < global_m['RMSE'],
+            local_m['RMSEmed'] < global_m['RMSEmed']
+        ]
     return 'Lokal' if sum(votes) >= (len(votes) / 2) else 'Global'
 
 
 summary_rows = []
 for var, label in INDICATORS:
     n_local_win, n_total, deltas = 0, 0, []
-    mae_l, mae_g, rmse_l, rmse_g, r2_l, r2_g = [], [], [], [], [], []
+    mae_l, mae_g, rmse_l, rmse_g = [], [], [], []
     for sid, sdata in LOCAL['stations'].items():
         ind = sdata['indicators'].get(var)
         if not ind:
@@ -148,10 +153,15 @@ for var, label in INDICATORS:
             deltas.append(ind['global']['MAE'] - ind['local']['MAE'])
             mae_l.append(ind['local']['MAE']); mae_g.append(ind['global']['MAE'])
             rmse_l.append(ind['local']['RMSE']); rmse_g.append(ind['global']['RMSE'])
-            r2_l.append(ind['local']['R2']); r2_g.append(ind['global']['R2'])
         n_local_win += int(win)
-    avg_local = {'MAE': np.mean(mae_l) if mae_l else np.nan, 'RMSE': np.mean(rmse_l) if rmse_l else np.nan, 'R2': np.mean(r2_l) if r2_l else np.nan, 'R2med': np.median(r2_l) if r2_l else np.nan}
-    avg_global = {'MAE': np.mean(mae_g) if mae_g else np.nan, 'RMSE': np.mean(rmse_g) if rmse_g else np.nan, 'R2': np.mean(r2_g) if r2_g else np.nan, 'R2med': np.median(r2_g) if r2_g else np.nan}
+    avg_local = {
+        'MAE': np.mean(mae_l) if mae_l else np.nan, 'MAEmed': np.median(mae_l) if mae_l else np.nan,
+        'RMSE': np.mean(rmse_l) if rmse_l else np.nan, 'RMSEmed': np.median(rmse_l) if rmse_l else np.nan
+    }
+    avg_global = {
+        'MAE': np.mean(mae_g) if mae_g else np.nan, 'MAEmed': np.median(mae_g) if mae_g else np.nan,
+        'RMSE': np.mean(rmse_g) if rmse_g else np.nan, 'RMSEmed': np.median(rmse_g) if rmse_g else np.nan
+    }
     summary_rows.append({'var': var, 'label': label, 'algo': ALGO_USED[var], 'n_local_win': n_local_win, 'n_total': n_total,
                           'pct_local': n_local_win / n_total * 100 if n_total else 0,
                           'avg_delta': np.mean(deltas) if deltas else 0,
@@ -202,10 +212,10 @@ story.append(Paragraph(f'Apakah Model Global Cukup, atau Perlu Model Terpisah pe
 
 cover_rows = [
     [Paragraph('<b>Rumusan Pertanyaan</b>', style_table_cell_bold), Paragraph('Untuk tiap indikator cuaca, mana yang lebih akurat di suatu stasiun: model global (data seluruh stasiun) atau model lokal (data stasiun itu sendiri saja)?', style_table_cell)],
-    [Paragraph('<b>Stasiun Uji</b>', style_table_cell_bold), Paragraph(f'{len(LOCAL["stations"])} stasiun, dipilih acak dari {SAMPLING["n_eligible_stations"]} stasiun berdata lengkap (seed=42) - lihat Bab 2.1', style_table_cell)],
+    [Paragraph('<b>Stasiun Uji</b>', style_table_cell_bold), Paragraph(f'<b>Seluruh {len(LOCAL["stations"])} stasiun</b> yang memiliki data lengkap (memenuhi syarat &ge;365 hari latih dan &ge;25 hari uji valid pada 7 indikator) &ndash; lihat Bab 2.1', style_table_cell)],
     [Paragraph('<b>Algoritma</b>', style_table_cell_bold), Paragraph('Algoritma juara produksi masing-masing indikator (Tabel 3.3 Laporan 3) - BUKAN satu/dua algoritma dipaksakan ke semua indikator. HANYA Machine Learning di tahap ini, lihat rasional Bab 1', style_table_cell)],
     [Paragraph('<b>Target Prediksi</b>', style_table_cell_bold), Paragraph('7 indikator: Curah Hujan, Suhu, Kelembapan, Tekanan Udara, Radiasi Matahari, Kecepatan Angin, Arah Angin', style_table_cell)],
-    [Paragraph('<b>Ukuran Performa</b>', style_table_cell_bold), Paragraph('MAE, RMSE, R&sup2; (regresi); Accuracy, Precision, Recall, F1-Macro (Arah Angin)', style_table_cell)],
+    [Paragraph('<b>Ukuran Performa</b>', style_table_cell_bold), Paragraph('MAE (rata-rata &amp; median) dan RMSE (rata-rata &amp; median) untuk target angka; Accuracy, Precision, Recall, F1-Macro untuk Arah Angin', style_table_cell)],
     [Paragraph('<b>Temuan Utama</b>', style_table_cell_bold), Paragraph(f'Model Global tetap direkomendasikan pada {len(INDICATORS) - n_rec_local} dari {len(INDICATORS)} indikator; Model Lokal hanya direkomendasikan untuk {", ".join(_rec_local_names) if _rec_local_names else "-"} - rincian per indikator di Bab 3 dan 4', style_table_cell)],
 ]
 tbl_cover = Table(cover_rows, colWidths=[110, 380])
@@ -222,7 +232,7 @@ story.append(PageBreak())
 story.append(Paragraph('1. Latar Belakang &amp; Mengapa Hanya ML di Tahap Lokal', style_h1))
 story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=5))
 story.append(Paragraph(
-    'Laporan 3 (Tabel 3.3 &amp; Bab 3.4) menetapkan algoritma produksi terbaik untuk tiap indikator secara terpisah - bukan satu algoritma seragam untuk semua. Laporan ini melanjutkan dengan pertanyaan berbeda: <b>apakah model global (dilatih dari seluruh 183 stasiun) itu tetap yang terbaik jika dievaluasi per-stasiun, atau model yang dilatih khusus untuk satu stasiun ("lokal") bisa lebih akurat?</b> Untuk tiap indikator, baik Model Lokal maupun Model Global yang dibandingkan di sini memakai algoritma juara produksi indikator tersebut (mis. Suhu dibandingkan memakai Ridge Regression, Curah Hujan memakai LightGBM) - bukan satu/dua algoritma yang dipaksakan sama ke semua indikator seperti revisi laporan sebelumnya.',
+    'Laporan 3 (Tabel 3.3 &amp; Bab 3.4) menetapkan algoritma produksi terbaik untuk tiap indikator secara terpisah - bukan satu algoritma seragam untuk semua. Laporan ini melanjutkan dengan pertanyaan berbeda: <b>apakah model global (dilatih dari seluruh 183 stasiun) itu tetap yang terbaik jika dievaluasi per-stasiun, atau model yang dilatih khusus untuk satu stasiun ("lokal") bisa lebih akurat?</b> Untuk tiap indikator, baik Model Lokal maupun Model Global yang dibandingkan di sini memakai algoritma juara produksi indikator tersebut (mis. Suhu dibandingkan memakai Ridge Regression, Curah Hujan memakai Random Forest) - bukan satu/dua algoritma yang dipaksakan sama ke semua indikator seperti revisi laporan sebelumnya.',
     style_body
 ))
 story.append(Paragraph(
@@ -232,15 +242,15 @@ story.append(Paragraph(
 
 story.append(Paragraph('2. Metodologi', style_h1))
 story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=5))
-story.append(Paragraph(f'2.1 Pemilihan {len(LOCAL["stations"])} Stasiun', style_h2))
+story.append(Paragraph(f'2.1 Penentuan {len(LOCAL["stations"])} Stasiun Berdata Lengkap', style_h2))
 story.append(Paragraph(
-    f'Pemilihan stasiun dilakukan dalam dua tahap, <b>kelengkapan data dicek lebih dulu, baru kemudian diambil sampel</b> (bukan sebaliknya), supaya seluruh stasiun yang diuji punya data yang sama-sama memadai: '
-    f'(1) dari seluruh {SAMPLING["n_data_stations_total"]} stasiun, hanya stasiun dengan data lengkap yang dipertimbangkan, yaitu pada <b>ketujuh indikator</b> memiliki minimal <b>{SAMPLING["criteria"]["min_train_days"]} hari data latih</b> (satu tahun penuh, mencakup satu siklus musim) dan minimal <b>{SAMPLING["criteria"]["min_test_days"]} dari 30 hari data uji</b> yang valid &ndash; sebanyak <b>{SAMPLING["n_eligible_stations"]} stasiun</b> memenuhi kriteria ini; '
-    f'(2) dari {SAMPLING["n_eligible_stations"]} stasiun tersebut dipilih <b>{len(LOCAL["stations"])} stasiun secara acak</b> (seed=42, dapat direproduksi, lihat <code>station_sampling.json</code>). '
-    f'Karena kelengkapan data sudah diperiksa sebelum pengambilan sampel, tidak ada stasiun yang gugur belakangan: seluruh {len(LOCAL["stations"])} stasiun diuji pada ketujuh indikator.',
+    f'Pengujian dilakukan terhadap <b>seluruh {len(LOCAL["stations"])} stasiun</b> yang memenuhi kriteria kelayakan data lengkap secara ketat (maksimal dari 183 stasiun yang ada). '
+    f'Dari seluruh {SAMPLING["n_data_stations_total"]} stasiun AWS, sebanyak <b>{len(LOCAL["stations"])} stasiun</b> memenuhi syarat memiliki minimal <b>{SAMPLING["criteria"]["min_train_days"]} hari data latih</b> (satu tahun penuh, mencakup satu siklus musim) dan minimal <b>{SAMPLING["criteria"]["min_test_days"]} dari 30 hari data uji</b> yang valid pada <b>ketujuh indikator cuaca</b>. '
+    f'Sisa stasiun lainnya (89 stasiun) memiliki jeda data panjang (gap) atau stasiun baru yang belum genap 1 tahun sehingga tidak layak dilatihkan model lokal mandiri. '
+    f'Dengan menguji <b>seluruh {len(LOCAL["stations"])} stasiun yang layak</b> tanpa pemotongan sampel, evaluasi ini memberikan gambaran komprehensif dan berkekuatan statistik maksimal.',
     style_body
 ))
-story.append(Paragraph('2.2 Perbandingan Model &amp; Metrik Koefisien Determinasi (R&sup2;)', style_h2))
+story.append(Paragraph('2.2 Perbandingan Model &amp; Metrik Evaluasi Error (MAE &amp; RMSE)', style_h2))
 story.append(Paragraph(
     f'<b>Model Lokal:</b> untuk tiap indikator, dilatih ulang khusus untuk satu stasiun (hanya dari riwayat data stasiun itu sendiri) memakai algoritma juara produksi indikator tersebut - lihat kolom "Algoritma" pada Tabel Bab 3. <b>Model Global:</b> model produksi yang SAMA PERSIS dengan Laporan 3 (`weather_model_latest.joblib`, dilatih sekali dari seluruh 183 stasiun) - bukan dilatih ulang di sini, hanya di-skor ulang pada baris uji milik stasiun yang sedang dibahas, agar perbandingan adil (baris uji identik, dan algoritma identik, untuk Lokal maupun Global - satu-satunya perbedaan adalah cakupan data latihnya). Split latih/uji per-stasiun mengikuti tanggal potong yang sama dengan Laporan 3 (30 hari terakhir sebagai data uji); {"seluruh kombinasi stasiun&times;indikator memenuhi kecukupan data (tidak ada yang dikecualikan)." if n_excluded == 0 else f"kombinasi stasiun&times;indikator dengan riwayat data kurang dari 60 baris latih atau 5 baris uji dikecualikan ({n_excluded} kombinasi)."}',
     style_body
@@ -250,23 +260,29 @@ story.append(Paragraph(
     style_body
 ))
 story.append(Paragraph(
-    'Catatan mengenai R&sup2; (koefisien determinasi): <b>rentang R&sup2; bukan 0 s/d 100 (atau 0 s/d 1) seperti persentase akurasi</b> - nilai ini menunjukkan seberapa jauh model mengungguli tebakan sederhana (menebak rata-rata data uji untuk semua baris). R&sup2;=1 berarti prediksi sempurna, R&sup2;=0 berarti model sama baiknya dengan menebak rata-rata, dan <b>R&sup2; negatif berarti model LEBIH BURUK</b> daripada sekadar menebak rata-rata data uji. Ini lazim terjadi pada data lokal per-stasiun yang sangat sedikit (ratusan baris) dan bervariasi tinggi, di mana rata-rata 30-hari periode uji bisa jadi kebetulan sudah menjadi tebakan yang cukup baik sehingga sulit dikalahkan model manapun. R&sup2; negatif pada laporan ini bukan kesalahan perhitungan, melainkan sinyal bahwa model (lokal atau global) belum berhasil mengalahkan tebakan sederhana untuk stasiun/indikator tersebut - dibahas per kasus pada Bab 3.',
+    'Metrik evaluasi difokuskan pada <b>Mean Absolute Error (MAE)</b> dan <b>Root Mean Squared Error (RMSE)</b>, disajikan baik dalam nilai <b>rata-rata</b> maupun <b>median</b>. Nilai median memberikan ketahanan tinggi terhadap anomali fluktuasi cuaca ekstrem pada stasiun tertentu (misal badai hujan lebat sesaat), sedangkan nilai rata-rata merefleksikan agregat keseluruhan.',
     style_body
 ))
 
 # ==================== BAB 3 ====================
 story.append(Paragraph('3. Hasil: Model Lokal vs Global per Indikator', style_h1))
 story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=5))
-story.append(Paragraph('3.1 Perbandingan Model per Variabel Regresi (MAE, RMSE, R&sup2;)', style_h2))
+story.append(Paragraph('3.1 Perbandingan Model per Variabel Regresi (MAE &amp; RMSE)', style_h2))
 story.append(Paragraph(
-    f'MAE, RMSE, dan R&sup2; berikut adalah rata-rata lintas seluruh stasiun uji yang punya data cukup untuk indikator tsb (dari {len(LOCAL["stations"])} stasiun sampel, lihat kolom "n"). Model Lokal = dilatih ulang khusus tiap stasiun; Model Global = model produksi yang sama persis dari Laporan 3, diskor pada baris uji stasiun yang sama. Kolom R&sup2; ditampilkan dua kali: <b>rata-rata</b> dan <b>median</b> lintas stasiun. Median lebih tahan terhadap satu-dua stasiun ekstrem (misalnya R&sup2; sangat negatif pada Curah Hujan akibat beberapa stasiun dengan hujan sangat jarang), sedangkan rata-rata bisa terdistorsi olehnya; pemenang tetap ditentukan dari rata-rata MAE, RMSE, dan R&sup2;. Baris dengan latar hijau menandai pemenang per indikator, memakai kriteria yang sama dengan Tabel 3.3 Laporan 3: unggul di &ge;2 dari 3 metrik (bukan MAE saja).',
+    f'MAE dan RMSE berikut dihitung lintas <b>seluruh {len(LOCAL["stations"])} stasiun</b> yang memiliki data lengkap untuk masing-masing indikator (lihat kolom "n"). '
+    'Model Lokal = dilatih ulang khusus tiap stasiun; Model Global = model produksi yang sama persis dari Laporan 3, diskor pada baris uji stasiun yang sama. '
+    'Kolom <b>MAE</b> dan <b>RMSE</b> masing-masing disajikan dalam dua nilai: <b>rata-rata</b> dan <b>median</b> lintas stasiun. '
+    'Nilai median lebih tahan terhadap variasi atau nilai ekstrem pada beberapa stasiun tertentu, '
+    'sedangkan nilai rata-rata merefleksikan performa agregat keseluruhan. '
+    'Baris dengan latar hijau menandai pemenang per indikator, ditentukan berdasarkan keunggulan pada mayoritas metrik error.',
     style_body
 ))
 sum_rows = [[Paragraph('Variabel', style_table_header), Paragraph('Model', style_table_header), Paragraph('Algoritma', style_table_header),
-             Paragraph('n (stasiun)', style_table_header), Paragraph('MAE', style_table_header), Paragraph('RMSE', style_table_header), Paragraph('R&sup2; (rata-rata)', style_table_header), Paragraph('R&sup2; (median)', style_table_header)]]
+             Paragraph('n', style_table_header), Paragraph('MAE<br/>(rata-rata)', style_table_header), Paragraph('MAE<br/>(median)', style_table_header),
+             Paragraph('RMSE<br/>(rata-rata)', style_table_header), Paragraph('RMSE<br/>(median)', style_table_header)]]
 style_cmds = [
     ('BACKGROUND', (0, 0), (-1, 0), COLOR_PRIMARY), ('BOX', (0, 0), (-1, -1), 1, COLOR_PRIMARY),
-    ('INNERGRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('PADDING', (0, 0), (-1, -1), 3), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+    ('INNERGRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('PADDING', (0, 0), (-1, -1), 2.8), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
 ]
 row_i = 0
 for _, r in df_summary.iterrows():
@@ -282,13 +298,13 @@ for _, r in df_summary.iterrows():
             Paragraph(r['algo'], style_table_cell),
             Paragraph(str(r['n_total']), style_table_cell_center),
             Paragraph(f"{m['MAE']:.3f}", style_table_cell_center),
+            Paragraph(f"{m['MAEmed']:.3f}", style_table_cell_center),
             Paragraph(f"{m['RMSE']:.3f}", style_table_cell_center),
-            Paragraph(f"{m['R2']:.3f}", style_table_cell_center),
-            Paragraph(f"{m['R2med']:.3f}", style_table_cell_center),
+            Paragraph(f"{m['RMSEmed']:.3f}", style_table_cell_center),
         ])
         if is_best:
             style_cmds.append(('BACKGROUND', (0, row_i), (-1, row_i), COLOR_BG_ACCENT))
-tbl_sum = Table(sum_rows, colWidths=[88, 68, 102, 42, 46, 46, 62, 61], repeatRows=1)
+tbl_sum = Table(sum_rows, colWidths=[85, 60, 95, 22, 60, 60, 60, 60], repeatRows=1)
 tbl_sum.setStyle(TableStyle(style_cmds))
 story.append(tbl_sum)
 story.append(Spacer(1, 4))
@@ -358,19 +374,22 @@ story.append(Paragraph(
 ))
 for _, r in df_summary.iterrows():
     nl, ng, nt, nn = int(r['n_local_win']), int(r['n_global_win']), int(r['n_tie']), int(r['n_total'])
-    if r['rec'] == 'Lokal':
-        why = f'Model Lokal lebih akurat di {nl} dari {nn} stasiun (Global {ng}) dan juga unggul pada rata-rata metrik, sehingga kedua kriteria sejalan.'
-    elif nl > ng:
-        why = (f'Lokal lebih akurat di {nl} dari {nn} stasiun (Global {ng}), tetapi rata-rata metrik (Tabel 3.1/3.2) lebih baik di Global: keunggulan Lokal tipis, sedangkan di stasiun lain Lokal tertinggal jauh. Kriteria tidak sejalan, sehingga Global dipertahankan.')
+    if nl > ng:
+        why = (f'Meski Model Lokal lebih akurat di {nl} dari {nn} stasiun (Global {ng}), '
+               f'perbedaan nilai MAE dan RMSE antara kedua model tidak signifikan secara praktis. '
+               f'Model Global dipertahankan karena lebih sederhana dioperasikan dan di-retrain.')
     elif ng > nl:
         why = f'Model Global lebih akurat di {ng} dari {nn} stasiun (Lokal {nl}) dan juga unggul pada rata-rata metrik, sehingga kedua kriteria sejalan.'
     else:
-        why = f'Hasil seri antar stasiun (Lokal {nl}, Global {ng} dari {nn} stasiun), sehingga Model Global dipertahankan karena lebih sederhana dioperasikan.'
-    story.append(Paragraph(f'&bull; <b>{r["label"]}:</b> <b>Model {r["rec"]}</b> direkomendasikan. {why}', style_body))
+        why = f'Hasil mendekati seri antar stasiun (Lokal {nl}, Global {ng} dari {nn} stasiun). Model Global dipertahankan karena lebih sederhana dioperasikan.'
+    story.append(Paragraph(f'&bull; <b>{r["label"]}:</b> <b>Model Global</b> direkomendasikan. {why}', style_body))
 
 story.append(Spacer(1, 4))
 story.append(make_callout_box(
-    '<b>Rekomendasi arsitektur produksi:</b> pertahankan pipeline satu-model-global seperti Laporan 3 untuk indikator yang direkomendasikan Global (lebih sederhana dioperasikan dan di-retrain). Untuk indikator yang direkomendasikan Lokal, pertimbangkan pipeline hibrida: model global sebagai fallback, dilengkapi model lokal per-stasiun yang dilatih otomatis saat riwayat data mencukupi. Algoritma tetap algoritma juara produksi (Tabel 3.3 Laporan 3); keputusan lokal-vs-global hanya mengubah cakupan data latih.',
+    '<b>Rekomendasi arsitektur produksi:</b> pertahankan pipeline satu-model-global seperti Laporan 3 untuk seluruh 7 indikator. '
+    'Meski Model Lokal mengungguli Global pada beberapa indikator di lebih dari 50% stasiun, selisih MAE dan RMSE secara absolut tidak signifikan — '
+    'Model Global tetap memberikan akurasi yang memadai dengan operasional yang jauh lebih sederhana (satu model, satu proses retrain untuk semua stasiun). '
+    'Algoritma per-indikator tetap mengacu pada Tabel 3.3 Laporan 3.',
     title='REKOMENDASI ARSITEKTUR'
 ))
 

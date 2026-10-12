@@ -78,7 +78,7 @@ Seluruh 7 laporan PDF (dan salinan bernomornya) sudah dibuat ulang dan dicek ber
 **Laporan 3 (Model Prediksi 7 Hari)**
 - **Radiasi matahari**: dulu dijumlahkan dari semua pembacaan sensor sehari, sehingga angkanya ribuan dan ikut berubah mengikuti jumlah pembacaan per hari. Sekarang dirata-ratakan (median ±166 W/m²). Hasilnya R² radiasi naik dari 0,24 ke 0,45 (H+1) dan dari 0,14 ke 0,33 (H+7). Semua model, benchmark, dan laporan terkait dibuat ulang.
 - **Fitur input**: sekarang **29 fitur** (dulu tertulis "36"/"37", lalu "29 rekayasa" padahal model memakai 30). Rinciannya: 28 turunan dari data pengamatan nyata + 1 fitur langsung dari dataset (arah angin hari berjalan). Fitur Day of the Year mentah dihapus, tersisa sin/cos. Daftar lengkap ada di Bab 2.2 laporan. Istilah "rekayasa fitur" diganti agar tidak disangka data buatan.
-- **Algoritma produksi**: hanya Ridge Regression (5 indikator) dan LightGBM (Curah Hujan dan Arah Angin). Random Forest dan Logistic Regression ditulis sebagai pembanding, bukan model produksi.
+- **Algoritma produksi**: Ridge Regression (Suhu, Kelembapan, Radiasi, Tekanan, Kecepatan Angin), Random Forest (Curah Hujan), dan LightGBM (Arah Angin), sesuai kriteria peringkat gabungan di load_champion_algorithms().
 - **Arah angin**: tabel juara menampilkan Accuracy (F1 dalam kurung). **Feature importance** memakai permutation importance yang seragam untuk semua algoritma.
 
 **Laporan 3b (Model Per-Stasiun vs Global)**
