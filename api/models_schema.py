@@ -7,12 +7,12 @@ from pydantic import BaseModel, Field
 
 class StationInfo(BaseModel):
     station_id: str = Field(..., example="227")
-    estate_name: str = Field(..., example="Kebun Sei Pancur (Pusat Riset Agroklimat)")
-    province: str = Field(..., example="Sumatera Utara")
-    region: Optional[str] = Field(None, example="Medan & Marihat")
-    lat: float = Field(..., example=3.487)
-    lon: float = Field(..., example=98.712)
-    elevation_m: int = Field(..., example=45)
+    estate_name: str = Field(..., example="PMO_Kebun Gedeh")
+    province: Optional[str] = Field(None, description="Tidak tersedia di device_nusaklim.csv")
+    region: Optional[str] = Field(None, example="AWS PMO")
+    lat: Optional[float] = Field(None, example=-6.802516)
+    lon: Optional[float] = Field(None, example=107.040665)
+    elevation_m: Optional[int] = Field(None, description="Tidak tersedia di device_nusaklim.csv")
     status: str = Field(..., example="Active")
 
 class StationsListResponse(BaseModel):
@@ -91,8 +91,8 @@ class PhysicalForecastUnits(BaseModel):
 class PhysicalForecastData(BaseModel):
     stationId: str
     stationName: str
-    latitude: float
-    longitude: float
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
     timezone: str = "Asia/Jakarta"
     generatedAt: str = Field(..., description="Waktu forecast ini dihitung (WIB), bukan waktu observasi sensor.")
     dataSource: str = Field(

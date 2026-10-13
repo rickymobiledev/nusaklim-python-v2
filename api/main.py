@@ -151,7 +151,7 @@ async def list_stations():
     tags=["AWS Stations Metadata"],
     summary="Detail Informasi Stasiun AWS Spesifik",
     description="Metadata satu stasiun berdasarkan station_id. Stasiun yang tidak ada di registry resmi tetap "
-                "mengembalikan data (lokasi dialokasikan deterministik per region), bukan 404.",
+                "mengembalikan data minimal (status 'Unknown', tanpa koordinat), bukan 404.",
     response_description="Metadata lengkap stasiun yang diminta."
 )
 async def get_station_detail(station_id: str):

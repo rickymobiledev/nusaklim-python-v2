@@ -48,8 +48,8 @@ def test_station_detail():
     assert response.status_code == 200
     data = response.json()
     assert data["station_id"] == "227"
-    assert "Sei Pancur" in data["estate_name"]
-    print(f"[PASS] GET /api/v1/stations/227 -> {data['estate_name']} ({data['province']})")
+    assert data["estate_name"] == "PMO_Kebun Gedeh"
+    print(f"[PASS] GET /api/v1/stations/227 -> {data['estate_name']} ({data['region']})")
 
 def test_forecast_7_days():
     t0 = time.time()
