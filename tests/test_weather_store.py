@@ -209,3 +209,36 @@ class WeatherStoreTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ConnectRetryTests(unittest.TestCase):
+    def test_retries_operational_error_then_succeeds(self):
+        calls = []
+
+        def flaky():
+            calls.append(1)
+            if len(calls) < 3:
+                raise psycopg.errors.ConnectionTimeout("timeout")
+            return "conn"
+
+        with patch.object(store, "connect", flaky), patch.object(store.time, "sleep") as sleep, \
+                patch.multiple(store.settings, db_connect_retries=5, db_connect_retry_delay=1.0):
+            self.assertEqual(store.connect_with_retry(), "conn")
+        self.assertEqual(len(calls), 3)
+        self.assertEqual([c.args[0] for c in sleep.call_args_list], [1.0, 2.0])
+
+    def test_raises_after_last_attempt(self):
+        with patch.object(store, "connect", side_effect=psycopg.errors.ConnectionTimeout("t")) as conn, \
+                patch.object(store.time, "sleep"), \
+                patch.multiple(store.settings, db_connect_retries=3, db_connect_retry_delay=1.0):
+            with self.assertRaises(psycopg.OperationalError):
+                store.connect_with_retry()
+        self.assertEqual(conn.call_count, 3)
+
+    def test_does_not_retry_non_connection_errors(self):
+        with patch.object(store, "connect", side_effect=ValueError("no url")) as conn, \
+                patch.object(store.time, "sleep") as sleep:
+            with self.assertRaises(ValueError):
+                store.connect_with_retry()
+        self.assertEqual(conn.call_count, 1)
+        sleep.assert_not_called()
