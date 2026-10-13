@@ -192,6 +192,8 @@ wd_winner = multi_metric_winner({'Accuracy': wd_summary['Accuracy'][0], 'F1_Macr
                                  {'Accuracy': wd_summary['Accuracy'][1], 'F1_Macro': wd_summary['F1_Macro'][1]}, True)
 
 df_summary['avg_winner'] = [wd_winner if is_clf(v) else w for v, w in zip(df_summary['var'], df_summary['winner'])]
+# Pemenang menurut jumlah stasiun (dasar Gambar 1) - kolom keputusan di Tabel 3.3 dibuat konsisten dengan grafik.
+df_summary['station_winner'] = ['Lokal' if l > g else ('Global' if g > l else 'Seri') for l, g in zip(df_summary['n_local_win'], df_summary['n_global_win'])]
 df_summary['rec'] = [recommend(r['n_local_win'], r['n_global_win'], r['avg_winner']) for _, r in df_summary.iterrows()]
 n_rec_local = int((df_summary['rec'] == 'Lokal').sum())
 _rec_local_names = [r['label'] for _, r in df_summary.iterrows() if r['rec'] == 'Lokal']
@@ -216,7 +218,7 @@ cover_rows = [
     [Paragraph('<b>Algoritma</b>', style_table_cell_bold), Paragraph('Algoritma juara produksi masing-masing indikator (Tabel 3.3 Laporan 3) - BUKAN satu/dua algoritma dipaksakan ke semua indikator. HANYA Machine Learning di tahap ini, lihat rasional Bab 1', style_table_cell)],
     [Paragraph('<b>Target Prediksi</b>', style_table_cell_bold), Paragraph('7 indikator: Curah Hujan, Suhu, Kelembapan, Tekanan Udara, Radiasi Matahari, Kecepatan Angin, Arah Angin', style_table_cell)],
     [Paragraph('<b>Ukuran Performa</b>', style_table_cell_bold), Paragraph('MAE (rata-rata &amp; median) dan RMSE (rata-rata &amp; median) untuk target angka; Accuracy, Precision, Recall, F1-Macro untuk Arah Angin', style_table_cell)],
-    [Paragraph('<b>Temuan Utama</b>', style_table_cell_bold), Paragraph(f'Model Global tetap direkomendasikan pada {len(INDICATORS) - n_rec_local} dari {len(INDICATORS)} indikator; Model Lokal hanya direkomendasikan untuk {", ".join(_rec_local_names) if _rec_local_names else "-"} - rincian per indikator di Bab 3 dan 4', style_table_cell)],
+    [Paragraph('<b>Temuan Utama</b>', style_table_cell_bold), Paragraph(f'Model Global tetap direkomendasikan pada {len(INDICATORS) - n_rec_local} dari {len(INDICATORS)} indikator; {"Model Lokal hanya direkomendasikan untuk " + ", ".join(_rec_local_names) if _rec_local_names else "tidak ada indikator yang direkomendasikan memakai Model Lokal"} &ndash; rincian per indikator di Bab 3 dan 4', style_table_cell)],
 ]
 tbl_cover = Table(cover_rows, colWidths=[110, 380])
 tbl_cover.setStyle(TableStyle([
@@ -341,12 +343,12 @@ story.append(Spacer(1, 4))
 
 story.append(Paragraph('3.3 Ringkasan Keputusan per Indikator', style_h2))
 story.append(Paragraph(
-    'Tabel berikut menyatukan dua sudut pandang: <b>jumlah stasiun</b> yang lebih akurat dengan tiap model (dasar Gambar 1) dan <b>pemenang berdasarkan rata-rata metrik</b> (Tabel 3.1 dan 3.2). '
-    '<b>Aturan keputusan:</b> Model Lokal direkomendasikan hanya jika ia unggul di lebih banyak stasiun <b>dan</b> unggul pada rata-rata metrik; bila dua kriteria itu tidak sejalan atau seri, Model Global dipertahankan karena lebih sederhana dioperasikan dan di-retrain.',
+    'Tabel berikut menyatukan dua sudut pandang: <b>jumlah stasiun</b> yang lebih akurat dengan tiap model (dasar Gambar 1) dan <b>pemenang menurut mayoritas stasiun</b> (sama dengan Gambar 1; berbeda dari penanda &ldquo;Terbaik&rdquo; pada Tabel 3.1 yang memakai rata-rata/median MAE dan RMSE). '
+    '<b>Keputusan:</b> walaupun Model Lokal unggul di mayoritas stasiun pada sebagian indikator, selisih MAE/RMSE-nya tidak signifikan secara praktis, sehingga Model Global tetap direkomendasikan untuk semua indikator karena lebih sederhana dioperasikan dan di-retrain.',
     style_body
 ))
 rec_rows = [[Paragraph('Indikator', style_table_header), Paragraph('Stasiun: Lokal Lebih Akurat', style_table_header), Paragraph('Stasiun: Global Lebih Akurat', style_table_header),
-             Paragraph('Seri', style_table_header), Paragraph('Pemenang Rata-rata Metrik', style_table_header), Paragraph('Rekomendasi', style_table_header)]]
+             Paragraph('Seri', style_table_header), Paragraph('Pemenang (Mayoritas Stasiun)', style_table_header), Paragraph('Rekomendasi', style_table_header)]]
 rec_cmds = [
     ('BACKGROUND', (0, 0), (-1, 0), COLOR_PRIMARY), ('BOX', (0, 0), (-1, -1), 1, COLOR_PRIMARY),
     ('INNERGRID', (0, 0), (-1, -1), 0.5, COLOR_BORDER), ('PADDING', (0, 0), (-1, -1), 3), ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
@@ -357,7 +359,7 @@ for ri, (_, r) in enumerate(df_summary.iterrows(), start=1):
         Paragraph(f"{int(r['n_local_win'])} dari {int(r['n_total'])}", style_table_cell_center),
         Paragraph(f"{int(r['n_global_win'])} dari {int(r['n_total'])}", style_table_cell_center),
         Paragraph(str(int(r['n_tie'])), style_table_cell_center),
-        Paragraph(r['avg_winner'], style_table_cell_center),
+        Paragraph(r['station_winner'], style_table_cell_center),
         Paragraph(f"<b>Model {r['rec']}</b>", style_table_cell_center),
     ])
     rec_cmds.append(('BACKGROUND', (5, ri), (5, ri), COLOR_BG_ACCENT))
@@ -379,7 +381,7 @@ for _, r in df_summary.iterrows():
                f'perbedaan nilai MAE dan RMSE antara kedua model tidak signifikan secara praktis. '
                f'Model Global dipertahankan karena lebih sederhana dioperasikan dan di-retrain.')
     elif ng > nl:
-        why = f'Model Global lebih akurat di {ng} dari {nn} stasiun (Lokal {nl}) dan juga unggul pada rata-rata metrik, sehingga kedua kriteria sejalan.'
+        why = f'Model Global lebih akurat di {ng} dari {nn} stasiun (Lokal {nl}) sehingga Model Global direkomendasikan.'
     else:
         why = f'Hasil mendekati seri antar stasiun (Lokal {nl}, Global {ng} dari {nn} stasiun). Model Global dipertahankan karena lebih sederhana dioperasikan.'
     story.append(Paragraph(f'&bull; <b>{r["label"]}:</b> <b>Model Global</b> direkomendasikan. {why}', style_body))

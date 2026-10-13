@@ -3,6 +3,7 @@ import sys
 import json
 import time
 import requests
+import matplotlib.dates as mdates
 import joblib
 import numpy as np
 import pandas as pd
@@ -318,7 +319,7 @@ for sid in stn_ids:
     m = merged_by_station[sid]
     meta = test_stations[sid]
     res = station_results[sid]['indicators']
-    fig, axes = plt.subplots(3, 2, figsize=(13, 11.5), dpi=200)
+    fig, axes = plt.subplots(3, 2, figsize=(13, 12.5), dpi=200)
     axes = axes.flatten()
     for ax, (key, label, unit, act_col, om_col) in zip(axes, INDICATORS):
         x = res[key]
@@ -341,18 +342,16 @@ for sid in stn_ids:
             ax.set_ylabel(f'{label} ({unit})', fontsize=8.5)
         ax.set_title(f"{label} — lebih akurat: {x['winner']}", fontsize=9.5, fontweight='bold')
         ax.legend(fontsize=7, loc='best', frameon=True)
-        ax.tick_params(axis='x', labelrotation=30, labelsize=7)
+        ax.xaxis.set_major_locator(mdates.DayLocator(interval=5))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%d %b'))
+        ax.tick_params(axis='x', labelsize=7.5, pad=2)
         ax.tick_params(axis='y', labelsize=7.5)
         ax.grid(True, linestyle=':', alpha=0.6)
-    axes[-1].axis('off')
-    axes[-1].text(0.02, 0.95,
-                  f"Stasiun {sid} — {meta['name']}\n{meta['company']}\nPeriode {start_date} s/d {end_date}\n"
-                  f"{station_results[sid]['n_days_matched']} hari data aktual\n\n"
-                  "Hitam: data aktual AWS\nBiru putus-putus: Open-Meteo\nHijau: prediksi H+1 NusaKlim",
-                  va='top', fontsize=9, color='#1E3A8A')
-    fig.suptitle(f"Kurva Perbandingan Data Aktual AWS vs Open-Meteo vs Prediksi H+1 NusaKlim — Stasiun {sid} {meta['name']}",
+    fig.suptitle(f"Kurva Perbandingan Data Aktual AWS vs Open-Meteo vs Prediksi NusaKlim — Stasiun {sid} {meta['name']}",
                  fontsize=12, fontweight='bold', color='#1E3A8A', y=0.995)
-    plt.tight_layout(rect=[0, 0, 1, 0.985], h_pad=3.0)
+    fig.text(0.5, 0.962, f"{meta['company']} | Periode {start_date} s/d {end_date} | {station_results[sid]['n_days_matched']} hari data aktual",
+             ha='center', fontsize=9, color='#475569')
+    plt.tight_layout(rect=[0, 0, 1, 0.955], h_pad=3.5, w_pad=2.5)
     ts_path = os.path.join(fig_dir, f'fig_openmeteo_ts_{sid}.png')
     plt.savefig(ts_path)
     plt.close()

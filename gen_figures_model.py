@@ -169,7 +169,7 @@ for station_id in station_ids:
         mae_str = f"MAE: {mean_absolute_error(y_actual, y_pred):.2f}" if len(valid) > 0 else "MAE: N/A"
 
         ax.plot(dates, y_actual, marker='o', markersize=3.5, color='#0F172A', linewidth=1.5, label='Aktual')
-        ax.plot(dates, y_pred, marker='x', markersize=3.5, color='#DC2626', linewidth=1.3, linestyle='--', label=f'Prediksi H+1 ({algo_used[f"{var}_h1"]})')
+        ax.plot(dates, y_pred, marker='x', markersize=3.5, color='#DC2626', linewidth=1.3, linestyle='--', label=f'Prediksi ({algo_used[f"{var}_h1"]})')
         ax.set_title(f"{LABELS[var]}  [{mae_str}]", fontsize=9.2, fontweight='bold')
         ax.set_ylabel(LABELS[var].split('(')[-1].rstrip(')'), fontsize=8)
         ax.tick_params(axis='x', labelrotation=30, labelsize=7)
@@ -177,7 +177,7 @@ for station_id in station_ids:
         ax.legend(fontsize=6.5)
         ax.grid(True, alpha=0.3, linestyle='--')
 
-    fig.suptitle(f'Deret Waktu Aktual vs Prediksi Model (H+1) - 6 Target Regresi, Stasiun AWS {stn_name_display} (30 Hari Uji)', fontsize=12.5, fontweight='bold', color='#1E3A8A')
+    fig.suptitle(f'Deret Waktu Aktual vs Prediksi Model - 6 Target Regresi, Stasiun AWS {stn_name_display} (30 Hari Uji)', fontsize=12.5, fontweight='bold', color='#1E3A8A')
     fig.tight_layout(rect=[0, 0, 1, 0.95])
     p3 = os.path.join(FIG_DIR, f'fig_model3_actual_vs_predicted_{station_id}.png')
     fig.savefig(p3, dpi=300, bbox_inches='tight', facecolor='white')

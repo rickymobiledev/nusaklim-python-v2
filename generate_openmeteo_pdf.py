@@ -382,7 +382,7 @@ story.append(Spacer(1, 4))
 story.append(Paragraph('7. Validasi Rangkaian Waktu: Kurva Aktual vs Open-Meteo vs NusaKlim', style_h1))
 story.append(HRFlowable(width='100%', thickness=1, color=COLOR_PRIMARY, spaceBefore=2, spaceAfter=5))
 story.append(Paragraph(
-    'Gambar 2 s/d 5 menampilkan kurva harian untuk <b>keenam indikator pada masing-masing stasiun</b>: garis hitam adalah data aktual sensor AWS, garis biru putus-putus adalah Open-Meteo, dan garis hijau adalah prediksi H+1 NusaKlim. '
+    'Gambar 2 s/d 5 menampilkan kurva harian untuk <b>keenam indikator pada masing-masing stasiun</b>: garis hitam adalah data aktual sensor AWS, garis biru putus-putus adalah Open-Meteo, dan garis hijau adalah prediksi NusaKlim. '
     'Judul tiap panel menyebutkan mesin yang lebih akurat pada indikator tersebut, dan legenda memuat nilai MAE (atau Accuracy untuk Arah Mata Angin).',
     style_body
 ))
@@ -395,7 +395,7 @@ for fig_i, sid in enumerate(STN_ORDER, start=2):
     story.append(PageBreak())
     if os.path.exists(fp):
         story.append(Image(fp, width=16.0*cm, height=18.46*cm))
-    story.append(Paragraph(f'Gambar {fig_i}: Kurva Perbandingan Data Aktual AWS vs Open-Meteo vs Prediksi H+1 NusaKlim untuk 6 Indikator &ndash; Stasiun {sid} {s["station_name"]} ({STN_PROVINCE[sid]}), {OM["evaluation_period"].replace(" to ", " s/d ")}.', style_caption))
+    story.append(Paragraph(f'Gambar {fig_i}: Kurva Perbandingan Data Aktual AWS vs Open-Meteo vs Prediksi NusaKlim untuk 6 Indikator &ndash; Stasiun {sid} {s["station_name"]} ({STN_PROVINCE[sid]}), {OM["evaluation_period"].replace(" to ", " s/d ")}.', style_caption))
     story.append(Paragraph(
         f'Pada Stasiun {sid} {s["station_name"]}, NusaKlim lebih akurat pada <b>{_join(nk_list) if nk_list else "-"}</b>; Open-Meteo lebih akurat pada <b>{_join(om_list) if om_list else "-"}</b>.',
         style_body
