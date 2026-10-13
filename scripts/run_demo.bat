@@ -1,7 +1,12 @@
 @echo off
+where uv >nul 2>nul
+if errorlevel 1 (
+    echo uv belum terpasang atau tidak ada di PATH.
+    exit /b 1
+)
 chcp 65001 >nul
 title Demo Performa Model NusaKlim
-cd /d "%~dp0"
+cd /d "%~dp0.."
 
 :menu
 cls
@@ -35,7 +40,7 @@ goto menu
 cls
 echo Menjalankan Demo Cepat Model Produksi...
 echo.
-".venv\Scripts\python.exe" demo_performa_model.py --cepat
+uv run python demo_performa_model.py --cepat
 echo.
 echo Selesai. Hasil juga disimpan di folder logs\demo\.
 pause
@@ -46,7 +51,7 @@ cls
 echo Menjalankan Evaluasi Langsung pada Data Uji 30 Hari Terakhir...
 echo (Proses membutuhkan waktu sekitar 20-30 detik)
 echo.
-".venv\Scripts\python.exe" demo_performa_model.py
+uv run python demo_performa_model.py
 echo.
 echo Selesai. Hasil juga disimpan di folder logs\demo\.
 pause
@@ -56,7 +61,7 @@ goto menu
 cls
 echo Menjalankan Evaluasi Langsung Indikator Suhu (H+1 dan H+7)...
 echo.
-".venv\Scripts\python.exe" demo_performa_model.py --indikator suhu --horizon 1,7
+uv run python demo_performa_model.py --indikator suhu --horizon 1,7
 echo.
 pause
 goto menu
@@ -65,7 +70,7 @@ goto menu
 cls
 echo Menjalankan Evaluasi Langsung Indikator Curah Hujan...
 echo.
-".venv\Scripts\python.exe" demo_performa_model.py --indikator hujan
+uv run python demo_performa_model.py --indikator hujan
 echo.
 pause
 goto menu
@@ -74,18 +79,16 @@ goto menu
 cls
 echo ======================================================================
 echo Memulai Server API NusaKlim...
-echo Swagger UI interaktif: http://localhost:8000/docs
 echo Tekan Ctrl+C di terminal ini jika ingin menghentikan server.
 echo ======================================================================
-start http://localhost:8000/docs
-".venv\Scripts\uvicorn.exe" api.main:app --host 127.0.0.1 --port 8000 --reload
+uv run python -m api.serve --open-browser
 pause
 goto menu
 
 :open_logs
 cls
 echo Membuka folder logs\demo...
-explorer "%~dp0logs\demo"
+explorer "%~dp0..\logs\demo"
 goto menu
 
 :end

@@ -12,6 +12,8 @@
 *.xls
 *.docx
 *.doc
+*.dump
+*.sql
 
 # 2. Python Virtual Environments & Packages
 .venv/
@@ -30,6 +32,8 @@ parts/
 sdist/
 var/
 wheels/
+data/nusaklim-aws-reduce.csv
+!data/device_nusaklim.csv
 *.egg-info/
 .installed.cfg
 *.egg
@@ -71,3 +75,6 @@ scratch/
 
 # Secrets lokal
 ngrok.yml
+.env
+.env.*
+!.env.example
