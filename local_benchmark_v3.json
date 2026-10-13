@@ -1,5 +1,565 @@
 {
   "stations": {
+    "200": {
+      "name": "Bekri",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 610,
+          "n_test": 28,
+          "local": {
+            "MAE": 1.0237,
+            "RMSE": 1.658,
+            "R2": -0.1119
+          },
+          "global": {
+            "MAE": 1.1296,
+            "RMSE": 1.7314,
+            "R2": -0.2125
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 610,
+          "n_test": 28,
+          "local": {
+            "MAE": 3.6213,
+            "RMSE": 5.2167,
+            "R2": -0.327
+          },
+          "global": {
+            "MAE": 3.3458,
+            "RMSE": 4.7929,
+            "R2": -0.1202
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 610,
+          "n_test": 28,
+          "local": {
+            "MAE": 1.074,
+            "RMSE": 2.9697,
+            "R2": 0.0
+          },
+          "global": {
+            "MAE": 1.5663,
+            "RMSE": 1.6379,
+            "R2": 0.0
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 619,
+          "n_test": 28,
+          "local": {
+            "MAE": 4887.3369,
+            "RMSE": 8024.8258,
+            "R2": -0.9655
+          },
+          "global": {
+            "MAE": 3939.1246,
+            "RMSE": 6312.1707,
+            "R2": -0.216
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 610,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.7218,
+            "RMSE": 0.8492,
+            "R2": 0.2287
+          },
+          "global": {
+            "MAE": 0.7767,
+            "RMSE": 0.8915,
+            "R2": 0.1499
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 610,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.2778,
+            "RMSE": 0.4566,
+            "R2": -0.0517
+          },
+          "global": {
+            "MAE": 0.2678,
+            "RMSE": 0.4462,
+            "R2": -0.0042
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 610,
+          "n_test": 28,
+          "local": {
+            "Accuracy": 0.8571,
+            "Precision_Macro": 0.2857,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.3077
+          },
+          "global": {
+            "Accuracy": 0.8214,
+            "Precision_Macro": 0.4044,
+            "Recall_Macro": 0.4167,
+            "F1_Macro": 0.4104
+          }
+        }
+      }
+    },
+    "201": {
+      "name": "Padang Ratu",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 544,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.7498,
+            "RMSE": 1.1777,
+            "R2": -0.0311
+          },
+          "global": {
+            "MAE": 0.8684,
+            "RMSE": 1.3124,
+            "R2": -0.2805
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 544,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.9481,
+            "RMSE": 3.9836,
+            "R2": -0.1352
+          },
+          "global": {
+            "MAE": 3.1044,
+            "RMSE": 3.96,
+            "R2": -0.1218
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 544,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.3122,
+            "RMSE": 2.7132,
+            "R2": -0.2076
+          },
+          "global": {
+            "MAE": 3.0388,
+            "RMSE": 4.0449,
+            "R2": -1.6838
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 547,
+          "n_test": 29,
+          "local": {
+            "MAE": 3300.3677,
+            "RMSE": 5388.4802,
+            "R2": -0.203
+          },
+          "global": {
+            "MAE": 3424.4535,
+            "RMSE": 5353.362,
+            "R2": -0.1874
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 544,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6758,
+            "RMSE": 0.8277,
+            "R2": 0.0459
+          },
+          "global": {
+            "MAE": 0.7134,
+            "RMSE": 0.8404,
+            "R2": 0.0162
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 544,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.3649,
+            "RMSE": 0.4516,
+            "R2": -0.1721
+          },
+          "global": {
+            "MAE": 0.3551,
+            "RMSE": 0.4586,
+            "R2": -0.2083
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 544,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.7586,
+            "Precision_Macro": 0.4074,
+            "Recall_Macro": 0.4583,
+            "F1_Macro": 0.4314
+          },
+          "global": {
+            "Accuracy": 0.6552,
+            "Precision_Macro": 0.3958,
+            "Recall_Macro": 0.3958,
+            "F1_Macro": 0.3958
+          }
+        }
+      }
+    },
+    "210": {
+      "name": "Sarang Giting",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 819,
+          "n_test": 28,
+          "local": {
+            "MAE": 1.1168,
+            "RMSE": 1.2605,
+            "R2": -0.5317
+          },
+          "global": {
+            "MAE": 0.9651,
+            "RMSE": 1.1106,
+            "R2": -0.189
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 819,
+          "n_test": 28,
+          "local": {
+            "MAE": 4.1693,
+            "RMSE": 4.8292,
+            "R2": -0.2078
+          },
+          "global": {
+            "MAE": 4.1213,
+            "RMSE": 4.7551,
+            "R2": -0.171
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 820,
+          "n_test": 28,
+          "local": {
+            "MAE": 19.9537,
+            "RMSE": 27.4583,
+            "R2": -0.4122
+          },
+          "global": {
+            "MAE": 15.9922,
+            "RMSE": 23.4228,
+            "R2": -0.0276
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 821,
+          "n_test": 28,
+          "local": {
+            "MAE": 5907.0773,
+            "RMSE": 7056.9191,
+            "R2": -0.0621
+          },
+          "global": {
+            "MAE": 6432.7952,
+            "RMSE": 7334.0867,
+            "R2": -0.1472
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 820,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.8413,
+            "RMSE": 1.0463,
+            "R2": 0.1114
+          },
+          "global": {
+            "MAE": 0.702,
+            "RMSE": 0.9099,
+            "R2": 0.328
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 819,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.1913,
+            "RMSE": 0.2411,
+            "R2": -0.0127
+          },
+          "global": {
+            "MAE": 0.2179,
+            "RMSE": 0.2825,
+            "R2": -0.3902
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 819,
+          "n_test": 28,
+          "local": {
+            "Accuracy": 0.5714,
+            "Precision_Macro": 0.5256,
+            "Recall_Macro": 0.3601,
+            "F1_Macro": 0.3214
+          },
+          "global": {
+            "Accuracy": 0.5714,
+            "Precision_Macro": 0.1905,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.2424
+          }
+        }
+      }
+    },
+    "211": {
+      "name": "PPKS Marihat",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 911,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.9201,
+            "RMSE": 1.1015,
+            "R2": 0.025
+          },
+          "global": {
+            "MAE": 0.9341,
+            "RMSE": 1.1551,
+            "R2": -0.0722
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 911,
+          "n_test": 28,
+          "local": {
+            "MAE": 4.0409,
+            "RMSE": 4.9423,
+            "R2": 0.0035
+          },
+          "global": {
+            "MAE": 4.2915,
+            "RMSE": 5.2247,
+            "R2": -0.1137
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 911,
+          "n_test": 28,
+          "local": {
+            "MAE": 6.9739,
+            "RMSE": 8.5168,
+            "R2": -0.1171
+          },
+          "global": {
+            "MAE": 6.9267,
+            "RMSE": 8.6607,
+            "R2": -0.1552
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 915,
+          "n_test": 28,
+          "local": {
+            "MAE": 6164.2949,
+            "RMSE": 7258.435,
+            "R2": -0.1062
+          },
+          "global": {
+            "MAE": 5967.5663,
+            "RMSE": 7111.9838,
+            "R2": -0.062
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 911,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.7843,
+            "RMSE": 0.9532,
+            "R2": 0.2662
+          },
+          "global": {
+            "MAE": 0.787,
+            "RMSE": 0.9643,
+            "R2": 0.2489
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 911,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.3296,
+            "RMSE": 0.451,
+            "R2": -0.2223
+          },
+          "global": {
+            "MAE": 0.326,
+            "RMSE": 0.433,
+            "R2": -0.1269
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 911,
+          "n_test": 28,
+          "local": {
+            "Accuracy": 0.7143,
+            "Precision_Macro": 0.3704,
+            "Recall_Macro": 0.4762,
+            "F1_Macro": 0.4167
+          },
+          "global": {
+            "Accuracy": 0.7143,
+            "Precision_Macro": 0.5467,
+            "Recall_Macro": 0.5238,
+            "F1_Macro": 0.513
+          }
+        }
+      }
+    },
+    "2114": {
+      "name": "Wilmar EMU CKP",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 670,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.438,
+            "RMSE": 0.5477,
+            "R2": -0.0331
+          },
+          "global": {
+            "MAE": 0.5507,
+            "RMSE": 0.6439,
+            "R2": -0.4281
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 671,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.7484,
+            "RMSE": 2.2013,
+            "R2": 0.1511
+          },
+          "global": {
+            "MAE": 1.7889,
+            "RMSE": 2.1698,
+            "R2": 0.1752
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 671,
+          "n_test": 29,
+          "local": {
+            "MAE": 9.6302,
+            "RMSE": 10.9268,
+            "R2": -502.0357
+          },
+          "global": {
+            "MAE": 2.2186,
+            "RMSE": 2.6227,
+            "R2": -27.9816
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 671,
+          "n_test": 29,
+          "local": {
+            "MAE": 4121.3048,
+            "RMSE": 4973.1386,
+            "R2": -0.3024
+          },
+          "global": {
+            "MAE": 3640.8448,
+            "RMSE": 4543.2859,
+            "R2": -0.0869
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 668,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5403,
+            "RMSE": 0.6698,
+            "R2": 0.3221
+          },
+          "global": {
+            "MAE": 0.6445,
+            "RMSE": 0.7293,
+            "R2": 0.1962
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 671,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2686,
+            "RMSE": 0.3419,
+            "R2": -0.4523
+          },
+          "global": {
+            "MAE": 0.354,
+            "RMSE": 0.4437,
+            "R2": -1.4454
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 671,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.7931,
+            "Precision_Macro": 0.542,
+            "Recall_Macro": 0.4648,
+            "F1_Macro": 0.485
+          },
+          "global": {
+            "Accuracy": 0.7241,
+            "Precision_Macro": 0.6778,
+            "Recall_Macro": 0.6778,
+            "F1_Macro": 0.6778
+          }
+        }
+      }
+    },
     "2116": {
       "name": "Sei Dadap",
       "indicators": {
@@ -224,6 +784,342 @@
         }
       }
     },
+    "2118": {
+      "name": "Rantau Prapat",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 724,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.775,
+            "RMSE": 0.9375,
+            "R2": -0.0345
+          },
+          "global": {
+            "MAE": 0.7306,
+            "RMSE": 0.8668,
+            "R2": 0.1157
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 724,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.9153,
+            "RMSE": 3.9127,
+            "R2": 0.1027
+          },
+          "global": {
+            "MAE": 2.9514,
+            "RMSE": 3.9364,
+            "R2": 0.0919
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 725,
+          "n_test": 29,
+          "local": {
+            "MAE": 9.2075,
+            "RMSE": 11.2579,
+            "R2": -0.493
+          },
+          "global": {
+            "MAE": 5.8077,
+            "RMSE": 9.4705,
+            "R2": -0.0566
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 725,
+          "n_test": 29,
+          "local": {
+            "MAE": 4056.2335,
+            "RMSE": 5208.5742,
+            "R2": -0.0396
+          },
+          "global": {
+            "MAE": 4061.9383,
+            "RMSE": 5128.5685,
+            "R2": -0.0079
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 725,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5502,
+            "RMSE": 0.7068,
+            "R2": 0.496
+          },
+          "global": {
+            "MAE": 0.68,
+            "RMSE": 0.8599,
+            "R2": 0.254
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 724,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1379,
+            "RMSE": 0.1802,
+            "R2": -0.3614
+          },
+          "global": {
+            "MAE": 0.1422,
+            "RMSE": 0.1806,
+            "R2": -0.3685
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 724,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.8276,
+            "Precision_Macro": 0.4138,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4528
+          },
+          "global": {
+            "Accuracy": 0.8276,
+            "Precision_Macro": 0.4138,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4528
+          }
+        }
+      }
+    },
+    "2120": {
+      "name": "Sei Kebara",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.433,
+            "RMSE": 0.5144,
+            "R2": 0.2325
+          },
+          "global": {
+            "MAE": 0.4456,
+            "RMSE": 0.5866,
+            "R2": 0.0019
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.113,
+            "RMSE": 3.2851,
+            "R2": 0.1472
+          },
+          "global": {
+            "MAE": 2.273,
+            "RMSE": 3.5934,
+            "R2": -0.0203
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.047,
+            "RMSE": 0.1199,
+            "R2": 0.0
+          },
+          "global": {
+            "MAE": 2.2614,
+            "RMSE": 2.4601,
+            "R2": 0.0
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "MAE": 4678.1343,
+            "RMSE": 5471.2504,
+            "R2": -0.1534
+          },
+          "global": {
+            "MAE": 4965.3337,
+            "RMSE": 5604.8018,
+            "R2": -0.2104
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5839,
+            "RMSE": 0.7567,
+            "R2": 0.3615
+          },
+          "global": {
+            "MAE": 0.6661,
+            "RMSE": 0.8443,
+            "R2": 0.2051
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.3074,
+            "RMSE": 0.4925,
+            "R2": -0.1278
+          },
+          "global": {
+            "MAE": 0.3155,
+            "RMSE": 0.49,
+            "R2": -0.1165
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.5517,
+            "Precision_Macro": 0.5833,
+            "Recall_Macro": 0.5721,
+            "F1_Macro": 0.543
+          },
+          "global": {
+            "Accuracy": 0.4138,
+            "Precision_Macro": 0.2143,
+            "Recall_Macro": 0.4615,
+            "F1_Macro": 0.2927
+          }
+        }
+      }
+    },
+    "2121": {
+      "name": "Ambalutu",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 736,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.7008,
+            "RMSE": 0.8503,
+            "R2": -0.0814
+          },
+          "global": {
+            "MAE": 0.7464,
+            "RMSE": 0.8838,
+            "R2": -0.1684
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 737,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.431,
+            "RMSE": 2.8077,
+            "R2": -0.1088
+          },
+          "global": {
+            "MAE": 2.421,
+            "RMSE": 2.795,
+            "R2": -0.0988
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 737,
+          "n_test": 29,
+          "local": {
+            "MAE": 9.6599,
+            "RMSE": 14.1989,
+            "R2": -0.1039
+          },
+          "global": {
+            "MAE": 8.8979,
+            "RMSE": 13.6494,
+            "R2": -0.0201
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 737,
+          "n_test": 29,
+          "local": {
+            "MAE": 6776.107,
+            "RMSE": 8720.4199,
+            "R2": -0.4874
+          },
+          "global": {
+            "MAE": 6035.0668,
+            "RMSE": 7528.7613,
+            "R2": -0.1087
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 736,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6556,
+            "RMSE": 0.834,
+            "R2": 0.3567
+          },
+          "global": {
+            "MAE": 0.7185,
+            "RMSE": 0.8949,
+            "R2": 0.2594
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 737,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2215,
+            "RMSE": 0.2988,
+            "R2": -0.3332
+          },
+          "global": {
+            "MAE": 0.2,
+            "RMSE": 0.2765,
+            "R2": -0.1413
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 737,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.6207,
+            "Precision_Macro": 0.3214,
+            "Recall_Macro": 0.4737,
+            "F1_Macro": 0.383
+          },
+          "global": {
+            "Accuracy": 0.6207,
+            "Precision_Macro": 0.5333,
+            "Recall_Macro": 0.5211,
+            "F1_Macro": 0.5054
+          }
+        }
+      }
+    },
     "2123": {
       "name": "Bandar Betsy",
       "indicators": {
@@ -332,6 +1228,342 @@
             "Precision_Macro": 0.713,
             "Recall_Macro": 0.6474,
             "F1_Macro": 0.6717
+          }
+        }
+      }
+    },
+    "2125": {
+      "name": "Sei Putih",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 794,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.523,
+            "RMSE": 0.6414,
+            "R2": -0.0178
+          },
+          "global": {
+            "MAE": 0.5003,
+            "RMSE": 0.6543,
+            "R2": -0.0592
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 794,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.452,
+            "RMSE": 2.9148,
+            "R2": -0.0061
+          },
+          "global": {
+            "MAE": 2.7322,
+            "RMSE": 3.1104,
+            "R2": -0.1457
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 794,
+          "n_test": 29,
+          "local": {
+            "MAE": 10.1656,
+            "RMSE": 16.3441,
+            "R2": -0.0105
+          },
+          "global": {
+            "MAE": 9.9368,
+            "RMSE": 15.9495,
+            "R2": 0.0377
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 794,
+          "n_test": 29,
+          "local": {
+            "MAE": 4331.3625,
+            "RMSE": 5504.3556,
+            "R2": -0.0481
+          },
+          "global": {
+            "MAE": 4457.3176,
+            "RMSE": 5531.6616,
+            "R2": -0.0585
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 794,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6628,
+            "RMSE": 0.7908,
+            "R2": 0.451
+          },
+          "global": {
+            "MAE": 0.7369,
+            "RMSE": 0.8873,
+            "R2": 0.3088
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 794,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2198,
+            "RMSE": 0.2537,
+            "R2": 0.0193
+          },
+          "global": {
+            "MAE": 0.2394,
+            "RMSE": 0.2828,
+            "R2": -0.2185
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 794,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.5517,
+            "Precision_Macro": 0.471,
+            "Recall_Macro": 0.4798,
+            "F1_Macro": 0.4591
+          },
+          "global": {
+            "Accuracy": 0.5862,
+            "Precision_Macro": 0.5472,
+            "Recall_Macro": 0.5429,
+            "F1_Macro": 0.5421
+          }
+        }
+      }
+    },
+    "2126": {
+      "name": "Merbau Selatan",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 487,
+          "n_test": 25,
+          "local": {
+            "MAE": 0.7884,
+            "RMSE": 1.044,
+            "R2": -0.0613
+          },
+          "global": {
+            "MAE": 0.7269,
+            "RMSE": 1.0933,
+            "R2": -0.164
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 489,
+          "n_test": 25,
+          "local": {
+            "MAE": 3.3414,
+            "RMSE": 4.5544,
+            "R2": -0.3125
+          },
+          "global": {
+            "MAE": 3.0646,
+            "RMSE": 4.0988,
+            "R2": -0.063
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 489,
+          "n_test": 25,
+          "local": {
+            "MAE": 8.8168,
+            "RMSE": 12.6221,
+            "R2": -0.012
+          },
+          "global": {
+            "MAE": 7.9433,
+            "RMSE": 12.7791,
+            "R2": -0.0373
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 489,
+          "n_test": 25,
+          "local": {
+            "MAE": 5123.138,
+            "RMSE": 6714.8244,
+            "R2": -0.0844
+          },
+          "global": {
+            "MAE": 4549.1092,
+            "RMSE": 6781.2974,
+            "R2": -0.106
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 487,
+          "n_test": 25,
+          "local": {
+            "MAE": 0.6873,
+            "RMSE": 0.7986,
+            "R2": -0.0406
+          },
+          "global": {
+            "MAE": 0.7032,
+            "RMSE": 0.8919,
+            "R2": -0.298
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 489,
+          "n_test": 25,
+          "local": {
+            "MAE": 0.2179,
+            "RMSE": 0.2779,
+            "R2": 0.0223
+          },
+          "global": {
+            "MAE": 0.2449,
+            "RMSE": 0.308,
+            "R2": -0.2011
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 489,
+          "n_test": 25,
+          "local": {
+            "Accuracy": 0.44,
+            "Precision_Macro": 0.1528,
+            "Recall_Macro": 0.3056,
+            "F1_Macro": 0.2037
+          },
+          "global": {
+            "Accuracy": 0.52,
+            "Precision_Macro": 0.3889,
+            "Recall_Macro": 0.3611,
+            "F1_Macro": 0.3046
+          }
+        }
+      }
+    },
+    "2127": {
+      "name": "Tanah Raja",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.0405,
+            "RMSE": 1.4763,
+            "R2": 0.04
+          },
+          "global": {
+            "MAE": 1.0869,
+            "RMSE": 1.4596,
+            "R2": 0.0617
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.6035,
+            "RMSE": 3.5769,
+            "R2": -0.0027
+          },
+          "global": {
+            "MAE": 2.8653,
+            "RMSE": 3.5913,
+            "R2": -0.0107
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "MAE": 8.4218,
+            "RMSE": 12.8838,
+            "R2": -3.4081
+          },
+          "global": {
+            "MAE": 4.8709,
+            "RMSE": 7.0637,
+            "R2": -0.325
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "MAE": 10278.0779,
+            "RMSE": 13050.4459,
+            "R2": -0.1434
+          },
+          "global": {
+            "MAE": 10559.2295,
+            "RMSE": 12818.7681,
+            "R2": -0.1031
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.8464,
+            "RMSE": 1.0852,
+            "R2": 0.4114
+          },
+          "global": {
+            "MAE": 0.9005,
+            "RMSE": 1.1401,
+            "R2": 0.3503
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5001,
+            "RMSE": 0.7184,
+            "R2": -0.0863
+          },
+          "global": {
+            "MAE": 0.4566,
+            "RMSE": 0.6654,
+            "R2": 0.0681
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.3103,
+            "Precision_Macro": 0.1705,
+            "Recall_Macro": 0.1593,
+            "F1_Macro": 0.1571
+          },
+          "global": {
+            "Accuracy": 0.5517,
+            "Precision_Macro": 0.1538,
+            "Recall_Macro": 0.2353,
+            "F1_Macro": 0.186
           }
         }
       }
@@ -560,6 +1792,1462 @@
         }
       }
     },
+    "2132": {
+      "name": "Wilmar Murini Sam Sam",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 626,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5899,
+            "RMSE": 0.7059,
+            "R2": -0.033
+          },
+          "global": {
+            "MAE": 0.6001,
+            "RMSE": 0.6926,
+            "R2": 0.0056
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 626,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.8351,
+            "RMSE": 2.1191,
+            "R2": 0.2868
+          },
+          "global": {
+            "MAE": 1.6409,
+            "RMSE": 2.1832,
+            "R2": 0.243
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 626,
+          "n_test": 29,
+          "local": {
+            "MAE": 4.6911,
+            "RMSE": 7.9849,
+            "R2": -0.0267
+          },
+          "global": {
+            "MAE": 5.7897,
+            "RMSE": 8.0595,
+            "R2": -0.0459
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 626,
+          "n_test": 29,
+          "local": {
+            "MAE": 2822.0043,
+            "RMSE": 3756.5438,
+            "R2": -0.0721
+          },
+          "global": {
+            "MAE": 2914.7571,
+            "RMSE": 3693.3708,
+            "R2": -0.0363
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 626,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6518,
+            "RMSE": 0.8212,
+            "R2": 0.2259
+          },
+          "global": {
+            "MAE": 0.6882,
+            "RMSE": 0.8805,
+            "R2": 0.1099
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 626,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1518,
+            "RMSE": 0.2067,
+            "R2": -0.02
+          },
+          "global": {
+            "MAE": 0.1546,
+            "RMSE": 0.2209,
+            "R2": -0.1646
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 626,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.5517,
+            "Precision_Macro": 0.7593,
+            "Recall_Macro": 0.5667,
+            "F1_Macro": 0.4591
+          },
+          "global": {
+            "Accuracy": 0.5517,
+            "Precision_Macro": 0.5744,
+            "Recall_Macro": 0.5595,
+            "F1_Macro": 0.5317
+          }
+        }
+      }
+    },
+    "2133": {
+      "name": "Dolok Ilir",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6028,
+            "RMSE": 0.7204,
+            "R2": -0.1947
+          },
+          "global": {
+            "MAE": 0.5658,
+            "RMSE": 0.7124,
+            "R2": -0.1684
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.6603,
+            "RMSE": 3.2808,
+            "R2": -0.2404
+          },
+          "global": {
+            "MAE": 2.5579,
+            "RMSE": 3.1182,
+            "R2": -0.1205
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "MAE": 10.0345,
+            "RMSE": 14.772,
+            "R2": -0.2653
+          },
+          "global": {
+            "MAE": 9.0815,
+            "RMSE": 13.3016,
+            "R2": -0.0259
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "MAE": 5537.6101,
+            "RMSE": 6840.2997,
+            "R2": -0.2064
+          },
+          "global": {
+            "MAE": 5348.5825,
+            "RMSE": 6465.4795,
+            "R2": -0.0778
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6869,
+            "RMSE": 0.8069,
+            "R2": 0.4081
+          },
+          "global": {
+            "MAE": 0.7246,
+            "RMSE": 0.8903,
+            "R2": 0.2794
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2535,
+            "RMSE": 0.3283,
+            "R2": 0.082
+          },
+          "global": {
+            "MAE": 0.2586,
+            "RMSE": 0.3368,
+            "R2": 0.0337
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 731,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.7241,
+            "Precision_Macro": 0.2593,
+            "Recall_Macro": 0.3043,
+            "F1_Macro": 0.28
+          },
+          "global": {
+            "Accuracy": 0.7931,
+            "Precision_Macro": 0.4383,
+            "Recall_Macro": 0.3855,
+            "F1_Macro": 0.3886
+          }
+        }
+      }
+    },
+    "2134": {
+      "name": "Toba Sari",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 706,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.7091,
+            "RMSE": 0.8232,
+            "R2": 0.3789
+          },
+          "global": {
+            "MAE": 0.8922,
+            "RMSE": 0.9972,
+            "R2": 0.0886
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 706,
+          "n_test": 29,
+          "local": {
+            "MAE": 6.012,
+            "RMSE": 7.4705,
+            "R2": 0.1788
+          },
+          "global": {
+            "MAE": 6.9788,
+            "RMSE": 8.6719,
+            "R2": -0.1065
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 706,
+          "n_test": 29,
+          "local": {
+            "MAE": 10.5789,
+            "RMSE": 32.6143,
+            "R2": -0.0987
+          },
+          "global": {
+            "MAE": 8.9724,
+            "RMSE": 32.0201,
+            "R2": -0.0591
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 706,
+          "n_test": 29,
+          "local": {
+            "MAE": 5031.4067,
+            "RMSE": 6240.4004,
+            "R2": 0.0723
+          },
+          "global": {
+            "MAE": 5146.9389,
+            "RMSE": 6245.7998,
+            "R2": 0.0707
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 706,
+          "n_test": 29,
+          "local": {
+            "MAE": 12.9404,
+            "RMSE": 17.4332,
+            "R2": 0.0094
+          },
+          "global": {
+            "MAE": 13.1511,
+            "RMSE": 19.0155,
+            "R2": -0.1786
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 706,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.4383,
+            "RMSE": 4.4193,
+            "R2": -0.0804
+          },
+          "global": {
+            "MAE": 3.4732,
+            "RMSE": 4.7431,
+            "R2": -0.2445
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 706,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.5517,
+            "Precision_Macro": 0.3278,
+            "Recall_Macro": 0.3583,
+            "F1_Macro": 0.3222
+          },
+          "global": {
+            "Accuracy": 0.4483,
+            "Precision_Macro": 0.3,
+            "Recall_Macro": 0.2958,
+            "F1_Macro": 0.2819
+          }
+        }
+      }
+    },
+    "2135": {
+      "name": "Kedaton",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 670,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.4281,
+            "RMSE": 0.5886,
+            "R2": -0.2313
+          },
+          "global": {
+            "MAE": 0.4682,
+            "RMSE": 0.5781,
+            "R2": -0.188
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 670,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.8099,
+            "RMSE": 2.2652,
+            "R2": -0.352
+          },
+          "global": {
+            "MAE": 1.9279,
+            "RMSE": 2.2048,
+            "R2": -0.2808
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 670,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.5823,
+            "RMSE": 4.6878,
+            "R2": -1.2007
+          },
+          "global": {
+            "MAE": 3.7424,
+            "RMSE": 4.667,
+            "R2": -1.1811
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 670,
+          "n_test": 29,
+          "local": {
+            "MAE": 4366.2951,
+            "RMSE": 5059.9178,
+            "R2": -0.1849
+          },
+          "global": {
+            "MAE": 4226.8172,
+            "RMSE": 4897.1947,
+            "R2": -0.1099
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 670,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6325,
+            "RMSE": 0.7489,
+            "R2": 0.2627
+          },
+          "global": {
+            "MAE": 0.694,
+            "RMSE": 0.811,
+            "R2": 0.1353
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 670,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.267,
+            "RMSE": 0.3523,
+            "R2": -0.4069
+          },
+          "global": {
+            "MAE": 0.2643,
+            "RMSE": 0.3541,
+            "R2": -0.4216
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 670,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.4483,
+            "Precision_Macro": 0.2241,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.3095
+          },
+          "global": {
+            "Accuracy": 0.5517,
+            "Precision_Macro": 0.55,
+            "Recall_Macro": 0.5505,
+            "F1_Macro": 0.5496
+          }
+        }
+      }
+    },
+    "2136": {
+      "name": "Gunung Bayu",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 711,
+          "n_test": 26,
+          "local": {
+            "MAE": 0.941,
+            "RMSE": 1.2092,
+            "R2": -0.0366
+          },
+          "global": {
+            "MAE": 1.2048,
+            "RMSE": 1.3964,
+            "R2": -0.3823
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 711,
+          "n_test": 26,
+          "local": {
+            "MAE": 3.8841,
+            "RMSE": 4.7412,
+            "R2": -0.2053
+          },
+          "global": {
+            "MAE": 4.5826,
+            "RMSE": 5.9459,
+            "R2": -0.8957
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 712,
+          "n_test": 26,
+          "local": {
+            "MAE": 7.4023,
+            "RMSE": 9.0434,
+            "R2": -0.4693
+          },
+          "global": {
+            "MAE": 7.4841,
+            "RMSE": 8.8074,
+            "R2": -0.3936
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 712,
+          "n_test": 26,
+          "local": {
+            "MAE": 5475.4374,
+            "RMSE": 6658.5598,
+            "R2": 0.0703
+          },
+          "global": {
+            "MAE": 6919.9708,
+            "RMSE": 7720.3834,
+            "R2": -0.2499
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 712,
+          "n_test": 26,
+          "local": {
+            "MAE": 0.6248,
+            "RMSE": 0.7974,
+            "R2": 0.5125
+          },
+          "global": {
+            "MAE": 0.7317,
+            "RMSE": 0.9497,
+            "R2": 0.3086
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 711,
+          "n_test": 26,
+          "local": {
+            "MAE": 0.1496,
+            "RMSE": 0.1895,
+            "R2": -0.1919
+          },
+          "global": {
+            "MAE": 0.1795,
+            "RMSE": 0.2064,
+            "R2": -0.4147
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 711,
+          "n_test": 26,
+          "local": {
+            "Accuracy": 0.8846,
+            "Precision_Macro": 0.4423,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4694
+          },
+          "global": {
+            "Accuracy": 0.7692,
+            "Precision_Macro": 0.4348,
+            "Recall_Macro": 0.4348,
+            "F1_Macro": 0.4348
+          }
+        }
+      }
+    },
+    "2137": {
+      "name": "Panai Jaya",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 704,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.9394,
+            "RMSE": 1.1691,
+            "R2": -0.1695
+          },
+          "global": {
+            "MAE": 1.0682,
+            "RMSE": 1.3936,
+            "R2": -0.6617
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 705,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.1846,
+            "RMSE": 4.3944,
+            "R2": -0.4247
+          },
+          "global": {
+            "MAE": 4.3279,
+            "RMSE": 5.3008,
+            "R2": -1.0731
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 705,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.6241,
+            "RMSE": 3.9941,
+            "R2": -4.7319
+          },
+          "global": {
+            "MAE": 3.0548,
+            "RMSE": 3.71,
+            "R2": -3.9454
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 705,
+          "n_test": 29,
+          "local": {
+            "MAE": 5791.5501,
+            "RMSE": 6679.4222,
+            "R2": 0.0625
+          },
+          "global": {
+            "MAE": 5535.4808,
+            "RMSE": 6594.4431,
+            "R2": 0.0862
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 704,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.8507,
+            "RMSE": 1.0895,
+            "R2": -0.0385
+          },
+          "global": {
+            "MAE": 0.7655,
+            "RMSE": 0.9499,
+            "R2": 0.2107
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 705,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2369,
+            "RMSE": 0.2948,
+            "R2": -0.2147
+          },
+          "global": {
+            "MAE": 0.2153,
+            "RMSE": 0.2833,
+            "R2": -0.1213
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 705,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.7931,
+            "Precision_Macro": 0.7372,
+            "Recall_Macro": 0.6201,
+            "F1_Macro": 0.6375
+          },
+          "global": {
+            "Accuracy": 0.5172,
+            "Precision_Macro": 0.3409,
+            "Recall_Macro": 0.3409,
+            "F1_Macro": 0.3409
+          }
+        }
+      }
+    },
+    "2138": {
+      "name": "Pasir Mandoge",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 725,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5851,
+            "RMSE": 0.6762,
+            "R2": 0.0842
+          },
+          "global": {
+            "MAE": 0.5985,
+            "RMSE": 0.761,
+            "R2": -0.1597
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 725,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.144,
+            "RMSE": 2.5145,
+            "R2": -0.0245
+          },
+          "global": {
+            "MAE": 2.2149,
+            "RMSE": 2.6761,
+            "R2": -0.1605
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 725,
+          "n_test": 29,
+          "local": {
+            "MAE": 9.8474,
+            "RMSE": 18.1158,
+            "R2": -0.0175
+          },
+          "global": {
+            "MAE": 10.8895,
+            "RMSE": 18.633,
+            "R2": -0.0765
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 725,
+          "n_test": 29,
+          "local": {
+            "MAE": 3651.5806,
+            "RMSE": 4290.4658,
+            "R2": -0.0674
+          },
+          "global": {
+            "MAE": 3583.2097,
+            "RMSE": 4479.9132,
+            "R2": -0.1637
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 725,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5339,
+            "RMSE": 0.6791,
+            "R2": 0.5581
+          },
+          "global": {
+            "MAE": 0.6957,
+            "RMSE": 0.865,
+            "R2": 0.2831
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 725,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1021,
+            "RMSE": 0.1305,
+            "R2": -0.0667
+          },
+          "global": {
+            "MAE": 0.1501,
+            "RMSE": 0.1682,
+            "R2": -0.7732
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 725,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.6897,
+            "Precision_Macro": 0.2469,
+            "Recall_Macro": 0.303,
+            "F1_Macro": 0.2721
+          },
+          "global": {
+            "Accuracy": 0.7586,
+            "Precision_Macro": 0.2529,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.2876
+          }
+        }
+      }
+    },
+    "2139": {
+      "name": "Mayang",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 728,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.8012,
+            "RMSE": 0.9808,
+            "R2": -0.2778
+          },
+          "global": {
+            "MAE": 0.7368,
+            "RMSE": 0.9445,
+            "R2": -0.1851
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 728,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.7453,
+            "RMSE": 3.557,
+            "R2": -0.1975
+          },
+          "global": {
+            "MAE": 2.8427,
+            "RMSE": 3.4077,
+            "R2": -0.099
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 728,
+          "n_test": 29,
+          "local": {
+            "MAE": 15.8598,
+            "RMSE": 22.1956,
+            "R2": -1.0876
+          },
+          "global": {
+            "MAE": 11.6295,
+            "RMSE": 16.6092,
+            "R2": -0.169
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 728,
+          "n_test": 29,
+          "local": {
+            "MAE": 6486.9353,
+            "RMSE": 8558.3368,
+            "R2": -0.2064
+          },
+          "global": {
+            "MAE": 5990.8512,
+            "RMSE": 7490.8109,
+            "R2": 0.0758
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 728,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6558,
+            "RMSE": 0.8046,
+            "R2": 0.4281
+          },
+          "global": {
+            "MAE": 0.7624,
+            "RMSE": 0.92,
+            "R2": 0.2524
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 728,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2457,
+            "RMSE": 0.3053,
+            "R2": -0.6478
+          },
+          "global": {
+            "MAE": 0.2418,
+            "RMSE": 0.2875,
+            "R2": -0.4613
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 728,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.4138,
+            "Precision_Macro": 0.215,
+            "Recall_Macro": 0.3487,
+            "F1_Macro": 0.2643
+          },
+          "global": {
+            "Accuracy": 0.4483,
+            "Precision_Macro": 0.1494,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.2063
+          }
+        }
+      }
+    },
+    "214": {
+      "name": "Sei Daun",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 1038,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.6578,
+            "RMSE": 0.8283,
+            "R2": 0.1014
+          },
+          "global": {
+            "MAE": 0.7257,
+            "RMSE": 0.9335,
+            "R2": -0.1413
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 1038,
+          "n_test": 28,
+          "local": {
+            "MAE": 3.2789,
+            "RMSE": 4.5331,
+            "R2": 0.2726
+          },
+          "global": {
+            "MAE": 3.5475,
+            "RMSE": 5.2129,
+            "R2": 0.0381
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 1038,
+          "n_test": 28,
+          "local": {
+            "MAE": 11.1409,
+            "RMSE": 15.37,
+            "R2": -0.2547
+          },
+          "global": {
+            "MAE": 8.9837,
+            "RMSE": 14.1899,
+            "R2": -0.0694
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 1041,
+          "n_test": 28,
+          "local": {
+            "MAE": 4638.1771,
+            "RMSE": 5743.6385,
+            "R2": -0.4154
+          },
+          "global": {
+            "MAE": 5185.7024,
+            "RMSE": 6025.8833,
+            "R2": -0.558
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 1038,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.7164,
+            "RMSE": 0.8414,
+            "R2": 0.3597
+          },
+          "global": {
+            "MAE": 0.7605,
+            "RMSE": 0.9426,
+            "R2": 0.1964
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 1038,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.3084,
+            "RMSE": 0.3653,
+            "R2": -0.3266
+          },
+          "global": {
+            "MAE": 0.2971,
+            "RMSE": 0.3559,
+            "R2": -0.2588
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 1038,
+          "n_test": 28,
+          "local": {
+            "Accuracy": 0.4643,
+            "Precision_Macro": 0.4872,
+            "Recall_Macro": 0.3632,
+            "F1_Macro": 0.3004
+          },
+          "global": {
+            "Accuracy": 0.3929,
+            "Precision_Macro": 0.2778,
+            "Recall_Macro": 0.3276,
+            "F1_Macro": 0.2987
+          }
+        }
+      }
+    },
+    "2140": {
+      "name": "Dolok Sinumbah",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 393,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.0697,
+            "RMSE": 1.3551,
+            "R2": -0.6871
+          },
+          "global": {
+            "MAE": 0.9541,
+            "RMSE": 1.1228,
+            "R2": -0.1582
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 394,
+          "n_test": 29,
+          "local": {
+            "MAE": 5.3694,
+            "RMSE": 6.9761,
+            "R2": -0.1772
+          },
+          "global": {
+            "MAE": 5.9783,
+            "RMSE": 8.004,
+            "R2": -0.5496
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 394,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.3237,
+            "RMSE": 1.0195,
+            "R2": 0.0
+          },
+          "global": {
+            "MAE": 1.566,
+            "RMSE": 8.4313,
+            "R2": 0.0
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 394,
+          "n_test": 29,
+          "local": {
+            "MAE": 6581.0819,
+            "RMSE": 8295.7238,
+            "R2": -0.2185
+          },
+          "global": {
+            "MAE": 6976.6969,
+            "RMSE": 8236.8293,
+            "R2": -0.2012
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 394,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.058,
+            "RMSE": 1.2653,
+            "R2": -0.1121
+          },
+          "global": {
+            "MAE": 0.8239,
+            "RMSE": 1.0748,
+            "R2": 0.1975
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 393,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.9876,
+            "RMSE": 3.8591,
+            "R2": 0.0165
+          },
+          "global": {
+            "MAE": 3.0503,
+            "RMSE": 4.1853,
+            "R2": -0.1568
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 393,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.7931,
+            "Precision_Macro": 0.3067,
+            "Recall_Macro": 0.284,
+            "F1_Macro": 0.2949
+          },
+          "global": {
+            "Accuracy": 0.8966,
+            "Precision_Macro": 0.3095,
+            "Recall_Macro": 0.321,
+            "F1_Macro": 0.3152
+          }
+        }
+      }
+    },
+    "2142": {
+      "name": "Air Batu",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 684,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6689,
+            "RMSE": 0.8639,
+            "R2": 0.0235
+          },
+          "global": {
+            "MAE": 0.7385,
+            "RMSE": 0.9026,
+            "R2": -0.066
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 684,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.9513,
+            "RMSE": 3.745,
+            "R2": -0.1445
+          },
+          "global": {
+            "MAE": 3.0056,
+            "RMSE": 3.7369,
+            "R2": -0.1395
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 683,
+          "n_test": 29,
+          "local": {
+            "MAE": 54.5859,
+            "RMSE": 78.7076,
+            "R2": 0.0277
+          },
+          "global": {
+            "MAE": 46.4498,
+            "RMSE": 86.0425,
+            "R2": -0.1619
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 684,
+          "n_test": 29,
+          "local": {
+            "MAE": 6433.88,
+            "RMSE": 7419.6795,
+            "R2": -0.1763
+          },
+          "global": {
+            "MAE": 6251.9219,
+            "RMSE": 7266.2737,
+            "R2": -0.1282
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 684,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6722,
+            "RMSE": 0.8208,
+            "R2": 0.3863
+          },
+          "global": {
+            "MAE": 0.7188,
+            "RMSE": 0.9143,
+            "R2": 0.2386
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 684,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1455,
+            "RMSE": 0.1725,
+            "R2": -0.309
+          },
+          "global": {
+            "MAE": 0.166,
+            "RMSE": 0.1878,
+            "R2": -0.5499
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 684,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.7241,
+            "Precision_Macro": 0.3611,
+            "Recall_Macro": 0.4444,
+            "F1_Macro": 0.3889
+          },
+          "global": {
+            "Accuracy": 0.8276,
+            "Precision_Macro": 0.4506,
+            "Recall_Macro": 0.4861,
+            "F1_Macro": 0.4673
+          }
+        }
+      }
+    },
+    "2143": {
+      "name": "Balimbingan",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 729,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5835,
+            "RMSE": 0.6859,
+            "R2": 0.0796
+          },
+          "global": {
+            "MAE": 0.5838,
+            "RMSE": 0.7548,
+            "R2": -0.1145
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 729,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.5972,
+            "RMSE": 3.043,
+            "R2": 0.0724
+          },
+          "global": {
+            "MAE": 2.7578,
+            "RMSE": 3.2687,
+            "R2": -0.0704
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 729,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.7767,
+            "RMSE": 4.7476,
+            "R2": -0.0945
+          },
+          "global": {
+            "MAE": 4.1434,
+            "RMSE": 5.0668,
+            "R2": -0.2466
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 729,
+          "n_test": 29,
+          "local": {
+            "MAE": 4316.529,
+            "RMSE": 5451.2275,
+            "R2": -0.0194
+          },
+          "global": {
+            "MAE": 4518.5623,
+            "RMSE": 5597.5005,
+            "R2": -0.0749
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 729,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6058,
+            "RMSE": 0.7629,
+            "R2": 0.4118
+          },
+          "global": {
+            "MAE": 0.6931,
+            "RMSE": 0.8605,
+            "R2": 0.2517
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 729,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2701,
+            "RMSE": 0.3255,
+            "R2": -0.0355
+          },
+          "global": {
+            "MAE": 0.2783,
+            "RMSE": 0.3436,
+            "R2": -0.1537
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 729,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.7241,
+            "Precision_Macro": 0.375,
+            "Recall_Macro": 0.4773,
+            "F1_Macro": 0.42
+          },
+          "global": {
+            "Accuracy": 0.7586,
+            "Precision_Macro": 0.3793,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4314
+          }
+        }
+      }
+    },
+    "2144": {
+      "name": "Pagar Alam",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 668,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.4943,
+            "RMSE": 0.5931,
+            "R2": 0.1122
+          },
+          "global": {
+            "MAE": 0.5027,
+            "RMSE": 0.6143,
+            "R2": 0.0477
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 668,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.1772,
+            "RMSE": 4.0401,
+            "R2": 0.3575
+          },
+          "global": {
+            "MAE": 3.256,
+            "RMSE": 4.403,
+            "R2": 0.2369
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 668,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.7683,
+            "RMSE": 4.7172,
+            "R2": -1.4023
+          },
+          "global": {
+            "MAE": 3.6892,
+            "RMSE": 4.0324,
+            "R2": -0.7555
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 668,
+          "n_test": 29,
+          "local": {
+            "MAE": 4832.0912,
+            "RMSE": 6129.2892,
+            "R2": 0.2961
+          },
+          "global": {
+            "MAE": 4660.7772,
+            "RMSE": 6010.3938,
+            "R2": 0.3231
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 668,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5663,
+            "RMSE": 0.6774,
+            "R2": 0.3185
+          },
+          "global": {
+            "MAE": 0.6009,
+            "RMSE": 0.7573,
+            "R2": 0.1482
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 668,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2623,
+            "RMSE": 0.3255,
+            "R2": -0.2242
+          },
+          "global": {
+            "MAE": 0.2322,
+            "RMSE": 0.2958,
+            "R2": -0.0107
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 668,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 1.0,
+            "Precision_Macro": 1.0,
+            "Recall_Macro": 1.0,
+            "F1_Macro": 1.0
+          },
+          "global": {
+            "Accuracy": 1.0,
+            "Precision_Macro": 1.0,
+            "Recall_Macro": 1.0,
+            "F1_Macro": 1.0
+          }
+        }
+      }
+    },
     "2147": {
       "name": "Kebun Batujamus",
       "indicators": {
@@ -672,6 +3360,118 @@
         }
       }
     },
+    "2148": {
+      "name": "Kebun Balong",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 426,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.433,
+            "RMSE": 0.5816,
+            "R2": 0.2972
+          },
+          "global": {
+            "MAE": 0.7026,
+            "RMSE": 0.8387,
+            "R2": -0.4615
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 426,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.6565,
+            "RMSE": 3.3932,
+            "R2": -0.3624
+          },
+          "global": {
+            "MAE": 2.3464,
+            "RMSE": 3.0858,
+            "R2": -0.1267
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 426,
+          "n_test": 29,
+          "local": {
+            "MAE": 4.3018,
+            "RMSE": 6.0404,
+            "R2": 0.0
+          },
+          "global": {
+            "MAE": 2.2203,
+            "RMSE": 2.6317,
+            "R2": 0.0
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 426,
+          "n_test": 29,
+          "local": {
+            "MAE": 3075.2496,
+            "RMSE": 4291.9355,
+            "R2": -2.8303
+          },
+          "global": {
+            "MAE": 2763.5551,
+            "RMSE": 3251.6049,
+            "R2": -1.1985
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 426,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5733,
+            "RMSE": 0.7014,
+            "R2": 0.2502
+          },
+          "global": {
+            "MAE": 0.5978,
+            "RMSE": 0.7001,
+            "R2": 0.253
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 426,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.3417,
+            "RMSE": 0.4838,
+            "R2": -0.0362
+          },
+          "global": {
+            "MAE": 0.4307,
+            "RMSE": 0.548,
+            "R2": -0.3296
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 426,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.3103,
+            "Precision_Macro": 0.2259,
+            "Recall_Macro": 0.2804,
+            "F1_Macro": 0.2346
+          },
+          "global": {
+            "Accuracy": 0.4828,
+            "Precision_Macro": 0.3254,
+            "Recall_Macro": 0.3862,
+            "F1_Macro": 0.3473
+          }
+        }
+      }
+    },
     "2149": {
       "name": "Tinjowan",
       "indicators": {
@@ -780,6 +3580,454 @@
             "Precision_Macro": 0.2024,
             "Recall_Macro": 0.3148,
             "F1_Macro": 0.2464
+          }
+        }
+      }
+    },
+    "2150": {
+      "name": "Bukit Lima",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 595,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.7592,
+            "RMSE": 0.8849,
+            "R2": -0.2071
+          },
+          "global": {
+            "MAE": 0.7471,
+            "RMSE": 0.9021,
+            "R2": -0.2545
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 595,
+          "n_test": 28,
+          "local": {
+            "MAE": 2.7155,
+            "RMSE": 3.401,
+            "R2": -0.0156
+          },
+          "global": {
+            "MAE": 3.0707,
+            "RMSE": 3.6887,
+            "R2": -0.1946
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 595,
+          "n_test": 28,
+          "local": {
+            "MAE": 15.3628,
+            "RMSE": 24.5861,
+            "R2": -0.0228
+          },
+          "global": {
+            "MAE": 16.2969,
+            "RMSE": 25.5552,
+            "R2": -0.105
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 595,
+          "n_test": 28,
+          "local": {
+            "MAE": 6920.394,
+            "RMSE": 8600.9833,
+            "R2": -0.038
+          },
+          "global": {
+            "MAE": 7062.9745,
+            "RMSE": 8893.5815,
+            "R2": -0.1099
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 595,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.6547,
+            "RMSE": 0.8017,
+            "R2": 0.351
+          },
+          "global": {
+            "MAE": 0.709,
+            "RMSE": 0.8966,
+            "R2": 0.1884
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 595,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.2333,
+            "RMSE": 0.2817,
+            "R2": -0.3592
+          },
+          "global": {
+            "MAE": 0.1882,
+            "RMSE": 0.2456,
+            "R2": -0.0327
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 595,
+          "n_test": 28,
+          "local": {
+            "Accuracy": 0.8571,
+            "Precision_Macro": 0.2857,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.3077
+          },
+          "global": {
+            "Accuracy": 0.8929,
+            "Precision_Macro": 0.6296,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.5359
+          }
+        }
+      }
+    },
+    "2151": {
+      "name": "Padang Matinggi",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 644,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.8658,
+            "RMSE": 1.0122,
+            "R2": -0.3156
+          },
+          "global": {
+            "MAE": 0.752,
+            "RMSE": 0.9783,
+            "R2": -0.2289
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 644,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.9749,
+            "RMSE": 3.6628,
+            "R2": -0.0012
+          },
+          "global": {
+            "MAE": 3.3223,
+            "RMSE": 3.9054,
+            "R2": -0.1382
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 644,
+          "n_test": 29,
+          "local": {
+            "MAE": 26.3597,
+            "RMSE": 45.7182,
+            "R2": -4.4936
+          },
+          "global": {
+            "MAE": 16.0611,
+            "RMSE": 22.8771,
+            "R2": -0.3756
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 644,
+          "n_test": 29,
+          "local": {
+            "MAE": 5912.1916,
+            "RMSE": 7096.1426,
+            "R2": -0.0305
+          },
+          "global": {
+            "MAE": 6121.2579,
+            "RMSE": 7279.0214,
+            "R2": -0.0843
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 644,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.0571,
+            "RMSE": 1.3542,
+            "R2": -0.862
+          },
+          "global": {
+            "MAE": 0.6598,
+            "RMSE": 0.8433,
+            "R2": 0.2779
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 644,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.3205,
+            "RMSE": 0.3978,
+            "R2": -0.4942
+          },
+          "global": {
+            "MAE": 0.2578,
+            "RMSE": 0.332,
+            "R2": -0.041
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 644,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.6207,
+            "Precision_Macro": 0.5972,
+            "Recall_Macro": 0.4903,
+            "F1_Macro": 0.4859
+          },
+          "global": {
+            "Accuracy": 0.5517,
+            "Precision_Macro": 0.1839,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.237
+          }
+        }
+      }
+    },
+    "2154": {
+      "name": "Air Tenang",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 633,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.8153,
+            "RMSE": 0.969,
+            "R2": -0.8492
+          },
+          "global": {
+            "MAE": 0.7314,
+            "RMSE": 0.834,
+            "R2": -0.3697
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 633,
+          "n_test": 28,
+          "local": {
+            "MAE": 2.8552,
+            "RMSE": 3.6768,
+            "R2": -0.4932
+          },
+          "global": {
+            "MAE": 2.7162,
+            "RMSE": 3.3344,
+            "R2": -0.228
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 633,
+          "n_test": 28,
+          "local": {
+            "MAE": 73.6998,
+            "RMSE": 102.8873,
+            "R2": -0.1717
+          },
+          "global": {
+            "MAE": 57.2916,
+            "RMSE": 105.2778,
+            "R2": -0.2268
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 633,
+          "n_test": 28,
+          "local": {
+            "MAE": 4758.2356,
+            "RMSE": 5730.2484,
+            "R2": -0.1953
+          },
+          "global": {
+            "MAE": 4690.5401,
+            "RMSE": 5703.685,
+            "R2": -0.1842
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 633,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.7654,
+            "RMSE": 0.868,
+            "R2": 0.3901
+          },
+          "global": {
+            "MAE": 0.7597,
+            "RMSE": 0.948,
+            "R2": 0.2725
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 633,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.3041,
+            "RMSE": 0.4199,
+            "R2": -0.3668
+          },
+          "global": {
+            "MAE": 0.3355,
+            "RMSE": 0.4232,
+            "R2": -0.3883
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 633,
+          "n_test": 28,
+          "local": {
+            "Accuracy": 0.75,
+            "Precision_Macro": 0.25,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.2857
+          },
+          "global": {
+            "Accuracy": 0.7143,
+            "Precision_Macro": 0.2469,
+            "Recall_Macro": 0.3175,
+            "F1_Macro": 0.2778
+          }
+        }
+      }
+    },
+    "2155": {
+      "name": "Bah Jambi",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 651,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.7894,
+            "RMSE": 0.933,
+            "R2": -0.3895
+          },
+          "global": {
+            "MAE": 0.7007,
+            "RMSE": 0.8509,
+            "R2": -0.1557
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 651,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.0003,
+            "RMSE": 3.8558,
+            "R2": -0.1432
+          },
+          "global": {
+            "MAE": 3.1727,
+            "RMSE": 3.8649,
+            "R2": -0.1487
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 651,
+          "n_test": 29,
+          "local": {
+            "MAE": 8.7834,
+            "RMSE": 9.6791,
+            "R2": -0.9113
+          },
+          "global": {
+            "MAE": 6.3822,
+            "RMSE": 7.0199,
+            "R2": -0.0054
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 651,
+          "n_test": 29,
+          "local": {
+            "MAE": 5496.4942,
+            "RMSE": 6492.4331,
+            "R2": -0.0865
+          },
+          "global": {
+            "MAE": 5236.9333,
+            "RMSE": 6464.8739,
+            "R2": -0.0773
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 651,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6196,
+            "RMSE": 0.7764,
+            "R2": 0.2111
+          },
+          "global": {
+            "MAE": 0.7432,
+            "RMSE": 0.9043,
+            "R2": -0.0702
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 651,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.0523,
+            "RMSE": 0.0837,
+            "R2": -0.3957
+          },
+          "global": {
+            "MAE": 0.1196,
+            "RMSE": 0.1265,
+            "R2": -2.1842
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 651,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.6552,
+            "Precision_Macro": 0.2184,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.2639
+          },
+          "global": {
+            "Accuracy": 0.6552,
+            "Precision_Macro": 0.2184,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.2639
           }
         }
       }
@@ -1008,6 +4256,118 @@
         }
       }
     },
+    "2169": {
+      "name": "Wilmar Sarana Titian Permata 2",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 529,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5012,
+            "RMSE": 0.6264,
+            "R2": -0.5686
+          },
+          "global": {
+            "MAE": 0.5062,
+            "RMSE": 0.6011,
+            "R2": -0.4443
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 529,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.9006,
+            "RMSE": 2.2713,
+            "R2": -0.5338
+          },
+          "global": {
+            "MAE": 1.4351,
+            "RMSE": 1.7051,
+            "R2": 0.1356
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 529,
+          "n_test": 29,
+          "local": {
+            "MAE": 9.6226,
+            "RMSE": 11.0949,
+            "R2": -617.2336
+          },
+          "global": {
+            "MAE": 2.2292,
+            "RMSE": 2.5822,
+            "R2": -32.4884
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 529,
+          "n_test": 29,
+          "local": {
+            "MAE": 3834.2616,
+            "RMSE": 4788.6831,
+            "R2": -0.9956
+          },
+          "global": {
+            "MAE": 2973.5959,
+            "RMSE": 3682.1532,
+            "R2": -0.1799
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 529,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.614,
+            "RMSE": 0.737,
+            "R2": 0.196
+          },
+          "global": {
+            "MAE": 0.6367,
+            "RMSE": 0.727,
+            "R2": 0.2177
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 529,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.153,
+            "RMSE": 0.182,
+            "R2": 0.3004
+          },
+          "global": {
+            "MAE": 0.2261,
+            "RMSE": 0.2798,
+            "R2": -0.6529
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 529,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.931,
+            "Precision_Macro": 0.4655,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4821
+          },
+          "global": {
+            "Accuracy": 0.8621,
+            "Precision_Macro": 0.463,
+            "Recall_Macro": 0.463,
+            "F1_Macro": 0.463
+          }
+        }
+      }
+    },
     "217": {
       "name": "Balap",
       "indicators": {
@@ -1116,6 +4476,118 @@
             "Precision_Macro": 0.1875,
             "Recall_Macro": 0.25,
             "F1_Macro": 0.2143
+          }
+        }
+      }
+    },
+    "2170": {
+      "name": "Wilmar Karunia Kencana Permai Sejati",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 591,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.4906,
+            "RMSE": 0.5984,
+            "R2": -0.2431
+          },
+          "global": {
+            "MAE": 0.5706,
+            "RMSE": 0.6464,
+            "R2": -0.4507
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 591,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.1528,
+            "RMSE": 2.4401,
+            "R2": -0.2354
+          },
+          "global": {
+            "MAE": 1.7637,
+            "RMSE": 2.0313,
+            "R2": 0.1438
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 591,
+          "n_test": 29,
+          "local": {
+            "MAE": 13.6487,
+            "RMSE": 15.0271,
+            "R2": -727.4773
+          },
+          "global": {
+            "MAE": 2.2048,
+            "RMSE": 2.578,
+            "R2": -20.4403
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 591,
+          "n_test": 29,
+          "local": {
+            "MAE": 3019.1806,
+            "RMSE": 3707.2378,
+            "R2": -0.4188
+          },
+          "global": {
+            "MAE": 2531.4955,
+            "RMSE": 3018.104,
+            "R2": 0.0596
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 591,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.7108,
+            "RMSE": 0.8615,
+            "R2": -0.0336
+          },
+          "global": {
+            "MAE": 0.6595,
+            "RMSE": 0.7303,
+            "R2": 0.2572
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 591,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.4504,
+            "RMSE": 0.5027,
+            "R2": -3.8877
+          },
+          "global": {
+            "MAE": 0.2302,
+            "RMSE": 0.2861,
+            "R2": -0.5829
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 591,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.8276,
+            "Precision_Macro": 0.2857,
+            "Recall_Macro": 0.32,
+            "F1_Macro": 0.3019
+          },
+          "global": {
+            "Accuracy": 0.8276,
+            "Precision_Macro": 0.2857,
+            "Recall_Macro": 0.32,
+            "F1_Macro": 0.3019
           }
         }
       }
@@ -1456,6 +4928,678 @@
         }
       }
     },
+    "2176": {
+      "name": "Sei Siasam",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 531,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.7547,
+            "RMSE": 0.8982,
+            "R2": 0.0046
+          },
+          "global": {
+            "MAE": 0.6608,
+            "RMSE": 0.8052,
+            "R2": 0.2001
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 531,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.8316,
+            "RMSE": 2.2058,
+            "R2": 0.7068
+          },
+          "global": {
+            "MAE": 1.8828,
+            "RMSE": 2.4376,
+            "R2": 0.6419
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 532,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.6537,
+            "RMSE": 2.4193,
+            "R2": 0.0
+          },
+          "global": {
+            "MAE": 1.2256,
+            "RMSE": 1.6421,
+            "R2": 0.0
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 532,
+          "n_test": 29,
+          "local": {
+            "MAE": 7894.9425,
+            "RMSE": 9732.077,
+            "R2": -3.8639
+          },
+          "global": {
+            "MAE": 3554.479,
+            "RMSE": 4433.4474,
+            "R2": -0.0094
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 532,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6458,
+            "RMSE": 0.7633,
+            "R2": 0.2435
+          },
+          "global": {
+            "MAE": 0.6273,
+            "RMSE": 0.814,
+            "R2": 0.1395
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 531,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1794,
+            "RMSE": 0.2194,
+            "R2": -1.1802
+          },
+          "global": {
+            "MAE": 0.131,
+            "RMSE": 0.1635,
+            "R2": -0.2103
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 531,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.7241,
+            "Precision_Macro": 0.3621,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.42
+          },
+          "global": {
+            "Accuracy": 0.7241,
+            "Precision_Macro": 0.3621,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.42
+          }
+        }
+      }
+    },
+    "2177": {
+      "name": "Lubuk Dalam",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 586,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.7678,
+            "RMSE": 0.9174,
+            "R2": -0.4518
+          },
+          "global": {
+            "MAE": 0.6025,
+            "RMSE": 0.797,
+            "R2": -0.0956
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 586,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.3488,
+            "RMSE": 3.4045,
+            "R2": 0.3266
+          },
+          "global": {
+            "MAE": 1.8438,
+            "RMSE": 3.341,
+            "R2": 0.3515
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 586,
+          "n_test": 29,
+          "local": {
+            "MAE": 8.6497,
+            "RMSE": 13.1238,
+            "R2": -0.0134
+          },
+          "global": {
+            "MAE": 7.3093,
+            "RMSE": 13.5066,
+            "R2": -0.0733
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 586,
+          "n_test": 29,
+          "local": {
+            "MAE": 4555.3848,
+            "RMSE": 5739.1301,
+            "R2": -0.1702
+          },
+          "global": {
+            "MAE": 3996.511,
+            "RMSE": 5167.5431,
+            "R2": 0.0513
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 586,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.591,
+            "RMSE": 0.7496,
+            "R2": 0.3302
+          },
+          "global": {
+            "MAE": 0.6519,
+            "RMSE": 0.8465,
+            "R2": 0.1459
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 586,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1387,
+            "RMSE": 0.1684,
+            "R2": -0.3296
+          },
+          "global": {
+            "MAE": 0.1321,
+            "RMSE": 0.1665,
+            "R2": -0.3003
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 586,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.6207,
+            "Precision_Macro": 0.3103,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.383
+          },
+          "global": {
+            "Accuracy": 0.6207,
+            "Precision_Macro": 0.3103,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.383
+          }
+        }
+      }
+    },
+    "2178": {
+      "name": "Tanjung Medan",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.4293,
+            "RMSE": 0.5813,
+            "R2": 0.2179
+          },
+          "global": {
+            "MAE": 0.4712,
+            "RMSE": 0.6136,
+            "R2": 0.1286
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.6036,
+            "RMSE": 3.6263,
+            "R2": 0.2779
+          },
+          "global": {
+            "MAE": 2.7421,
+            "RMSE": 4.0577,
+            "R2": 0.096
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "MAE": 8.6986,
+            "RMSE": 12.007,
+            "R2": -0.629
+          },
+          "global": {
+            "MAE": 7.3655,
+            "RMSE": 9.532,
+            "R2": -0.0266
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "MAE": 4224.0677,
+            "RMSE": 5017.7549,
+            "R2": -0.2317
+          },
+          "global": {
+            "MAE": 4191.055,
+            "RMSE": 5015.8584,
+            "R2": -0.2307
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6223,
+            "RMSE": 0.7507,
+            "R2": 0.3886
+          },
+          "global": {
+            "MAE": 0.6944,
+            "RMSE": 0.8901,
+            "R2": 0.1405
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1678,
+            "RMSE": 0.2164,
+            "R2": -0.2923
+          },
+          "global": {
+            "MAE": 0.1709,
+            "RMSE": 0.2172,
+            "R2": -0.3029
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.4483,
+            "Precision_Macro": 0.4444,
+            "Recall_Macro": 0.3205,
+            "F1_Macro": 0.3439
+          },
+          "global": {
+            "Accuracy": 0.0,
+            "Precision_Macro": 0.0,
+            "Recall_Macro": 0.0,
+            "F1_Macro": 0.0
+          }
+        }
+      }
+    },
+    "2179": {
+      "name": "Sei Pagar",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 569,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.8087,
+            "RMSE": 0.9633,
+            "R2": -0.2567
+          },
+          "global": {
+            "MAE": 0.8342,
+            "RMSE": 0.9534,
+            "R2": -0.231
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 569,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.5461,
+            "RMSE": 3.5018,
+            "R2": 0.3977
+          },
+          "global": {
+            "MAE": 2.0804,
+            "RMSE": 2.8009,
+            "R2": 0.6147
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 569,
+          "n_test": 29,
+          "local": {
+            "MAE": 6.1907,
+            "RMSE": 9.0457,
+            "R2": -43.852
+          },
+          "global": {
+            "MAE": 3.0515,
+            "RMSE": 3.4653,
+            "R2": -5.5822
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 569,
+          "n_test": 29,
+          "local": {
+            "MAE": 4267.8238,
+            "RMSE": 5055.3548,
+            "R2": -0.2532
+          },
+          "global": {
+            "MAE": 3809.1797,
+            "RMSE": 4664.318,
+            "R2": -0.0668
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 569,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5263,
+            "RMSE": 0.6805,
+            "R2": 0.4391
+          },
+          "global": {
+            "MAE": 0.6494,
+            "RMSE": 0.8389,
+            "R2": 0.1475
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 569,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2366,
+            "RMSE": 0.2749,
+            "R2": -1.1245
+          },
+          "global": {
+            "MAE": 0.1798,
+            "RMSE": 0.2162,
+            "R2": -0.3142
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 569,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 1.0,
+            "Precision_Macro": 1.0,
+            "Recall_Macro": 1.0,
+            "F1_Macro": 1.0
+          },
+          "global": {
+            "Accuracy": 1.0,
+            "Precision_Macro": 1.0,
+            "Recall_Macro": 1.0,
+            "F1_Macro": 1.0
+          }
+        }
+      }
+    },
+    "2180": {
+      "name": "Tanah Putih",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 595,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5374,
+            "RMSE": 0.7216,
+            "R2": -0.1273
+          },
+          "global": {
+            "MAE": 0.5137,
+            "RMSE": 0.6417,
+            "R2": 0.1085
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 595,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.7846,
+            "RMSE": 3.9579,
+            "R2": 0.0932
+          },
+          "global": {
+            "MAE": 2.5624,
+            "RMSE": 4.1959,
+            "R2": -0.0192
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 595,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.8008,
+            "RMSE": 3.1667,
+            "R2": -0.0956
+          },
+          "global": {
+            "MAE": 4.0715,
+            "RMSE": 4.3671,
+            "R2": -1.0835
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 595,
+          "n_test": 29,
+          "local": {
+            "MAE": 4178.8425,
+            "RMSE": 5143.0663,
+            "R2": -0.4361
+          },
+          "global": {
+            "MAE": 4112.5021,
+            "RMSE": 4971.6465,
+            "R2": -0.342
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 595,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6072,
+            "RMSE": 0.7443,
+            "R2": 0.3815
+          },
+          "global": {
+            "MAE": 0.6625,
+            "RMSE": 0.8375,
+            "R2": 0.2168
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 595,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.3865,
+            "RMSE": 0.5654,
+            "R2": 0.0254
+          },
+          "global": {
+            "MAE": 0.4265,
+            "RMSE": 0.6035,
+            "R2": -0.1106
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 595,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.8276,
+            "Precision_Macro": 0.9107,
+            "Recall_Macro": 0.5833,
+            "F1_Macro": 0.5938
+          },
+          "global": {
+            "Accuracy": 0.7931,
+            "Precision_Macro": 0.6848,
+            "Recall_Macro": 0.6848,
+            "F1_Macro": 0.6848
+          }
+        }
+      }
+    },
+    "2181": {
+      "name": "Sei Rokan",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 594,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5559,
+            "RMSE": 0.7231,
+            "R2": 0.2472
+          },
+          "global": {
+            "MAE": 0.6449,
+            "RMSE": 0.7767,
+            "R2": 0.1316
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 594,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.1321,
+            "RMSE": 2.7509,
+            "R2": 0.1907
+          },
+          "global": {
+            "MAE": 2.1078,
+            "RMSE": 2.9574,
+            "R2": 0.0646
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 594,
+          "n_test": 29,
+          "local": {
+            "MAE": 6.0279,
+            "RMSE": 12.3887,
+            "R2": -0.0771
+          },
+          "global": {
+            "MAE": 6.5824,
+            "RMSE": 12.1987,
+            "R2": -0.0443
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 594,
+          "n_test": 29,
+          "local": {
+            "MAE": 4302.8292,
+            "RMSE": 5111.2666,
+            "R2": -0.1981
+          },
+          "global": {
+            "MAE": 4245.0914,
+            "RMSE": 4961.2646,
+            "R2": -0.1288
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 594,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.749,
+            "RMSE": 0.9503,
+            "R2": -0.1019
+          },
+          "global": {
+            "MAE": 0.673,
+            "RMSE": 0.8519,
+            "R2": 0.1144
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 594,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1382,
+            "RMSE": 0.1912,
+            "R2": -0.3363
+          },
+          "global": {
+            "MAE": 0.1602,
+            "RMSE": 0.1995,
+            "R2": -0.4556
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 594,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.8621,
+            "Precision_Macro": 0.2874,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.3086
+          },
+          "global": {
+            "Accuracy": 0.8621,
+            "Precision_Macro": 0.2874,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.3086
+          }
+        }
+      }
+    },
     "2182": {
       "name": "Air Molek 2",
       "indicators": {
@@ -1676,6 +5820,454 @@
             "Precision_Macro": 0.4655,
             "Recall_Macro": 0.5,
             "F1_Macro": 0.4821
+          }
+        }
+      }
+    },
+    "2185": {
+      "name": "Ngrangkah Pawon",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.3768,
+            "RMSE": 0.4855,
+            "R2": -0.5457
+          },
+          "global": {
+            "MAE": 0.3621,
+            "RMSE": 0.4705,
+            "R2": -0.452
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "MAE": 4.185,
+            "RMSE": 5.3984,
+            "R2": 0.2114
+          },
+          "global": {
+            "MAE": 4.5837,
+            "RMSE": 5.7947,
+            "R2": 0.0914
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.1614,
+            "RMSE": 3.8267,
+            "R2": 0.0
+          },
+          "global": {
+            "MAE": 2.4206,
+            "RMSE": 3.2508,
+            "R2": 0.0
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "MAE": 3443.9327,
+            "RMSE": 4210.0081,
+            "R2": -0.0212
+          },
+          "global": {
+            "MAE": 3472.021,
+            "RMSE": 4255.8137,
+            "R2": -0.0435
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.4954,
+            "RMSE": 0.6054,
+            "R2": 0.3953
+          },
+          "global": {
+            "MAE": 0.6661,
+            "RMSE": 0.7746,
+            "R2": 0.0102
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.1804,
+            "RMSE": 1.6768,
+            "R2": 0.0989
+          },
+          "global": {
+            "MAE": 1.4037,
+            "RMSE": 1.9189,
+            "R2": -0.18
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 596,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.4828,
+            "Precision_Macro": 0.5507,
+            "Recall_Macro": 0.5343,
+            "F1_Macro": 0.4596
+          },
+          "global": {
+            "Accuracy": 0.5517,
+            "Precision_Macro": 0.5433,
+            "Recall_Macro": 0.5441,
+            "F1_Macro": 0.543
+          }
+        }
+      }
+    },
+    "2186": {
+      "name": "Pangkalan 50 Kota",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 581,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.82,
+            "RMSE": 1.0013,
+            "R2": -0.1089
+          },
+          "global": {
+            "MAE": 0.6759,
+            "RMSE": 0.8113,
+            "R2": 0.2719
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 581,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.2142,
+            "RMSE": 2.9705,
+            "R2": 0.2548
+          },
+          "global": {
+            "MAE": 1.9886,
+            "RMSE": 2.8345,
+            "R2": 0.3215
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 581,
+          "n_test": 29,
+          "local": {
+            "MAE": 12.0055,
+            "RMSE": 15.8781,
+            "R2": -0.7252
+          },
+          "global": {
+            "MAE": 7.9581,
+            "RMSE": 12.4378,
+            "R2": -0.0586
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 581,
+          "n_test": 29,
+          "local": {
+            "MAE": 3415.9886,
+            "RMSE": 4105.4932,
+            "R2": -0.1941
+          },
+          "global": {
+            "MAE": 3286.9119,
+            "RMSE": 3949.7917,
+            "R2": -0.1053
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 581,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6134,
+            "RMSE": 0.7698,
+            "R2": 0.37
+          },
+          "global": {
+            "MAE": 0.7226,
+            "RMSE": 0.8977,
+            "R2": 0.1431
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 581,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1186,
+            "RMSE": 0.1478,
+            "R2": -1.0358
+          },
+          "global": {
+            "MAE": 0.0967,
+            "RMSE": 0.1316,
+            "R2": -0.6133
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 581,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.8966,
+            "Precision_Macro": 0.4483,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4727
+          },
+          "global": {
+            "Accuracy": 0.8966,
+            "Precision_Macro": 0.4483,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4727
+          }
+        }
+      }
+    },
+    "2187": {
+      "name": "Rimbo Dua",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 585,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.8734,
+            "RMSE": 1.1134,
+            "R2": -0.3931
+          },
+          "global": {
+            "MAE": 0.8193,
+            "RMSE": 1.0665,
+            "R2": -0.2782
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 585,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.1627,
+            "RMSE": 2.8082,
+            "R2": -1.5112
+          },
+          "global": {
+            "MAE": 1.9828,
+            "RMSE": 2.6387,
+            "R2": -1.2172
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 585,
+          "n_test": 29,
+          "local": {
+            "MAE": 5.8884,
+            "RMSE": 7.796,
+            "R2": -1.2391
+          },
+          "global": {
+            "MAE": 3.5175,
+            "RMSE": 6.2806,
+            "R2": -0.4532
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 585,
+          "n_test": 29,
+          "local": {
+            "MAE": 3748.6998,
+            "RMSE": 4635.145,
+            "R2": -0.3371
+          },
+          "global": {
+            "MAE": 3718.2097,
+            "RMSE": 4390.9151,
+            "R2": -0.1999
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 585,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.8338,
+            "RMSE": 1.0602,
+            "R2": -0.4803
+          },
+          "global": {
+            "MAE": 0.7081,
+            "RMSE": 0.8902,
+            "R2": -0.0437
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 585,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.3435,
+            "RMSE": 0.4191,
+            "R2": -0.0096
+          },
+          "global": {
+            "MAE": 0.3438,
+            "RMSE": 0.4275,
+            "R2": -0.0505
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 585,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.3793,
+            "Precision_Macro": 0.3972,
+            "Recall_Macro": 0.4093,
+            "F1_Macro": 0.3726
+          },
+          "global": {
+            "Accuracy": 0.4828,
+            "Precision_Macro": 0.4596,
+            "Recall_Macro": 0.4608,
+            "F1_Macro": 0.4596
+          }
+        }
+      }
+    },
+    "219": {
+      "name": "Aek Nabara Utara",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 666,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6491,
+            "RMSE": 0.7816,
+            "R2": 0.1646
+          },
+          "global": {
+            "MAE": 0.6501,
+            "RMSE": 0.7761,
+            "R2": 0.1764
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 666,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.6304,
+            "RMSE": 3.8299,
+            "R2": 0.1268
+          },
+          "global": {
+            "MAE": 2.6221,
+            "RMSE": 3.8195,
+            "R2": 0.1315
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 666,
+          "n_test": 29,
+          "local": {
+            "MAE": 6.3474,
+            "RMSE": 8.8384,
+            "R2": -0.3587
+          },
+          "global": {
+            "MAE": 5.665,
+            "RMSE": 8.4271,
+            "R2": -0.2352
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 670,
+          "n_test": 29,
+          "local": {
+            "MAE": 6178.2687,
+            "RMSE": 8136.4318,
+            "R2": -0.2085
+          },
+          "global": {
+            "MAE": 5996.8017,
+            "RMSE": 7616.5076,
+            "R2": -0.059
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 666,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.668,
+            "RMSE": 0.8459,
+            "R2": 0.3148
+          },
+          "global": {
+            "MAE": 0.7648,
+            "RMSE": 0.9715,
+            "R2": 0.0962
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 666,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2628,
+            "RMSE": 0.324,
+            "R2": -0.1919
+          },
+          "global": {
+            "MAE": 0.2706,
+            "RMSE": 0.3318,
+            "R2": -0.2499
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 665,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.7241,
+            "Precision_Macro": 0.6987,
+            "Recall_Macro": 0.5861,
+            "F1_Macro": 0.5797
+          },
+          "global": {
+            "Accuracy": 0.5172,
+            "Precision_Macro": 0.628,
+            "Recall_Macro": 0.6194,
+            "F1_Macro": 0.5167
           }
         }
       }
@@ -1904,6 +6496,118 @@
         }
       }
     },
+    "2193": {
+      "name": "Bukit Kausar",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 568,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.599,
+            "RMSE": 0.7619,
+            "R2": -0.1896
+          },
+          "global": {
+            "MAE": 0.6059,
+            "RMSE": 0.7647,
+            "R2": -0.1983
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 568,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.6731,
+            "RMSE": 2.9965,
+            "R2": -0.7781
+          },
+          "global": {
+            "MAE": 1.6211,
+            "RMSE": 2.0443,
+            "R2": 0.1724
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 568,
+          "n_test": 29,
+          "local": {
+            "MAE": 6.539,
+            "RMSE": 7.2199,
+            "R2": -1.6614
+          },
+          "global": {
+            "MAE": 4.5026,
+            "RMSE": 5.3863,
+            "R2": -0.4812
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 568,
+          "n_test": 29,
+          "local": {
+            "MAE": 3841.3499,
+            "RMSE": 4456.8628,
+            "R2": -0.4949
+          },
+          "global": {
+            "MAE": 3019.1083,
+            "RMSE": 3608.7495,
+            "R2": 0.0199
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 568,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6097,
+            "RMSE": 0.787,
+            "R2": 0.2398
+          },
+          "global": {
+            "MAE": 0.6637,
+            "RMSE": 0.8454,
+            "R2": 0.1227
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 568,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1283,
+            "RMSE": 0.1594,
+            "R2": -1.0278
+          },
+          "global": {
+            "MAE": 0.0996,
+            "RMSE": 0.1296,
+            "R2": -0.3414
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 568,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.9655,
+            "Precision_Macro": 0.4828,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4912
+          },
+          "global": {
+            "Accuracy": 0.931,
+            "Precision_Macro": 0.4821,
+            "Recall_Macro": 0.4821,
+            "F1_Macro": 0.4821
+          }
+        }
+      }
+    },
     "2194": {
       "name": "Laras",
       "indicators": {
@@ -2128,6 +6832,118 @@
         }
       }
     },
+    "2196": {
+      "name": "Tonduhan",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 540,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.657,
+            "RMSE": 0.8213,
+            "R2": 0.037
+          },
+          "global": {
+            "MAE": 0.638,
+            "RMSE": 0.8518,
+            "R2": -0.0358
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 540,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.1057,
+            "RMSE": 3.9246,
+            "R2": -0.0905
+          },
+          "global": {
+            "MAE": 3.3384,
+            "RMSE": 4.0251,
+            "R2": -0.1471
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 541,
+          "n_test": 29,
+          "local": {
+            "MAE": 14.547,
+            "RMSE": 18.2649,
+            "R2": -0.3014
+          },
+          "global": {
+            "MAE": 11.2584,
+            "RMSE": 16.2719,
+            "R2": -0.0329
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 541,
+          "n_test": 29,
+          "local": {
+            "MAE": 6287.7889,
+            "RMSE": 7688.2684,
+            "R2": 0.0045
+          },
+          "global": {
+            "MAE": 6290.4278,
+            "RMSE": 7481.1092,
+            "R2": 0.0574
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 541,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6777,
+            "RMSE": 0.9178,
+            "R2": 0.0599
+          },
+          "global": {
+            "MAE": 0.6582,
+            "RMSE": 0.8205,
+            "R2": 0.2485
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 540,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1396,
+            "RMSE": 0.1867,
+            "R2": -0.1656
+          },
+          "global": {
+            "MAE": 0.1777,
+            "RMSE": 0.2033,
+            "R2": -0.3819
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 540,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.4483,
+            "Precision_Macro": 0.2761,
+            "Recall_Macro": 0.2992,
+            "F1_Macro": 0.287
+          },
+          "global": {
+            "Accuracy": 0.5517,
+            "Precision_Macro": 0.1839,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.237
+          }
+        }
+      }
+    },
     "2197": {
       "name": "Wilmar Wonosari",
       "indicators": {
@@ -2236,6 +7052,566 @@
             "Precision_Macro": 0.4231,
             "Recall_Macro": 0.3586,
             "F1_Macro": 0.3611
+          }
+        }
+      }
+    },
+    "2198": {
+      "name": "Hanusentra Agro Lestari",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 423,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.5432,
+            "RMSE": 0.6579,
+            "R2": -0.1443
+          },
+          "global": {
+            "MAE": 0.5013,
+            "RMSE": 0.5956,
+            "R2": 0.0621
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 423,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.026,
+            "RMSE": 2.6319,
+            "R2": -0.6029
+          },
+          "global": {
+            "MAE": 1.5008,
+            "RMSE": 1.9726,
+            "R2": 0.0996
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 423,
+          "n_test": 29,
+          "local": {
+            "MAE": 5.4925,
+            "RMSE": 5.9704,
+            "R2": -1028.0697
+          },
+          "global": {
+            "MAE": 3.2826,
+            "RMSE": 3.4378,
+            "R2": -340.19
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 423,
+          "n_test": 29,
+          "local": {
+            "MAE": 3477.5077,
+            "RMSE": 4104.8795,
+            "R2": -0.3069
+          },
+          "global": {
+            "MAE": 3013.5854,
+            "RMSE": 3923.2676,
+            "R2": -0.1938
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 423,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.4065,
+            "RMSE": 0.5217,
+            "R2": 0.5059
+          },
+          "global": {
+            "MAE": 0.4944,
+            "RMSE": 0.6298,
+            "R2": 0.28
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 423,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1052,
+            "RMSE": 0.1343,
+            "R2": -0.3294
+          },
+          "global": {
+            "MAE": 0.095,
+            "RMSE": 0.117,
+            "R2": -0.0085
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 423,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.3103,
+            "Precision_Macro": 0.2202,
+            "Recall_Macro": 0.2485,
+            "F1_Macro": 0.212
+          },
+          "global": {
+            "Accuracy": 0.3793,
+            "Precision_Macro": 0.1264,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.1833
+          }
+        }
+      }
+    },
+    "2207": {
+      "name": "BP1-AFDKB",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 404,
+          "n_test": 27,
+          "local": {
+            "MAE": 0.9656,
+            "RMSE": 1.1996,
+            "R2": -0.9284
+          },
+          "global": {
+            "MAE": 0.6763,
+            "RMSE": 0.8203,
+            "R2": 0.0982
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 404,
+          "n_test": 27,
+          "local": {
+            "MAE": 3.9732,
+            "RMSE": 5.065,
+            "R2": -0.9117
+          },
+          "global": {
+            "MAE": 2.456,
+            "RMSE": 3.2444,
+            "R2": 0.2156
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 404,
+          "n_test": 27,
+          "local": {
+            "MAE": 3.0616,
+            "RMSE": 5.9881,
+            "R2": -1.7766
+          },
+          "global": {
+            "MAE": 3.8981,
+            "RMSE": 4.5018,
+            "R2": -0.5692
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 404,
+          "n_test": 27,
+          "local": {
+            "MAE": 4762.0883,
+            "RMSE": 6974.8866,
+            "R2": -0.3952
+          },
+          "global": {
+            "MAE": 4080.5867,
+            "RMSE": 6507.7784,
+            "R2": -0.2146
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 404,
+          "n_test": 27,
+          "local": {
+            "MAE": 0.6353,
+            "RMSE": 0.7719,
+            "R2": 0.0468
+          },
+          "global": {
+            "MAE": 0.5608,
+            "RMSE": 0.6932,
+            "R2": 0.2313
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 404,
+          "n_test": 27,
+          "local": {
+            "MAE": 0.275,
+            "RMSE": 0.3293,
+            "R2": -0.8672
+          },
+          "global": {
+            "MAE": 0.24,
+            "RMSE": 0.2728,
+            "R2": -0.2819
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 404,
+          "n_test": 27,
+          "local": {
+            "Accuracy": 0.5926,
+            "Precision_Macro": 0.4063,
+            "Recall_Macro": 0.3889,
+            "F1_Macro": 0.3741
+          },
+          "global": {
+            "Accuracy": 0.5185,
+            "Precision_Macro": 0.3152,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.3051
+          }
+        }
+      }
+    },
+    "221": {
+      "name": "Sei Baruhur",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 868,
+          "n_test": 28,
+          "local": {
+            "MAE": 1.0032,
+            "RMSE": 1.1918,
+            "R2": -0.9584
+          },
+          "global": {
+            "MAE": 0.7962,
+            "RMSE": 1.0125,
+            "R2": -0.4134
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 868,
+          "n_test": 28,
+          "local": {
+            "MAE": 4.411,
+            "RMSE": 5.7068,
+            "R2": 0.1411
+          },
+          "global": {
+            "MAE": 4.1289,
+            "RMSE": 6.0328,
+            "R2": 0.0402
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 868,
+          "n_test": 28,
+          "local": {
+            "MAE": 6.122,
+            "RMSE": 7.6818,
+            "R2": -1.2402
+          },
+          "global": {
+            "MAE": 7.0262,
+            "RMSE": 7.949,
+            "R2": -1.3988
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 869,
+          "n_test": 28,
+          "local": {
+            "MAE": 5928.6897,
+            "RMSE": 6927.2801,
+            "R2": -0.6316
+          },
+          "global": {
+            "MAE": 6356.0682,
+            "RMSE": 7134.1807,
+            "R2": -0.7306
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 868,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.9013,
+            "RMSE": 1.1327,
+            "R2": -0.149
+          },
+          "global": {
+            "MAE": 0.7857,
+            "RMSE": 0.9488,
+            "R2": 0.1938
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 868,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.4384,
+            "RMSE": 0.6285,
+            "R2": -0.1804
+          },
+          "global": {
+            "MAE": 0.4483,
+            "RMSE": 0.6141,
+            "R2": -0.1271
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 868,
+          "n_test": 28,
+          "local": {
+            "Accuracy": 0.6071,
+            "Precision_Macro": 0.2024,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.2519
+          },
+          "global": {
+            "Accuracy": 0.6429,
+            "Precision_Macro": 0.3889,
+            "Recall_Macro": 0.4248,
+            "F1_Macro": 0.3935
+          }
+        }
+      }
+    },
+    "222": {
+      "name": "Rambutan",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 669,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.7905,
+            "RMSE": 0.9494,
+            "R2": -0.2348
+          },
+          "global": {
+            "MAE": 0.782,
+            "RMSE": 0.946,
+            "R2": -0.2259
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 669,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.2508,
+            "RMSE": 3.9937,
+            "R2": -0.0974
+          },
+          "global": {
+            "MAE": 3.3187,
+            "RMSE": 4.1644,
+            "R2": -0.1931
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 670,
+          "n_test": 29,
+          "local": {
+            "MAE": 4.2949,
+            "RMSE": 6.9594,
+            "R2": 0.514
+          },
+          "global": {
+            "MAE": 6.6215,
+            "RMSE": 11.1192,
+            "R2": -0.2406
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 676,
+          "n_test": 29,
+          "local": {
+            "MAE": 7285.0233,
+            "RMSE": 8930.3298,
+            "R2": -0.1458
+          },
+          "global": {
+            "MAE": 7681.4913,
+            "RMSE": 9334.8108,
+            "R2": -0.2519
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 670,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.783,
+            "RMSE": 0.9011,
+            "R2": 0.356
+          },
+          "global": {
+            "MAE": 0.8099,
+            "RMSE": 0.9745,
+            "R2": 0.2468
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 669,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2819,
+            "RMSE": 0.3715,
+            "R2": 0.0063
+          },
+          "global": {
+            "MAE": 0.2811,
+            "RMSE": 0.3761,
+            "R2": -0.0188
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 669,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.7931,
+            "Precision_Macro": 0.2738,
+            "Recall_Macro": 0.3194,
+            "F1_Macro": 0.2949
+          },
+          "global": {
+            "Accuracy": 0.7931,
+            "Precision_Macro": 0.3932,
+            "Recall_Macro": 0.4167,
+            "F1_Macro": 0.4044
+          }
+        }
+      }
+    },
+    "224": {
+      "name": "Adolina",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 811,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.8592,
+            "RMSE": 1.0466,
+            "R2": -0.4224
+          },
+          "global": {
+            "MAE": 0.8245,
+            "RMSE": 1.0221,
+            "R2": -0.3564
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 811,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.5545,
+            "RMSE": 3.2097,
+            "R2": -0.3463
+          },
+          "global": {
+            "MAE": 2.6104,
+            "RMSE": 3.1947,
+            "R2": -0.3337
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 811,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.3622,
+            "RMSE": 6.532,
+            "R2": -0.1799
+          },
+          "global": {
+            "MAE": 6.3311,
+            "RMSE": 8.4205,
+            "R2": -0.9608
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 815,
+          "n_test": 29,
+          "local": {
+            "MAE": 8127.6232,
+            "RMSE": 9791.5375,
+            "R2": -0.1546
+          },
+          "global": {
+            "MAE": 8227.2724,
+            "RMSE": 10134.6446,
+            "R2": -0.2369
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 811,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.7331,
+            "RMSE": 0.8662,
+            "R2": 0.3912
+          },
+          "global": {
+            "MAE": 0.797,
+            "RMSE": 0.9561,
+            "R2": 0.2584
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 811,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.0451,
+            "RMSE": 0.0569,
+            "R2": 0.0
+          },
+          "global": {
+            "MAE": 0.1055,
+            "RMSE": 0.1084,
+            "R2": 0.0
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 811,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.4828,
+            "Precision_Macro": 0.2361,
+            "Recall_Macro": 0.2555,
+            "F1_Macro": 0.238
+          },
+          "global": {
+            "Accuracy": 0.5172,
+            "Precision_Macro": 0.2583,
+            "Recall_Macro": 0.2775,
+            "F1_Macro": 0.2676
           }
         }
       }
@@ -2460,6 +7836,342 @@
             "Precision_Macro": 0.308,
             "Recall_Macro": 0.3,
             "F1_Macro": 0.2822
+          }
+        }
+      }
+    },
+    "228": {
+      "name": "PPKS Sembawa",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 481,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.0192,
+            "RMSE": 1.2121,
+            "R2": -0.1409
+          },
+          "global": {
+            "MAE": 0.852,
+            "RMSE": 1.1568,
+            "R2": -0.0393
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 481,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.7286,
+            "RMSE": 4.6756,
+            "R2": -0.1495
+          },
+          "global": {
+            "MAE": 3.3267,
+            "RMSE": 4.3473,
+            "R2": 0.0062
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 481,
+          "n_test": 29,
+          "local": {
+            "MAE": 4.7288,
+            "RMSE": 6.8664,
+            "R2": -3932.5891
+          },
+          "global": {
+            "MAE": 4.0038,
+            "RMSE": 8.2324,
+            "R2": -5653.3883
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 484,
+          "n_test": 29,
+          "local": {
+            "MAE": 4622.2782,
+            "RMSE": 6471.8215,
+            "R2": -0.0946
+          },
+          "global": {
+            "MAE": 4799.2528,
+            "RMSE": 7171.203,
+            "R2": -0.3439
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 481,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.7506,
+            "RMSE": 0.8842,
+            "R2": 0.0848
+          },
+          "global": {
+            "MAE": 0.7772,
+            "RMSE": 0.9446,
+            "R2": -0.0444
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 481,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.4503,
+            "RMSE": 0.6399,
+            "R2": -0.136
+          },
+          "global": {
+            "MAE": 0.491,
+            "RMSE": 0.6644,
+            "R2": -0.2246
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 481,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 1.0,
+            "Precision_Macro": 1.0,
+            "Recall_Macro": 1.0,
+            "F1_Macro": 1.0
+          },
+          "global": {
+            "Accuracy": 0.931,
+            "Precision_Macro": 0.5,
+            "Recall_Macro": 0.4655,
+            "F1_Macro": 0.4821
+          }
+        }
+      }
+    },
+    "243": {
+      "name": "Sei Galuh",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 828,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.736,
+            "RMSE": 0.9348,
+            "R2": -0.0383
+          },
+          "global": {
+            "MAE": 0.7089,
+            "RMSE": 0.9487,
+            "R2": -0.0696
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 828,
+          "n_test": 29,
+          "local": {
+            "MAE": 2.6264,
+            "RMSE": 3.696,
+            "R2": -0.1878
+          },
+          "global": {
+            "MAE": 2.527,
+            "RMSE": 3.6408,
+            "R2": -0.1526
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 828,
+          "n_test": 29,
+          "local": {
+            "MAE": 6.0623,
+            "RMSE": 8.2251,
+            "R2": -0.5206
+          },
+          "global": {
+            "MAE": 7.2128,
+            "RMSE": 8.8174,
+            "R2": -0.7476
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 838,
+          "n_test": 29,
+          "local": {
+            "MAE": 5972.2301,
+            "RMSE": 7333.2648,
+            "R2": -0.0933
+          },
+          "global": {
+            "MAE": 5611.1074,
+            "RMSE": 7648.9882,
+            "R2": -0.1894
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 828,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6279,
+            "RMSE": 0.7783,
+            "R2": 0.2696
+          },
+          "global": {
+            "MAE": 0.7227,
+            "RMSE": 0.8763,
+            "R2": 0.0741
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 828,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1569,
+            "RMSE": 0.1934,
+            "R2": -0.0336
+          },
+          "global": {
+            "MAE": 0.1881,
+            "RMSE": 0.2265,
+            "R2": -0.4174
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 828,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.5862,
+            "Precision_Macro": 0.2267,
+            "Recall_Macro": 0.2982,
+            "F1_Macro": 0.2576
+          },
+          "global": {
+            "Accuracy": 0.6552,
+            "Precision_Macro": 0.3986,
+            "Recall_Macro": 0.4057,
+            "F1_Macro": 0.3968
+          }
+        }
+      }
+    },
+    "244": {
+      "name": "Sosa",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 455,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.9178,
+            "RMSE": 1.1314,
+            "R2": 0.1839
+          },
+          "global": {
+            "MAE": 0.8062,
+            "RMSE": 1.1208,
+            "R2": 0.1991
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 455,
+          "n_test": 28,
+          "local": {
+            "MAE": 3.5245,
+            "RMSE": 4.1167,
+            "R2": 0.1524
+          },
+          "global": {
+            "MAE": 2.9983,
+            "RMSE": 3.9081,
+            "R2": 0.2361
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 455,
+          "n_test": 28,
+          "local": {
+            "MAE": 16.8413,
+            "RMSE": 28.549,
+            "R2": -0.1361
+          },
+          "global": {
+            "MAE": 12.5907,
+            "RMSE": 27.1774,
+            "R2": -0.0296
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 461,
+          "n_test": 28,
+          "local": {
+            "MAE": 6964.2421,
+            "RMSE": 8827.6166,
+            "R2": -0.0765
+          },
+          "global": {
+            "MAE": 6665.7178,
+            "RMSE": 8728.1122,
+            "R2": -0.0524
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 455,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.5562,
+            "RMSE": 0.8237,
+            "R2": 0.1607
+          },
+          "global": {
+            "MAE": 0.7191,
+            "RMSE": 0.9251,
+            "R2": -0.0585
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 455,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.297,
+            "RMSE": 0.3729,
+            "R2": -0.3485
+          },
+          "global": {
+            "MAE": 0.2644,
+            "RMSE": 0.3384,
+            "R2": -0.1108
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 455,
+          "n_test": 28,
+          "local": {
+            "Accuracy": 0.6071,
+            "Precision_Macro": 0.2179,
+            "Recall_Macro": 0.2982,
+            "F1_Macro": 0.2519
+          },
+          "global": {
+            "Accuracy": 0.6786,
+            "Precision_Macro": 0.2262,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.2695
           }
         }
       }
@@ -2800,6 +8512,230 @@
         }
       }
     },
+    "250": {
+      "name": "Rimbo Satu",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 888,
+          "n_test": 27,
+          "local": {
+            "MAE": 0.9678,
+            "RMSE": 1.1982,
+            "R2": -0.2838
+          },
+          "global": {
+            "MAE": 0.8078,
+            "RMSE": 1.1215,
+            "R2": -0.1248
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 888,
+          "n_test": 27,
+          "local": {
+            "MAE": 3.3573,
+            "RMSE": 4.4142,
+            "R2": -0.1115
+          },
+          "global": {
+            "MAE": 3.3783,
+            "RMSE": 4.301,
+            "R2": -0.0552
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 889,
+          "n_test": 27,
+          "local": {
+            "MAE": 4.5128,
+            "RMSE": 5.3715,
+            "R2": -1.6541
+          },
+          "global": {
+            "MAE": 4.9357,
+            "RMSE": 5.2476,
+            "R2": -1.5331
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 897,
+          "n_test": 27,
+          "local": {
+            "MAE": 5074.4339,
+            "RMSE": 5923.9227,
+            "R2": -0.2593
+          },
+          "global": {
+            "MAE": 3779.4171,
+            "RMSE": 5577.6711,
+            "R2": -0.1164
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 889,
+          "n_test": 27,
+          "local": {
+            "MAE": 0.6961,
+            "RMSE": 0.8613,
+            "R2": 0.0859
+          },
+          "global": {
+            "MAE": 0.7751,
+            "RMSE": 0.9424,
+            "R2": -0.0942
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 888,
+          "n_test": 27,
+          "local": {
+            "MAE": 0.1561,
+            "RMSE": 0.1889,
+            "R2": -0.2642
+          },
+          "global": {
+            "MAE": 0.1467,
+            "RMSE": 0.1854,
+            "R2": -0.2177
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 888,
+          "n_test": 27,
+          "local": {
+            "Accuracy": 0.6667,
+            "Precision_Macro": 0.6821,
+            "Recall_Macro": 0.6417,
+            "F1_Macro": 0.6346
+          },
+          "global": {
+            "Accuracy": 0.5185,
+            "Precision_Macro": 0.5714,
+            "Recall_Macro": 0.55,
+            "F1_Macro": 0.4935
+          }
+        }
+      }
+    },
+    "251": {
+      "name": "Rejosari",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 843,
+          "n_test": 27,
+          "local": {
+            "MAE": 0.5459,
+            "RMSE": 0.7785,
+            "R2": 0.2511
+          },
+          "global": {
+            "MAE": 0.6599,
+            "RMSE": 0.8906,
+            "R2": 0.0198
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 843,
+          "n_test": 27,
+          "local": {
+            "MAE": 2.7525,
+            "RMSE": 3.3176,
+            "R2": 0.269
+          },
+          "global": {
+            "MAE": 2.8705,
+            "RMSE": 3.4769,
+            "R2": 0.1972
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 843,
+          "n_test": 27,
+          "local": {
+            "MAE": 1.3261,
+            "RMSE": 1.75,
+            "R2": 0.0
+          },
+          "global": {
+            "MAE": 2.5544,
+            "RMSE": 3.5325,
+            "R2": 0.0
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 852,
+          "n_test": 27,
+          "local": {
+            "MAE": 3663.1842,
+            "RMSE": 4607.6539,
+            "R2": -0.1306
+          },
+          "global": {
+            "MAE": 3356.1841,
+            "RMSE": 4526.6205,
+            "R2": -0.0912
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 843,
+          "n_test": 27,
+          "local": {
+            "MAE": 0.7245,
+            "RMSE": 0.8199,
+            "R2": 0.14
+          },
+          "global": {
+            "MAE": 0.7972,
+            "RMSE": 0.9152,
+            "R2": -0.0716
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 843,
+          "n_test": 27,
+          "local": {
+            "MAE": 0.316,
+            "RMSE": 0.4271,
+            "R2": -0.3522
+          },
+          "global": {
+            "MAE": 0.303,
+            "RMSE": 0.4,
+            "R2": -0.1861
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 843,
+          "n_test": 27,
+          "local": {
+            "Accuracy": 0.8519,
+            "Precision_Macro": 0.4259,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.46
+          },
+          "global": {
+            "Accuracy": 0.8889,
+            "Precision_Macro": 0.7773,
+            "Recall_Macro": 0.8315,
+            "F1_Macro": 0.8
+          }
+        }
+      }
+    },
     "252": {
       "name": "Kebun Getas",
       "indicators": {
@@ -2902,6 +8838,230 @@
             "Precision_Macro": 0.2529,
             "Recall_Macro": 0.3333,
             "F1_Macro": 0.2876
+          },
+          "global": {
+            "Accuracy": 0.7241,
+            "Precision_Macro": 0.25,
+            "Recall_Macro": 0.3182,
+            "F1_Macro": 0.28
+          }
+        }
+      }
+    },
+    "253": {
+      "name": "Membang Muda",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 832,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.9377,
+            "RMSE": 1.0476,
+            "R2": -0.1226
+          },
+          "global": {
+            "MAE": 0.8398,
+            "RMSE": 0.9976,
+            "R2": -0.018
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 832,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.1384,
+            "RMSE": 3.7708,
+            "R2": 0.0239
+          },
+          "global": {
+            "MAE": 3.3031,
+            "RMSE": 3.9361,
+            "R2": -0.0636
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 832,
+          "n_test": 29,
+          "local": {
+            "MAE": 5.3808,
+            "RMSE": 6.9967,
+            "R2": -2.1228
+          },
+          "global": {
+            "MAE": 5.0692,
+            "RMSE": 5.5257,
+            "R2": -0.9478
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 838,
+          "n_test": 29,
+          "local": {
+            "MAE": 6916.517,
+            "RMSE": 8372.5194,
+            "R2": -0.4268
+          },
+          "global": {
+            "MAE": 5681.5512,
+            "RMSE": 7533.5429,
+            "R2": -0.1552
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 832,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6871,
+            "RMSE": 0.8531,
+            "R2": 0.333
+          },
+          "global": {
+            "MAE": 0.7567,
+            "RMSE": 0.9641,
+            "R2": 0.1481
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 832,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2757,
+            "RMSE": 0.3614,
+            "R2": 0.0328
+          },
+          "global": {
+            "MAE": 0.326,
+            "RMSE": 0.4243,
+            "R2": -0.3334
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 832,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.931,
+            "Precision_Macro": 0.4655,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4821
+          },
+          "global": {
+            "Accuracy": 0.931,
+            "Precision_Macro": 0.4655,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4821
+          }
+        }
+      }
+    },
+    "257": {
+      "name": "Bangun",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6466,
+            "RMSE": 0.8708,
+            "R2": -0.0605
+          },
+          "global": {
+            "MAE": 0.6016,
+            "RMSE": 0.8186,
+            "R2": 0.0628
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.2518,
+            "RMSE": 4.3463,
+            "R2": 0.0262
+          },
+          "global": {
+            "MAE": 3.5524,
+            "RMSE": 4.4564,
+            "R2": -0.0238
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "MAE": 13.1457,
+            "RMSE": 20.0697,
+            "R2": -0.0753
+          },
+          "global": {
+            "MAE": 12.5098,
+            "RMSE": 19.8135,
+            "R2": -0.0481
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 750,
+          "n_test": 29,
+          "local": {
+            "MAE": 7840.2726,
+            "RMSE": 9452.3852,
+            "R2": -0.1494
+          },
+          "global": {
+            "MAE": 7505.251,
+            "RMSE": 9179.9809,
+            "R2": -0.0841
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6567,
+            "RMSE": 0.8,
+            "R2": 0.4358
+          },
+          "global": {
+            "MAE": 0.7398,
+            "RMSE": 0.9505,
+            "R2": 0.2035
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.4585,
+            "RMSE": 0.6018,
+            "R2": -0.1081
+          },
+          "global": {
+            "MAE": 0.4314,
+            "RMSE": 0.5625,
+            "R2": 0.032
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 745,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.7241,
+            "Precision_Macro": 0.25,
+            "Recall_Macro": 0.3182,
+            "F1_Macro": 0.28
           },
           "global": {
             "Accuracy": 0.7241,
@@ -3024,6 +9184,678 @@
         }
       }
     },
+    "262": {
+      "name": "Sawit Sebrang",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 636,
+          "n_test": 29,
+          "local": {
+            "MAE": 1.2893,
+            "RMSE": 1.694,
+            "R2": -0.6471
+          },
+          "global": {
+            "MAE": 1.1475,
+            "RMSE": 1.5823,
+            "R2": -0.437
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 636,
+          "n_test": 29,
+          "local": {
+            "MAE": 4.0716,
+            "RMSE": 4.7488,
+            "R2": -0.9873
+          },
+          "global": {
+            "MAE": 3.5282,
+            "RMSE": 4.2438,
+            "R2": -0.5871
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 637,
+          "n_test": 29,
+          "local": {
+            "MAE": 7.2116,
+            "RMSE": 7.7857,
+            "R2": -830.9124
+          },
+          "global": {
+            "MAE": 4.5305,
+            "RMSE": 5.1073,
+            "R2": -356.9816
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 640,
+          "n_test": 29,
+          "local": {
+            "MAE": 7190.5663,
+            "RMSE": 7588.285,
+            "R2": -6.7228
+          },
+          "global": {
+            "MAE": 5687.0498,
+            "RMSE": 5843.8335,
+            "R2": -3.5802
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 636,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.8375,
+            "RMSE": 1.0017,
+            "R2": 0.2226
+          },
+          "global": {
+            "MAE": 0.8801,
+            "RMSE": 1.0948,
+            "R2": 0.0714
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 636,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1593,
+            "RMSE": 0.1864,
+            "R2": -1.3559
+          },
+          "global": {
+            "MAE": 0.1506,
+            "RMSE": 0.1756,
+            "R2": -1.0904
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 636,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.3793,
+            "Precision_Macro": 0.2083,
+            "Recall_Macro": 0.2216,
+            "F1_Macro": 0.1927
+          },
+          "global": {
+            "Accuracy": 0.5172,
+            "Precision_Macro": 0.2524,
+            "Recall_Macro": 0.2699,
+            "F1_Macro": 0.2604
+          }
+        }
+      }
+    },
+    "264": {
+      "name": "Luwu",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 627,
+          "n_test": 26,
+          "local": {
+            "MAE": 0.5702,
+            "RMSE": 0.7481,
+            "R2": -0.3955
+          },
+          "global": {
+            "MAE": 0.5262,
+            "RMSE": 0.6925,
+            "R2": -0.1958
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 627,
+          "n_test": 26,
+          "local": {
+            "MAE": 2.555,
+            "RMSE": 3.3968,
+            "R2": -0.2018
+          },
+          "global": {
+            "MAE": 2.5388,
+            "RMSE": 3.4289,
+            "R2": -0.2246
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 628,
+          "n_test": 26,
+          "local": {
+            "MAE": 6.5967,
+            "RMSE": 9.5318,
+            "R2": -0.9054
+          },
+          "global": {
+            "MAE": 6.5622,
+            "RMSE": 8.1458,
+            "R2": -0.3916
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 635,
+          "n_test": 26,
+          "local": {
+            "MAE": 6153.7851,
+            "RMSE": 7762.2426,
+            "R2": -0.1227
+          },
+          "global": {
+            "MAE": 6109.268,
+            "RMSE": 7781.2581,
+            "R2": -0.1282
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 628,
+          "n_test": 26,
+          "local": {
+            "MAE": 0.5679,
+            "RMSE": 0.7695,
+            "R2": 0.3758
+          },
+          "global": {
+            "MAE": 0.582,
+            "RMSE": 0.767,
+            "R2": 0.3799
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 627,
+          "n_test": 26,
+          "local": {
+            "MAE": 0.1239,
+            "RMSE": 0.1537,
+            "R2": -0.1031
+          },
+          "global": {
+            "MAE": 0.1258,
+            "RMSE": 0.1577,
+            "R2": -0.1616
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 627,
+          "n_test": 26,
+          "local": {
+            "Accuracy": 0.5385,
+            "Precision_Macro": 0.3981,
+            "Recall_Macro": 0.4095,
+            "F1_Macro": 0.3723
+          },
+          "global": {
+            "Accuracy": 0.5769,
+            "Precision_Macro": 0.3611,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4123
+          }
+        }
+      }
+    },
+    "267": {
+      "name": "Meliau",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 462,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.9879,
+            "RMSE": 1.2852,
+            "R2": -0.6461
+          },
+          "global": {
+            "MAE": 0.7217,
+            "RMSE": 1.0677,
+            "R2": -0.136
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 462,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.8262,
+            "RMSE": 4.9657,
+            "R2": -0.48
+          },
+          "global": {
+            "MAE": 3.271,
+            "RMSE": 4.1063,
+            "R2": -0.0121
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 462,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.3098,
+            "RMSE": 4.3305,
+            "R2": -1.0664
+          },
+          "global": {
+            "MAE": 4.092,
+            "RMSE": 4.4946,
+            "R2": -1.2261
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 466,
+          "n_test": 29,
+          "local": {
+            "MAE": 3163.1942,
+            "RMSE": 4320.8234,
+            "R2": -1.2724
+          },
+          "global": {
+            "MAE": 3467.9014,
+            "RMSE": 4328.7653,
+            "R2": -1.2808
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 462,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6867,
+            "RMSE": 0.8871,
+            "R2": 0.0152
+          },
+          "global": {
+            "MAE": 0.7498,
+            "RMSE": 0.9347,
+            "R2": -0.0935
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 462,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1975,
+            "RMSE": 0.2609,
+            "R2": -0.2298
+          },
+          "global": {
+            "MAE": 0.163,
+            "RMSE": 0.2377,
+            "R2": -0.0203
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 462,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.5517,
+            "Precision_Macro": 0.1975,
+            "Recall_Macro": 0.2963,
+            "F1_Macro": 0.237
+          },
+          "global": {
+            "Accuracy": 0.5862,
+            "Precision_Macro": 0.2024,
+            "Recall_Macro": 0.3148,
+            "F1_Macro": 0.2464
+          }
+        }
+      }
+    },
+    "270": {
+      "name": "Sukamaju",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 481,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.8376,
+            "RMSE": 1.1576,
+            "R2": -0.1823
+          },
+          "global": {
+            "MAE": 0.8079,
+            "RMSE": 1.1615,
+            "R2": -0.1902
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 481,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.9176,
+            "RMSE": 5.0448,
+            "R2": -0.2582
+          },
+          "global": {
+            "MAE": 3.8034,
+            "RMSE": 4.8369,
+            "R2": -0.1566
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 481,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.3831,
+            "RMSE": 4.5731,
+            "R2": -60.9508
+          },
+          "global": {
+            "MAE": 2.852,
+            "RMSE": 3.1246,
+            "R2": -27.9215
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 482,
+          "n_test": 29,
+          "local": {
+            "MAE": 4134.1964,
+            "RMSE": 5757.5937,
+            "R2": -0.2769
+          },
+          "global": {
+            "MAE": 3765.8395,
+            "RMSE": 5564.9698,
+            "R2": -0.1929
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 481,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.8164,
+            "RMSE": 0.9249,
+            "R2": 0.1103
+          },
+          "global": {
+            "MAE": 0.8259,
+            "RMSE": 0.9689,
+            "R2": 0.0237
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 481,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.1887,
+            "RMSE": 0.2616,
+            "R2": 0.0127
+          },
+          "global": {
+            "MAE": 0.2297,
+            "RMSE": 0.289,
+            "R2": -0.2054
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 481,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.8621,
+            "Precision_Macro": 0.4808,
+            "Recall_Macro": 0.4464,
+            "F1_Macro": 0.463
+          },
+          "global": {
+            "Accuracy": 0.9655,
+            "Precision_Macro": 0.4828,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4912
+          }
+        }
+      }
+    },
+    "283": {
+      "name": "Pulau Tiga",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 561,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.619,
+            "RMSE": 0.7506,
+            "R2": -0.2865
+          },
+          "global": {
+            "MAE": 0.5547,
+            "RMSE": 0.7041,
+            "R2": -0.1319
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 561,
+          "n_test": 28,
+          "local": {
+            "MAE": 2.0833,
+            "RMSE": 2.6679,
+            "R2": -0.1729
+          },
+          "global": {
+            "MAE": 2.0583,
+            "RMSE": 2.5627,
+            "R2": -0.0822
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 561,
+          "n_test": 28,
+          "local": {
+            "MAE": 6.3617,
+            "RMSE": 9.1325,
+            "R2": -0.7499
+          },
+          "global": {
+            "MAE": 4.3709,
+            "RMSE": 6.8767,
+            "R2": 0.0078
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 568,
+          "n_test": 28,
+          "local": {
+            "MAE": 5259.4043,
+            "RMSE": 6461.7348,
+            "R2": -0.0127
+          },
+          "global": {
+            "MAE": 5303.8607,
+            "RMSE": 6616.6404,
+            "R2": -0.0618
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 561,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.643,
+            "RMSE": 0.76,
+            "R2": 0.5657
+          },
+          "global": {
+            "MAE": 0.7282,
+            "RMSE": 0.9111,
+            "R2": 0.3759
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 561,
+          "n_test": 28,
+          "local": {
+            "MAE": 0.127,
+            "RMSE": 0.1533,
+            "R2": -0.3821
+          },
+          "global": {
+            "MAE": 0.1222,
+            "RMSE": 0.1473,
+            "R2": -0.2753
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 561,
+          "n_test": 28,
+          "local": {
+            "Accuracy": 0.8571,
+            "Precision_Macro": 0.4286,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4615
+          },
+          "global": {
+            "Accuracy": 0.8571,
+            "Precision_Macro": 0.4286,
+            "Recall_Macro": 0.5,
+            "F1_Macro": 0.4615
+          }
+        }
+      }
+    },
+    "286": {
+      "name": "Kebun Lama",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 644,
+          "n_test": 27,
+          "local": {
+            "MAE": 0.8016,
+            "RMSE": 0.9735,
+            "R2": -0.1224
+          },
+          "global": {
+            "MAE": 0.8046,
+            "RMSE": 0.9749,
+            "R2": -0.1256
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 644,
+          "n_test": 27,
+          "local": {
+            "MAE": 2.559,
+            "RMSE": 3.0446,
+            "R2": -0.0965
+          },
+          "global": {
+            "MAE": 2.644,
+            "RMSE": 3.1042,
+            "R2": -0.1398
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 644,
+          "n_test": 27,
+          "local": {
+            "MAE": 6.5683,
+            "RMSE": 9.8949,
+            "R2": -0.2901
+          },
+          "global": {
+            "MAE": 6.9063,
+            "RMSE": 8.8168,
+            "R2": -0.0243
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 649,
+          "n_test": 27,
+          "local": {
+            "MAE": 7908.886,
+            "RMSE": 9926.6882,
+            "R2": 0.0042
+          },
+          "global": {
+            "MAE": 8317.1402,
+            "RMSE": 10255.1227,
+            "R2": -0.0628
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 644,
+          "n_test": 27,
+          "local": {
+            "MAE": 0.8205,
+            "RMSE": 0.9501,
+            "R2": 0.2573
+          },
+          "global": {
+            "MAE": 0.8108,
+            "RMSE": 0.9699,
+            "R2": 0.226
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 644,
+          "n_test": 27,
+          "local": {
+            "MAE": 0.1994,
+            "RMSE": 0.2666,
+            "R2": 0.0332
+          },
+          "global": {
+            "MAE": 0.2329,
+            "RMSE": 0.3025,
+            "R2": -0.2449
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 644,
+          "n_test": 27,
+          "local": {
+            "Accuracy": 0.4815,
+            "Precision_Macro": 0.1354,
+            "Recall_Macro": 0.2031,
+            "F1_Macro": 0.1625
+          },
+          "global": {
+            "Accuracy": 0.5926,
+            "Precision_Macro": 0.1538,
+            "Recall_Macro": 0.25,
+            "F1_Macro": 0.1905
+          }
+        }
+      }
+    },
     "287": {
       "name": "Julok Rayeuk Utara",
       "indicators": {
@@ -3132,6 +9964,342 @@
             "Precision_Macro": 0.5881,
             "Recall_Macro": 0.5889,
             "F1_Macro": 0.5857
+          }
+        }
+      }
+    },
+    "292": {
+      "name": "Berangir",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 899,
+          "n_test": 25,
+          "local": {
+            "MAE": 1.8057,
+            "RMSE": 2.1935,
+            "R2": -0.2265
+          },
+          "global": {
+            "MAE": 1.57,
+            "RMSE": 1.8728,
+            "R2": 0.1059
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 899,
+          "n_test": 25,
+          "local": {
+            "MAE": 5.1759,
+            "RMSE": 6.8228,
+            "R2": -0.3255
+          },
+          "global": {
+            "MAE": 4.5698,
+            "RMSE": 5.6501,
+            "R2": 0.091
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 899,
+          "n_test": 25,
+          "local": {
+            "MAE": 14.8278,
+            "RMSE": 17.1684,
+            "R2": -7.2542
+          },
+          "global": {
+            "MAE": 5.38,
+            "RMSE": 6.8488,
+            "R2": -0.3135
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 904,
+          "n_test": 25,
+          "local": {
+            "MAE": 8159.5364,
+            "RMSE": 10200.7821,
+            "R2": -2.596
+          },
+          "global": {
+            "MAE": 4387.4226,
+            "RMSE": 5737.081,
+            "R2": -0.1375
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 899,
+          "n_test": 25,
+          "local": {
+            "MAE": 0.7669,
+            "RMSE": 1.0383,
+            "R2": -0.0564
+          },
+          "global": {
+            "MAE": 0.8154,
+            "RMSE": 0.9946,
+            "R2": 0.0306
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 899,
+          "n_test": 25,
+          "local": {
+            "MAE": 0.2736,
+            "RMSE": 0.3536,
+            "R2": -0.2647
+          },
+          "global": {
+            "MAE": 0.2348,
+            "RMSE": 0.307,
+            "R2": 0.0472
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 899,
+          "n_test": 25,
+          "local": {
+            "Accuracy": 0.72,
+            "Precision_Macro": 0.24,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.2791
+          },
+          "global": {
+            "Accuracy": 0.72,
+            "Precision_Macro": 0.4206,
+            "Recall_Macro": 0.4296,
+            "F1_Macro": 0.4217
+          }
+        }
+      }
+    },
+    "295": {
+      "name": "Sei Kopas",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 476,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.9119,
+            "RMSE": 1.0852,
+            "R2": -0.3238
+          },
+          "global": {
+            "MAE": 0.7804,
+            "RMSE": 1.0096,
+            "R2": -0.1458
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 476,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.1426,
+            "RMSE": 3.6974,
+            "R2": -0.1994
+          },
+          "global": {
+            "MAE": 3.2451,
+            "RMSE": 3.7111,
+            "R2": -0.2083
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 478,
+          "n_test": 29,
+          "local": {
+            "MAE": 5.3373,
+            "RMSE": 6.3139,
+            "R2": -2.6349
+          },
+          "global": {
+            "MAE": 4.4301,
+            "RMSE": 4.8713,
+            "R2": -1.1637
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 484,
+          "n_test": 29,
+          "local": {
+            "MAE": 5343.962,
+            "RMSE": 6771.6017,
+            "R2": -0.066
+          },
+          "global": {
+            "MAE": 5285.6479,
+            "RMSE": 6978.7261,
+            "R2": -0.1323
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 477,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6995,
+            "RMSE": 0.8724,
+            "R2": 0.3272
+          },
+          "global": {
+            "MAE": 0.7622,
+            "RMSE": 0.9444,
+            "R2": 0.2115
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 476,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.2453,
+            "RMSE": 0.2934,
+            "R2": -0.2027
+          },
+          "global": {
+            "MAE": 0.2292,
+            "RMSE": 0.2933,
+            "R2": -0.2018
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 476,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.5862,
+            "Precision_Macro": 0.4106,
+            "Recall_Macro": 0.4,
+            "F1_Macro": 0.3762
+          },
+          "global": {
+            "Accuracy": 0.5172,
+            "Precision_Macro": 0.1724,
+            "Recall_Macro": 0.3333,
+            "F1_Macro": 0.2273
+          }
+        }
+      }
+    },
+    "298": {
+      "name": "Aek Raso",
+      "indicators": {
+        "temp_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 902,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.8579,
+            "RMSE": 1.1528,
+            "R2": 0.0946
+          },
+          "global": {
+            "MAE": 0.9237,
+            "RMSE": 1.2429,
+            "R2": -0.0526
+          }
+        },
+        "humidity_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 902,
+          "n_test": 29,
+          "local": {
+            "MAE": 3.2289,
+            "RMSE": 4.6295,
+            "R2": 0.2308
+          },
+          "global": {
+            "MAE": 3.4853,
+            "RMSE": 5.0993,
+            "R2": 0.0668
+          }
+        },
+        "rainfall_total_mm": {
+          "algo": "Random Forest (Ensemble Bagging)",
+          "n_train_local": 902,
+          "n_test": 29,
+          "local": {
+            "MAE": 6.6256,
+            "RMSE": 8.5167,
+            "R2": -0.5006
+          },
+          "global": {
+            "MAE": 6.5226,
+            "RMSE": 8.7979,
+            "R2": -0.6013
+          }
+        },
+        "solar_radiation_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 905,
+          "n_test": 29,
+          "local": {
+            "MAE": 6474.1226,
+            "RMSE": 8365.1116,
+            "R2": -0.1555
+          },
+          "global": {
+            "MAE": 6637.5919,
+            "RMSE": 8137.8195,
+            "R2": -0.0936
+          }
+        },
+        "pressure_avg_hpa": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 902,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.6786,
+            "RMSE": 0.8274,
+            "R2": 0.2592
+          },
+          "global": {
+            "MAE": 0.7513,
+            "RMSE": 0.9168,
+            "R2": 0.0903
+          }
+        },
+        "wind_speed_avg": {
+          "algo": "Ridge Regression (Linear Baseline)",
+          "n_train_local": 902,
+          "n_test": 29,
+          "local": {
+            "MAE": 0.3472,
+            "RMSE": 0.5134,
+            "R2": -0.0367
+          },
+          "global": {
+            "MAE": 0.3695,
+            "RMSE": 0.5556,
+            "R2": -0.214
+          }
+        },
+        "wind_direction_name": {
+          "algo": "LightGBM (Gradient Boosting)",
+          "n_train_local": 902,
+          "n_test": 29,
+          "local": {
+            "Accuracy": 0.4828,
+            "Precision_Macro": 0.4881,
+            "Recall_Macro": 0.4167,
+            "F1_Macro": 0.3447
+          },
+          "global": {
+            "Accuracy": 0.4828,
+            "Precision_Macro": 0.342,
+            "Recall_Macro": 0.3675,
+            "F1_Macro": 0.3308
           }
         }
       }

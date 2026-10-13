@@ -75,6 +75,10 @@ df_bench_clf = df_bench_all[df_bench_all['Variabel'] == CLASSIFICATION_TARGET].c
 with open(os.path.join(BASE_DIR, 'benchmark_merged_5algo_h1_h7.json'), 'r', encoding='utf-8') as f:
     merged_records = json.load(f)
 df_merged_all = pd.DataFrame(merged_records)
+# Baris ML diambil dari benchmark produksi (df_bench_all) agar juara deployable identik dengan
+# Tabel 3.3 dan model produksi; file gabungan hanya dipakai untuk baris DL (LSTM/GRU).
+_ml_names = set(df_bench_all['Algoritma'].unique())
+df_merged_all = pd.concat([df_bench_all, df_merged_all[~df_merged_all['Algoritma'].isin(_ml_names)]], ignore_index=True)
 df_merged_reg = df_merged_all[df_merged_all['Variabel'] != CLASSIFICATION_TARGET].copy()
 df_merged_clf = df_merged_all[df_merged_all['Variabel'] == CLASSIFICATION_TARGET].copy()
 
@@ -668,7 +672,7 @@ for i, (stn_id, fname) in enumerate(zip(fig3_station_ids, fig3_files), start=1):
     fig3_p = os.path.join(fig_dir, fname)
     if os.path.exists(fig3_p):
         story.append(Image(fig3_p, width=17.0*cm, height=9.04*cm))
-        story.append(Paragraph(f'<b>Gambar 7.{i}:</b> Perbandingan Deret Waktu Harian Aktual vs Prediksi Model (H+1) untuk 6 Target Regresi pada Stasiun AWS {stn_id} (Periode Uji 30 Hari: 21 Juli s/d 19 Agustus 2026).', style_caption))
+        story.append(Paragraph(f'<b>Gambar 7.{i}:</b> Perbandingan Deret Waktu Harian Aktual vs Prediksi Model untuk 6 Target Regresi pada Stasiun AWS {stn_id} (Periode Uji 30 Hari: 21 Juli s/d 19 Agustus 2026).', style_caption))
         story.append(PageBreak())
 
 story.append(Paragraph('6.2 Showcase Trajektori Ramalan H+1 s/d H+7', style_h2))
