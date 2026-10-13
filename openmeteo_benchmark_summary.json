@@ -85,6 +85,60 @@
       "winner_avg": "NusaKlim"
     }
   },
+  "solar_comparison": {
+    "222": {
+      "n": 30,
+      "readings_per_day": 141,
+      "om": {
+        "value": 7000.4,
+        "bias": 6432.3
+      },
+      "nk": {
+        "value": 7681.4,
+        "bias": -1177.0
+      },
+      "winner": "Open-Meteo"
+    },
+    "2179": {
+      "n": 30,
+      "readings_per_day": 143,
+      "om": {
+        "value": 7598.5,
+        "bias": 7598.5
+      },
+      "nk": {
+        "value": 3697.7,
+        "bias": -1413.2
+      },
+      "winner": "NusaKlim"
+    },
+    "248": {
+      "n": 30,
+      "readings_per_day": 139,
+      "om": {
+        "value": 12462.7,
+        "bias": 12462.7
+      },
+      "nk": {
+        "value": 5032.3,
+        "bias": -697.6
+      },
+      "winner": "NusaKlim"
+    },
+    "267": {
+      "n": 30,
+      "readings_per_day": 63,
+      "om": {
+        "value": 5668.0,
+        "bias": 5668.0
+      },
+      "nk": {
+        "value": 3515.4,
+        "bias": 3118.9
+      },
+      "winner": "NusaKlim"
+    }
+  },
   "station_results": {
     "222": {
       "station_name": "Rambutan",

@@ -357,6 +357,49 @@ for sid in stn_ids:
     plt.close()
     print(f'Saved time-series figure: {ts_path}')
 
+# (c) Kurva Radiasi Matahari, 4 stasiun dalam satu gambar, format sama dengan indikator lain (MAE + pemenang).
+#     Kolom AWS solar_radiation_avg = TOTAL harian (jumlah pembacaan W/m2; 144/hari pada interval 10 menit, ~72/hari
+#     pada stasiun berinterval 20 menit), sedangkan Open-Meteo = rata-rata harian W/m2. Agar sebanding, Open-Meteo
+#     dikonversi ke skala total harian: rata-rata W/m2 x jumlah pembacaan normal stasiun (median records_count).
+#     Semua hari uji dihitung, sama seperti indikator lain.
+SOLAR = 'solar_radiation_avg'
+df_feat['nk_solar'] = np.clip(np.asarray(models[f'{SOLAR}_h1'].predict(X_all), dtype=float), 0, None)
+nk_solar = df_feat[['stnname', 'pred_date', 'nk_solar']].rename(columns={'pred_date': 'date_dt'})
+solar_res = {}
+fig, axes = plt.subplots(2, 2, figsize=(14, 8.5), dpi=200)
+for ax, sid in zip(axes.flatten(), stn_ids):
+    m = merged_by_station[sid].merge(nk_solar[nk_solar['stnname'] == int(sid)].drop(columns='stnname'), on='date_dt', how='left')
+    n_full = float(m['records_count'].median())  # jumlah pembacaan per hari normal stasiun ini (144 atau ~72)
+    m['om_solar_total'] = m['om_solar'] * n_full
+    sub = m.dropna(subset=[SOLAR, 'om_solar_total', 'nk_solar'])
+    mae_om = float(mean_absolute_error(sub[SOLAR], sub['om_solar_total']))
+    mae_nk = float(mean_absolute_error(sub[SOLAR], sub['nk_solar']))
+    winner = 'NusaKlim' if mae_nk < mae_om else ('Open-Meteo' if mae_om < mae_nk else 'Seri')
+    solar_res[sid] = {'n': int(len(sub)), 'readings_per_day': int(n_full),
+                      'om': {'value': round(mae_om, 1), 'bias': round(float((sub['om_solar_total'] - sub[SOLAR]).mean()), 1)},
+                      'nk': {'value': round(mae_nk, 1), 'bias': round(float((sub['nk_solar'] - sub[SOLAR]).mean()), 1)},
+                      'winner': winner}
+    ax.plot(m['date_dt'], m[SOLAR], color=COL_ACT, linewidth=2.0, marker='o', markersize=3, label='Aktual AWS')
+    ax.plot(m['date_dt'], m['om_solar_total'], color=COL_OM, linewidth=1.5, linestyle='--', marker='s', markersize=2.5,
+            label=f'Open-Meteo (MAE {mae_om:,.0f})')
+    ax.plot(m['date_dt'], m['nk_solar'], color=COL_NK, linewidth=1.6, marker='^', markersize=2.5,
+            label=f'NusaKlim (MAE {mae_nk:,.0f})')
+    ax.set_ylabel('Radiasi Matahari (total harian)', fontsize=8.5)
+    ax.set_title(f"Stasiun {sid} {test_stations[sid]['name']} — lebih akurat: {winner}", fontsize=9.5, fontweight='bold')
+    ax.legend(fontsize=7, loc='best', frameon=True)
+    ax.xaxis.set_major_locator(mdates.DayLocator(interval=5))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%d %b'))
+    ax.tick_params(axis='x', labelsize=7.5)
+    ax.tick_params(axis='y', labelsize=7.5)
+    ax.grid(True, linestyle=':', alpha=0.6)
+fig.suptitle(f'Kurva Radiasi Matahari: Aktual AWS vs Open-Meteo vs Prediksi NusaKlim, {start_date} s/d {end_date}',
+             fontsize=12, fontweight='bold', color='#1E3A8A')
+plt.tight_layout(rect=[0, 0, 1, 0.96], h_pad=3, w_pad=2.5)
+solar_path = os.path.join(fig_dir, 'fig_openmeteo_solar_ts.png')
+plt.savefig(solar_path)
+plt.close()
+print(f'Saved solar figure: {solar_path}  {solar_res}')
+
 # ------------------------------------------------------------------------------
 # 7. Simpan ringkasan JSON
 # ------------------------------------------------------------------------------
@@ -367,6 +410,7 @@ summary = {
     'open_meteo_source': om_source,
     'algo_used': {k: algo_used[f'{k}_h1'] for k, *_ in INDICATORS},
     'indicator_summary': indicator_summary,
+    'solar_comparison': solar_res,
     'station_results': station_results,
     'open_meteo_metrics': {'avg_temp_mae': round(avg_temp_mae_om, 3), 'avg_temp_rmse': round(avg_temp_rmse_om, 3),
                            'avg_temp_bias': round(avg_temp_bias_om, 3), 'avg_humidity_mae': round(avg_hum_mae_om, 3),

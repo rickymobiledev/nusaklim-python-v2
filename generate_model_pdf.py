@@ -675,6 +675,16 @@ for i, (stn_id, fname) in enumerate(zip(fig3_station_ids, fig3_files), start=1):
         story.append(Paragraph(f'<b>Gambar 7.{i}:</b> Perbandingan Deret Waktu Harian Aktual vs Prediksi Model untuk 6 Target Regresi pada Stasiun AWS {stn_id} (Periode Uji 30 Hari: 21 Juli s/d 19 Agustus 2026).', style_caption))
         story.append(PageBreak())
 
+_wd_a = os.path.join(fig_dir, 'fig_model3b_winddir_timeseries.png')
+if os.path.exists(_wd_a):
+    story.append(Paragraph(
+        'Arah Mata Angin berupa kategori sehingga tidak dapat digambar sebagai garis seperti enam target di atas. Gambar 7.11 menampilkan kategori harian aktual (lingkaran hitam) dan prediksi NusaKlim H+1 (segitiga hijau) pada 10 stasiun yang sama; titik yang saling menutupi berarti prediksi benar. Accuracy tiap stasiun tertera pada legenda.',
+        style_body
+    ))
+    story.append(Image(_wd_a, width=14.0*cm, height=16.9*cm))
+    story.append(Paragraph('<b>Gambar 7.11:</b> Perbandingan Deret Waktu Harian Arah Mata Angin, Aktual vs Prediksi NusaKlim (H+1), 10 Stasiun, Periode Uji 30 Hari (21 Juli s/d 19 Agustus 2026).', style_caption))
+    story.append(PageBreak())
+
 story.append(Paragraph('6.2 Showcase Trajektori Ramalan H+1 s/d H+7', style_h2))
 with open(os.path.join(fig_dir, '..', 'figures_benchmark', 'fig_merged4_stations.json'), 'r', encoding='utf-8') as f:
     _traj_meta = json.load(f)
@@ -697,6 +707,16 @@ for i, (stn_id, fname) in enumerate(zip(traj_station_ids, traj_files), start=1):
         story.append(Image(p_traj, width=17.0 * cm, height=8.94 * cm))
         story.append(Paragraph(f'<b>Gambar 8.{i}:</b> Trajektori Ramalan H+1 s/d H+7 vs Realisasi Aktual, Stasiun AWS {stn_id} (Titik Ramal: {traj_issue_date}).', style_caption))
         story.append(PageBreak())
+
+_wd_b = os.path.join(fig_dir, '..', 'figures_benchmark', 'fig_merged4b_winddir_trajectory.png')
+if os.path.exists(_wd_b):
+    story.append(Paragraph(
+        f'Untuk Arah Mata Angin, Gambar 8.6 menampilkan kategori aktual dan ramalan H+1 s/d H+7 dari titik ramal yang sama ({traj_issue_date}) pada kelima stasiun tersebut.',
+        style_body
+    ))
+    story.append(Image(_wd_b, width=17.0*cm, height=13.4*cm))
+    story.append(Paragraph(f'<b>Gambar 8.6:</b> Trajektori Ramalan Arah Mata Angin H+1 s/d H+7 vs Realisasi Aktual, Stasiun AWS {", ".join(traj_station_ids)} (Titik Ramal: {traj_issue_date}).', style_caption))
+    story.append(PageBreak())
 
 # ==================== CHAPTER 7 & 8 ====================
 story.append(Paragraph('7. Implementasi Output Ramalan Cuaca 7 Hari per Stasiun', style_h1))
@@ -758,7 +778,7 @@ art_data = [
     [Paragraph('<b>Model Prediksi Terlatih</b>', style_table_cell_bold), Paragraph(f'{model_size_mb:.1f} MB', style_table_cell), Paragraph(f'Model produksi berisi {n_target} sub-model ({7*6} regresi &amp; {7} klasifikasi arah angin) untuk 7 horizon waktu ke depan.', style_table_cell)],
     [Paragraph('<b>Program Pelatihan Ulang</b>', style_table_cell_bold), Paragraph('Program otomatis', style_table_cell), Paragraph('Program yang dapat melatih ulang model secara otomatis serta menghasilkan ramalan 7 hari untuk stasiun mana pun.', style_table_cell)],
     [Paragraph('<b>Perbandingan Algoritma</b>', style_table_cell_bold), Paragraph('Program analisis', style_table_cell), Paragraph('Program pembanding 5 algoritma (LightGBM, Ridge Regression/Logistic Regression, Random Forest, LSTM, GRU) untuk seluruh 7 variabel target di H+1 &amp; H+7 (Bab 3.4); algoritma produksi tetap dipilih hanya dari 3 ML yang bisa di-deploy (Bab 3.3).', style_table_cell)],
-    [Paragraph('<b>Grafik Evaluasi</b>', style_table_cell_bold), Paragraph('21 gambar resolusi tinggi', style_table_cell), Paragraph('Kurva performa per horizon (regresi & arah angin), perbandingan 5 algoritma (ML+DL), tingkat kepentingan fitur per variabel, perbandingan deret waktu aktual vs prediksi pada 10 stasiun, dan trajektori ramalan H+1-H+7 pada 5 stasiun.', style_table_cell)],
+    [Paragraph('<b>Grafik Evaluasi</b>', style_table_cell_bold), Paragraph('23 gambar resolusi tinggi', style_table_cell), Paragraph('Kurva performa per horizon (regresi & arah angin), perbandingan 5 algoritma (ML+DL), tingkat kepentingan fitur per variabel, perbandingan deret waktu aktual vs prediksi pada 10 stasiun, trajektori ramalan H+1-H+7 pada 5 stasiun, serta deret waktu dan trajektori Arah Mata Angin.', style_table_cell)],
 ]
 tbl_art = Table(art_data, colWidths=[145, 105, 265])
 tbl_art.setStyle(TableStyle([
