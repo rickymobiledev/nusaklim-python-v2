@@ -11,13 +11,19 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from api.config import settings
 
 def run_nusaklim_pipeline(
-    input_csv=r"D:\Projects\Kodepanda\Nusaklim\nusaklim\data_raw\nusaklim-aws-reduce.csv",
-    output_daily_csv=r"D:\Projects\Kodepanda\Nusaklim\nusaklim\nusaklim_daily_aggregated.csv",
-    figures_output_dir=r"D:\Projects\Kodepanda\Nusaklim\nusaklim\figures",
-    chunk_size=500000
+    input_csv=None,
+    output_daily_csv=None,
+    figures_output_dir=None,
+    chunk_size=500000,
+    storage_backend=None,
 ):
+    backend = storage_backend or settings.storage_backend
+    input_csv = input_csv or settings.raw_csv_path
+    output_daily_csv = output_daily_csv or settings.daily_csv_path
+    figures_output_dir = figures_output_dir or os.path.join(settings.base_dir, "figures")
     print("=" * 75)
     print("STARTING NUSAKLIM DATA PREPROCESSING & EDA PIPELINE (PPKS)")
     print("=" * 75)
@@ -44,10 +50,15 @@ def run_nusaklim_pipeline(
     }
 
     chunk_count = 0
-    print(f"Reading raw file: {input_csv}")
+    print(f"Reading raw data: {'PostgreSQL weather_raw' if backend == 'postgres' else input_csv}")
     print(f"Chunk processing size: {chunk_size:,} rows per batch")
 
-    for chunk in pd.read_csv(input_csv, chunksize=chunk_size, low_memory=False):
+    if backend == "postgres":
+        from api.weather_store import iter_raw_chunks
+        chunks = iter_raw_chunks(chunk_size)
+    else:
+        chunks = pd.read_csv(input_csv, chunksize=chunk_size, low_memory=False, dtype={"stnname": str})
+    for chunk in chunks:
         chunk_count += 1
         total_raw_rows += len(chunk)
         
@@ -258,10 +269,17 @@ def run_nusaklim_pipeline(
             'records_count': d['total_records']
         })
 
+    if not daily_list:
+        raise ValueError("Tidak ada data harian valid setelah cleaning")
     df_daily = pd.DataFrame(daily_list).sort_values(['stnname', 'date']).reset_index(drop=True)
-    df_daily.to_csv(output_daily_csv, index=False)
+    if backend == "postgres":
+        from api.weather_store import save_daily
+        save_daily(df_daily)
+    else:
+        os.makedirs(os.path.dirname(os.path.abspath(output_daily_csv)), exist_ok=True)
+        df_daily.to_csv(output_daily_csv, index=False)
     print(f"Dropped {dropped_excess_records:,} station-days with implausible reporting frequency (> {MAX_PLAUSIBLE_RECORDS_PER_DAY} records/day).")
-    print(f"SUCCESS: Saved {len(df_daily):,} station-days to {output_daily_csv} ({os.path.getsize(output_daily_csv):,} bytes)")
+    print(f"SUCCESS: Saved {len(df_daily):,} station-days to {'PostgreSQL weather_daily' if backend == 'postgres' else output_daily_csv}")
     print(f"Pipeline completed in {time.time() - start_time:.2f} seconds.")
     return df_daily
 

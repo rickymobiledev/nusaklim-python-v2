@@ -57,9 +57,12 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, accuracy_score, f1_score
 
-BASE_DIR = r"D:\Projects\Kodepanda\Nusaklim\nusaklim"
-DATA_PATH = os.path.join(BASE_DIR, "nusaklim_daily_aggregated.csv")
-MODEL_DIR = os.path.join(BASE_DIR, "models")
+from api.config import settings
+from api.weather_store import load_daily
+
+BASE_DIR = settings.base_dir
+DATA_PATH = settings.daily_csv_path
+MODEL_DIR = os.path.dirname(settings.model_bundle_path)
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 # Base variables used for lag/rolling engineered features (excludes wind_direction_deg:
@@ -219,7 +222,7 @@ def wind_majority_baseline(horizon=1, df_featured=None, feature_cols=None, targe
     (bukan angka tetap) supaya selalu sama dengan data uji yang dipakai model.
     Kembalikan (nama_kelas, proporsi 0-1)."""
     if df_featured is None:
-        df_featured, feature_cols, target_cols, _ = build_features_and_targets(pd.read_csv(DATA_PATH))
+        df_featured, feature_cols, target_cols, _ = build_features_and_targets(load_daily())
     split = df_featured['date_dt'].max() - timedelta(days=test_days)
     valid = ['Utara', 'Timur', 'Selatan', 'Barat']
     t1 = target_cols[f'{CLASSIFICATION_TARGET}_h1']
@@ -379,7 +382,7 @@ def train_and_evaluate(df_featured, feature_cols, target_cols, target_types, tes
     timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
     bundle_filename = f"weather_model_bundle_{timestamp_str}.joblib"
     bundle_path = os.path.join(MODEL_DIR, bundle_filename)
-    latest_bundle_path = os.path.join(MODEL_DIR, "weather_model_latest.joblib")
+    latest_bundle_path = settings.model_bundle_path
 
     model_bundle = {
         'timestamp': timestamp_str,
@@ -408,14 +411,14 @@ def train_and_evaluate(df_featured, feature_cols, target_cols, target_types, tes
 # ------------------------------------------------------------------------------
 def generate_7day_forecast(station_id, df_featured=None, bundle_path=None):
     if bundle_path is None:
-        bundle_path = os.path.join(MODEL_DIR, "weather_model_latest.joblib")
+        bundle_path = settings.model_bundle_path
 
     bundle = joblib.load(bundle_path)
     models = bundle['models']
     feature_cols = bundle['feature_cols']
 
     if df_featured is None:
-        df_daily = pd.read_csv(DATA_PATH)
+        df_daily = load_daily()
         df_featured, _, _, _ = build_features_and_targets(df_daily)
 
     stn_data = df_featured[df_featured['stnname'].astype(str) == str(station_id)].sort_values('date_dt')
@@ -480,10 +483,10 @@ def execute_retrain_pipeline():
     print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 70)
 
-    if not os.path.exists(DATA_PATH):
+    if settings.storage_backend == "csv" and not os.path.exists(DATA_PATH):
         raise FileNotFoundError(f"Clean aggregated data not found at {DATA_PATH}. Run process_nusaklim.py first.")
 
-    df_daily = pd.read_csv(DATA_PATH)
+    df_daily = load_daily()
     print(f"Loaded daily dataset: {len(df_daily):,} rows from {df_daily['stnname'].nunique()} stations.")
 
     df_featured, feature_cols, target_cols, target_types = build_features_and_targets(df_daily)

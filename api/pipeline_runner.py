@@ -1,7 +1,7 @@
 # ==============================================================================
 # ORKESTRATOR PIPELINE DATA BARU -> CLEANING -> AGREGASI -> RETRAIN (+ LOG)
 # Dipakai oleh POST /ingest, /ingest/upload, /retrain, dan CLI:
-#     python -m api.pipeline_runner            (proses semua file di data_raw/incoming/)
+#     uv run python -m api.pipeline_runner            (proses semua file di data_raw/incoming/)
 #
 # Struktur folder (lihat api/config.py):
 #   data_raw/nusaklim-aws-reduce.csv   master (gabungan seluruh data mentah)
@@ -31,6 +31,7 @@ import joblib
 
 from api.config import settings
 from api.ingest_upload import merge_upload, validate_csv_header, UploadValidationError
+from api.retention import run_all_retention
 
 NAME_PATTERN = re.compile(r"^nusaklim-aws-reduce_\d{8}-\d{8}\.csv$")
 TAIL_LINES = 25
@@ -160,7 +161,7 @@ def _verify_new_bundle(started_at: float) -> dict:
 
 
 def run_pipeline(task_id: str, trigger: str, extra_files: list[tuple[str, str]] | None = None,
-                 retrain_only: bool = False, on_success=None) -> bool:
+                 retrain_only: bool = False, on_success=None, ingestion_stats: dict | None = None) -> bool:
     """Jalankan tahap: merge file baru -> cleaning+agregasi -> retrain -> verifikasi -> reload.
     Selalu menulis 1 entri SUKSES/GAGAL ke logs/pipeline.log. Return True kalau sukses."""
     _ensure_dirs()
@@ -168,6 +169,9 @@ def run_pipeline(task_id: str, trigger: str, extra_files: list[tuple[str, str]] 
     started = time.time()
     entry = {"task_id": task_id, "trigger": trigger, "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
              "run_log": run_log, "files": "", "rows_added": 0}
+    if ingestion_stats:
+        entry["rows_added"] = ingestion_stats["rows_added"]
+        entry["rows_skipped"] = ingestion_stats["rows_skipped"]
     archived: list[str] = []
     try:
         if not retrain_only:
@@ -180,7 +184,11 @@ def run_pipeline(task_id: str, trigger: str, extra_files: list[tuple[str, str]] 
                     _move_unique(path, _paths()["rejected"], base)
                     raise StageError("validasi", f"{base}: {e}")
                 try:
-                    stats = merge_upload(path, settings.raw_csv_path, mode, keep_source=True)
+                    if settings.storage_backend == "postgres":
+                        from api.weather_store import import_raw_csv
+                        stats = import_raw_csv(path, mode)
+                    else:
+                        stats = merge_upload(path, settings.raw_csv_path, mode, keep_source=True)
                 except Exception as e:
                     _move_unique(path, _paths()["rejected"], base)
                     raise StageError("merge", f"{base}: {e}", traceback.format_exc())
@@ -188,7 +196,7 @@ def run_pipeline(task_id: str, trigger: str, extra_files: list[tuple[str, str]] 
                 archived.append(os.path.basename(_move_unique(path, _paths()["archive"], _archive_name(path, task_id))))
                 with open(run_log, "a", encoding="utf-8") as f:
                     f.write(f"[merge] {base}: {stats}\n")
-            entry["files"] = ", ".join(archived) or "(tidak ada file baru - proses ulang master)"
+            entry["files"] = ", ".join(archived) or ("(JSON tersimpan di PostgreSQL)" if ingestion_stats else "(tidak ada file baru - proses ulang master)")
             _run_script("cleaning", os.path.join(settings.base_dir, "process_nusaklim.py"), run_log)
         else:
             entry["files"] = "(retrain dari data harian yang sudah ada)"
@@ -196,6 +204,20 @@ def run_pipeline(task_id: str, trigger: str, extra_files: list[tuple[str, str]] 
         t_retrain = time.time()
         _run_script("retrain", os.path.join(settings.base_dir, "retrain_pipeline.py"), run_log)
         entry.update(_verify_new_bundle(t_retrain))
+
+        try:
+            ret_stats = run_all_retention(exclude_logs={os.path.basename(run_log)})
+            n_del_b = len(ret_stats.get("models", {}).get("deleted", []))
+            n_del_l = len(ret_stats.get("logs", {}).get("deleted", []))
+            freed = ret_stats.get("freed_bytes", 0)
+            with open(run_log, "a", encoding="utf-8") as f:
+                f.write(
+                    f"\n[retention] Pembersihan otomatis: {n_del_b} bundle model, "
+                    f"{n_del_l} run log dihapus ({freed:,} bytes dibebaskan)\n"
+                )
+        except Exception as ret_err:
+            with open(run_log, "a", encoding="utf-8") as f:
+                f.write(f"\n[retention] Peringatan: Pembersihan retensi file gagal: {ret_err}\n")
 
         if on_success:
             try:

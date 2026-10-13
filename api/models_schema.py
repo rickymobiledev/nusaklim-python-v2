@@ -134,6 +134,8 @@ class IngestRecord(BaseModel):
 class IngestJsonRequest(BaseModel):
     mode: Literal["append", "replace"] = Field(
         "append",
-        description="`append` (default): hanya baris yang LEBIH BARU dari data terakhir tiap stasiun yang ditambahkan. "
-                    "`replace`: payload menggantikan SELURUH raw CSV (raw lama disimpan sebagai .bak).")
+        description="`append` (default): PostgreSQL menambahkan pasangan stasiun/waktu yang belum ada, termasuk data terlambat; "
+                    "CSV menambahkan baris yang lebih baru dari data terakhir tiap stasiun. "
+                    "`replace`: khusus backend CSV, menggantikan seluruh raw CSV (backup .bak).")
+    trigger_retrain: bool = Field(True, description="Jika true, memicu background retrain. Jika false, data hanya di-commit ke storage (PostgreSQL/raw) tanpa memicu retrain.")
     records: List[IngestRecord] = Field(..., min_length=1, description="Daftar baris data mentah.")
