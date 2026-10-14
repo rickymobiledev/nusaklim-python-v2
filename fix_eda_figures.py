@@ -18,6 +18,8 @@ plt.rcParams['font.family'] = 'DejaVu Sans'
 plt.rcParams['figure.dpi'] = 300
 
 df = pd.read_csv(os.path.join(BASE_DIR, 'nusaklim_daily_aggregated.csv'))
+import radiation_units as ru  # radiasi: total harian (SUM) -> MJ/m2 hanya saat tampil
+df = ru.convert_daily(df)
 df['date'] = pd.to_datetime(df['date'])
 
 # ------------------------------------------------------------------------------
@@ -217,7 +219,7 @@ axes[0, 0].legend(loc='upper right')
 axes[0, 0].set_title('Tren Rangkaian Waktu Cuaca Harian Nasional – Parameter Tambahan (2022 - 2026)', fontweight='bold', fontsize=13)
 
 axes[0, 1].plot(daily_b.index, solar_ma, color='#EA580C', lw=1.3, label='Radiasi Solar (7-day MA)')
-axes[0, 1].set_ylabel('Radiasi Solar (Wh/m² total harian)', fontweight='bold', fontsize=11)
+axes[0, 1].set_ylabel('Radiasi Solar (MJ/m² per hari)', fontweight='bold', fontsize=11)
 axes[0, 1].legend(loc='upper right')
 
 axes[1, 0].plot(daily_b.index, windspd_ma, color='#7C3AED', lw=1.3, label='Kecepatan Angin (7-day MA)')
