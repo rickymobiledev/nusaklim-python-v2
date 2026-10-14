@@ -30,7 +30,8 @@ from retrain_pipeline import REGRESSION_TARGETS, CLASSIFICATION_TARGET
 from local_vs_global_stats import station_wins, recommend
 
 with open(os.path.join(BASE_DIR, 'local_benchmark_v3.json'), encoding='utf-8') as f:
-    LOCAL = json.load(f)
+    import radiation_units as ru  # radiasi: total harian (SUM) -> MJ/m2 hanya saat tampil
+    LOCAL = ru.scale_local_benchmark(json.load(f))
 with open(os.path.join(BASE_DIR, 'station_sampling.json'), encoding='utf-8') as f:
     SAMPLING = json.load(f)
 

@@ -40,7 +40,7 @@ ALIAS = {'suhu': 'temp_avg', 'kelembapan': 'humidity_avg', 'hujan': 'rainfall_to
          'tekanan': 'pressure_avg_hpa', 'angin': 'wind_speed_avg', 'arah': 'wind_direction_name'}
 LABELS = dict(REGRESSION_TARGETS)
 LABELS[CLASSIFICATION_TARGET] = 'Arah Mata Angin'
-UNITS = {'temp_avg': '°C', 'humidity_avg': '%', 'rainfall_total_mm': 'mm', 'solar_radiation_avg': 'W/m²',
+UNITS = {'temp_avg': '°C', 'humidity_avg': '%', 'rainfall_total_mm': 'mm', 'solar_radiation_avg': 'MJ/m²',
          'pressure_avg_hpa': 'hPa', 'wind_speed_avg': 'km/h'}
 ORDER = list(REGRESSION_TARGETS) + [CLASSIFICATION_TARGET]
 
@@ -123,7 +123,8 @@ rows_csv = []
 if args.cepat:
     emit('## 3. Performa model produksi (metrik tersimpan di model, mode --cepat)')
     emit()
-    metrics = bundle['metrics']
+    import radiation_units as ru  # radiasi: total harian (SUM) -> MJ/m2 hanya saat tampil
+    metrics = ru.scale_bundle_metrics(bundle['metrics'])
     for var in selected:
         emit(f'### {LABELS[var]}  —  {algo_used[f"{var}_h1"]}')
         emit()
@@ -194,10 +195,15 @@ else:
                 y = sub[tcol]
                 if var == 'rainfall_total_mm':
                     pred = np.clip(pred, 0, None)
+                _base = sub[var]
+                if var == 'solar_radiation_avg':  # total harian (SUM) -> MJ/m2 (faktor global, pendekatan)
+                    import radiation_units as ru
+                    _f = ru.global_factor()
+                    y, pred, _base = y * _f, pred * _f, _base * _f
                 mae = mean_absolute_error(y, pred)
                 rmse = float(np.sqrt(mean_squared_error(y, pred)))
                 r2 = r2_score(y, pred) if len(sub) > 1 else float('nan')
-                base_mae = mean_absolute_error(y, sub[var])
+                base_mae = mean_absolute_error(y, _base)
                 gain = (1 - mae / base_mae) * 100 if base_mae > 0 else float('nan')
                 tab.append([f'H+{h}', f'{mae:.3f}', f'{rmse:.3f}', f'{r2:.3f}', f'{base_mae:.3f}', f'{gain:+.0f}%', len(sub)])
                 rows_csv.append({'indikator': LABELS[var], 'horizon': f'H+{h}', 'algoritma': algo_used[key], 'n_uji': len(sub), 'mae': round(mae, 4),
@@ -214,7 +220,8 @@ else:
 # ------------------------------------------------------------------ 5. perbandingan algoritma
 bench_path = os.path.join(BASE_DIR, 'benchmark_merged_5algo_h1_h7.json')
 if os.path.exists(bench_path):
-    bdf = pd.DataFrame(json.load(open(bench_path, encoding='utf-8')))
+    import radiation_units as ru  # radiasi: total harian (SUM) -> MJ/m2 hanya saat tampil
+    bdf = pd.DataFrame(ru.scale_benchmark_records(json.load(open(bench_path, encoding='utf-8'))))
     emit('## 5. Perbandingan algoritma (benchmark H+1 dan H+7)')
     emit()
     emit('Sumber: `benchmark_merged_5algo_h1_h7.json` (3 algoritma ML dari Laporan 3 + LSTM/GRU dari eksperimen Deep Learning). '
