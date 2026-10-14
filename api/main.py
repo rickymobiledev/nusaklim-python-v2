@@ -343,14 +343,16 @@ async def trigger_retrain(background_tasks: BackgroundTasks):
         timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S WIB")
     )
 
-def background_ingest_task(task_id: str, staging_path: str | None = None, mode: str = "append", ingestion_stats: dict | None = None):
+def background_ingest_task(task_id: str, staging_path: str | None = None, mode: str = "append", ingestion_stats: dict | None = None,
+                           refresh_only: bool = False):
     """Merge file baru (upload + isi data_raw/incoming/) -> cleaning -> retrain. Hasil SUKSES/GAGAL
     + penyebabnya ditulis ke logs/pipeline.log oleh run_pipeline."""
     try:
         extra = [(staging_path, mode)] if staging_path else None
         trigger = "api:/ingest/json" if ingestion_stats else ("api:/ingest/upload" if staging_path else "api:/ingest")
         run_pipeline(task_id, trigger=trigger,
-                     extra_files=extra, on_success=engine.load_models, ingestion_stats=ingestion_stats)
+                     extra_files=extra, on_success=engine.load_models, ingestion_stats=ingestion_stats,
+                     refresh_only=refresh_only)
     finally:
         _release_training_slot()
 
@@ -404,6 +406,7 @@ async def trigger_ingest_upload(
     file: UploadFile = File(..., description="CSV data mentah baru (header: stnname,utctime,tempout,humout,windspd,winddir,bar,solar,rain15,...)"),
     mode: Literal["append", "replace"] = Form("append", description="`append` (default) atau `replace`"),
     trigger_retrain: bool = Form(True, description="Picu retrain otomatis setelah upload selesai"),
+    refresh_only: bool = Form(False, description="Hanya berlaku jika trigger_retrain=true: lewati retrain, cukup cleaning+agregasi harian lalu reload (untuk ingest harian)"),
 ):
     if settings.storage_backend == "postgres" and mode != "append":
         raise HTTPException(status_code=400, detail="PostgreSQL hanya mendukung mode append.")
@@ -457,7 +460,7 @@ async def trigger_ingest_upload(
             while chunk := await file.read(1024 * 1024):
                 out.write(chunk)
         validate_csv_header(staging_path)
-        background_tasks.add_task(background_ingest_task, task_id, staging_path, mode)
+        background_tasks.add_task(background_ingest_task, task_id, staging_path, mode, refresh_only=refresh_only)
         scheduled = True
     except UploadValidationError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
@@ -550,7 +553,7 @@ async def trigger_ingest_json(payload: IngestJsonRequest, background_tasks: Back
         from api.weather_store import ingest_records
         try:
             stats = await run_in_threadpool(ingest_records, [r.model_dump() for r in payload.records], payload.mode)
-            background_tasks.add_task(background_ingest_task, task_id, ingestion_stats=stats)
+            background_tasks.add_task(background_ingest_task, task_id, ingestion_stats=stats, refresh_only=payload.refresh_only)
         except Exception:
             _release_training_slot()
             raise HTTPException(status_code=503, detail="Gagal menyimpan data ke PostgreSQL; request dapat dikirim ulang.")
@@ -567,7 +570,7 @@ async def trigger_ingest_json(payload: IngestJsonRequest, background_tasks: Back
         os.makedirs(settings.upload_staging_dir, exist_ok=True)
         n = records_to_csv([r.model_dump() for r in payload.records], staging_path)
         validate_csv_header(staging_path)
-        background_tasks.add_task(background_ingest_task, task_id, staging_path, payload.mode)
+        background_tasks.add_task(background_ingest_task, task_id, staging_path, payload.mode, refresh_only=payload.refresh_only)
         scheduled = True
     except UploadValidationError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))

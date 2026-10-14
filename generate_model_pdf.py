@@ -672,7 +672,7 @@ for i, (stn_id, fname) in enumerate(zip(fig3_station_ids, fig3_files), start=1):
     fig3_p = os.path.join(fig_dir, fname)
     if os.path.exists(fig3_p):
         story.append(Image(fig3_p, width=17.0*cm, height=9.04*cm))
-        story.append(Paragraph(f'<b>Gambar 7.{i}:</b> Perbandingan Deret Waktu Harian Aktual vs Prediksi Model untuk 6 Target Regresi pada Stasiun AWS {stn_id} (Periode Uji 30 Hari: 21 Juli s/d 19 Agustus 2026).', style_caption))
+        story.append(Paragraph(f'<b>Gambar 7.{i}:</b> Perbandingan Deret Waktu Harian Aktual vs Prediksi Model untuk 6 Target Regresi pada Stasiun AWS {stn_id} (Periode Uji 30 Hari: 22 Juli s/d 19 Agustus 2026).', style_caption))
         story.append(PageBreak())
 
 _wd_a = os.path.join(fig_dir, 'fig_model3b_winddir_timeseries.png')
@@ -691,11 +691,20 @@ with open(os.path.join(fig_dir, '..', 'figures_benchmark', 'fig_merged4_stations
 traj_issue_date = _traj_meta['issue_date']
 traj_station_ids = _traj_meta['station_ids']
 traj_files = _traj_meta['files']
+_BULAN_ID = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+def _tgl_id(d):
+    return f'{d.day} {_BULAN_ID[d.month - 1]} {d.year}'
+_traj_issue = pd.Timestamp(traj_issue_date)
+_traj_first, _traj_last = _traj_issue + pd.Timedelta(days=1), _traj_issue + pd.Timedelta(days=7)
+_traj_range = (f'{_traj_first.day} s/d {_tgl_id(_traj_last)}' if _traj_first.month == _traj_last.month
+               else f'{_tgl_id(_traj_first)} s/d {_tgl_id(_traj_last)}')
 story.append(Paragraph(
     f'Gambar 7 di atas menunjukkan performa H+1 yang diulang (<i>rolling</i>) di banyak tanggal pengujian berbeda. Sebagai pelengkap, berikut '
-    f'contoh <b>satu kali proses ramal</b> yang diambil dari tanggal {traj_issue_date} (dalam periode uji 30 hari) &ndash; model menghasilkan '
-    f'ramalan H+1 s/d H+7 sekaligus dari observasi hari itu, dibandingkan langsung dengan realisasi cuaca aktual 7 hari berikutnya ({traj_issue_date} '
-    f's/d 19 Agustus 2026) yang sudah tersedia di data historis. Setiap indikator memakai algoritma produksinya sendiri (Tabel 3.3) pada '
+    f'contoh <b>satu kali proses ramal</b> dengan titik ramal {_tgl_id(_traj_issue)} (hari observasi terakhir pada dataset laporan) &ndash; model menghasilkan '
+    f'ramalan H+1 s/d H+7 ({_traj_range}) sekaligus dari observasi hari itu, dibandingkan langsung dengan realisasi cuaca aktual pada tanggal yang sama. '
+    f'Realisasi {_traj_range} berasal dari data observasi terbaru yang masuk setelah model dilatih, sehingga berada di luar data latih maupun data uji '
+    f'(21 Juli &ndash; 19 Agustus 2026) dan belum pernah dilihat model. Model yang dipakai sama dengan model produksi pada seluruh evaluasi di Bab ini. '
+    f'Setiap indikator memakai algoritma produksinya sendiri (Tabel 3.3) pada '
     f'<b>{len(traj_station_ids)} stasiun</b> (Stasiun AWS {", ".join(traj_station_ids)}). Pola umum yang terlihat: garis prediksi cenderung lebih '
     'landai/stabil dibanding realisasi aktual yang lebih berfluktuasi hari-ke-hari &ndash; wajar karena model meramalkan nilai ekspektasi, bukan '
     'menebak fluktuasi cuaca jangka pendek yang secara inheren sulit diprediksi 7 hari ke depan.',
@@ -705,17 +714,17 @@ for i, (stn_id, fname) in enumerate(zip(traj_station_ids, traj_files), start=1):
     p_traj = os.path.join(fig_dir, '..', 'figures_benchmark', fname)
     if os.path.exists(p_traj):
         story.append(Image(p_traj, width=17.0 * cm, height=8.94 * cm))
-        story.append(Paragraph(f'<b>Gambar 8.{i}:</b> Trajektori Ramalan H+1 s/d H+7 vs Realisasi Aktual, Stasiun AWS {stn_id} (Titik Ramal: {traj_issue_date}).', style_caption))
+        story.append(Paragraph(f'<b>Gambar 8.{i}:</b> Trajektori Ramalan H+1 s/d H+7 vs Realisasi Aktual, Stasiun AWS {stn_id} (Titik Ramal: {_tgl_id(_traj_issue)}; H+1 s/d H+7 = {_traj_range}).', style_caption))
         story.append(PageBreak())
 
 _wd_b = os.path.join(fig_dir, '..', 'figures_benchmark', 'fig_merged4b_winddir_trajectory.png')
 if os.path.exists(_wd_b):
     story.append(Paragraph(
-        f'Untuk Arah Mata Angin, Gambar 8.6 menampilkan kategori aktual dan ramalan H+1 s/d H+7 dari titik ramal yang sama ({traj_issue_date}) pada kelima stasiun tersebut.',
+        f'Untuk Arah Mata Angin, Gambar 8.6 menampilkan kategori aktual dan ramalan H+1 s/d H+7 dari titik ramal yang sama ({_tgl_id(_traj_issue)}; H+1 s/d H+7 = {_traj_range}) pada kelima stasiun tersebut.',
         style_body
     ))
     story.append(Image(_wd_b, width=17.0*cm, height=13.4*cm))
-    story.append(Paragraph(f'<b>Gambar 8.6:</b> Trajektori Ramalan Arah Mata Angin H+1 s/d H+7 vs Realisasi Aktual, Stasiun AWS {", ".join(traj_station_ids)} (Titik Ramal: {traj_issue_date}).', style_caption))
+    story.append(Paragraph(f'<b>Gambar 8.6:</b> Trajektori Ramalan Arah Mata Angin H+1 s/d H+7 vs Realisasi Aktual, Stasiun AWS {", ".join(traj_station_ids)} (Titik Ramal: {_tgl_id(_traj_issue)}; H+1 s/d H+7 = {_traj_range}).', style_caption))
     story.append(PageBreak())
 
 # ==================== CHAPTER 7 & 8 ====================

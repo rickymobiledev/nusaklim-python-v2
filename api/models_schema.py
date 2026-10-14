@@ -138,4 +138,5 @@ class IngestJsonRequest(BaseModel):
                     "CSV menambahkan baris yang lebih baru dari data terakhir tiap stasiun. "
                     "`replace`: khusus backend CSV, menggantikan seluruh raw CSV (backup .bak).")
     trigger_retrain: bool = Field(True, description="Jika true, memicu background retrain. Jika false, data hanya di-commit ke storage (PostgreSQL/raw) tanpa memicu retrain.")
+    refresh_only: bool = Field(False, description="Hanya berlaku jika trigger_retrain=true. Jika true, pipeline berhenti setelah cleaning+agregasi harian lalu reload data (tanpa retrain model), sehingga forecast maju ke tanggal data terbaru. Untuk ingest harian; retrain model dijadwalkan terpisah lewat /retrain.")
     records: List[IngestRecord] = Field(..., min_length=1, description="Daftar baris data mentah.")

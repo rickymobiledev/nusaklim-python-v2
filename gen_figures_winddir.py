@@ -14,6 +14,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.ticker as mticker
 
 plt.rcParams['font.family'] = 'DejaVu Sans'
 
@@ -61,12 +62,13 @@ for ax, stn in zip(axes, stations):
     pred = pd.Series(models[f'{KEY}_h1'].predict(d[feature_cols]), index=d.index).astype(str)
     act = d[target_col].astype(str)
     acc = float((pred == act).mean()) if len(d) else float('nan')
-    ax.plot(d['date_dt'], act.map(YMAP), 'o', color=COL_ACT, markersize=8, label='Aktual AWS')
-    ax.plot(d['date_dt'], pred.map(YMAP), '^', color=COL_NK, markersize=5.5,
+    t_dates = d['date_dt'] + pd.Timedelta(days=1)  # tanggal yang diramal (target H+1), bukan tanggal baris fitur
+    ax.plot(t_dates, act.map(YMAP), 'o', color=COL_ACT, markersize=8, label='Aktual AWS')
+    ax.plot(t_dates, pred.map(YMAP), '^', color=COL_NK, markersize=5.5,
             label=f'NusaKlim (Accuracy {acc * 100:.0f}%)')
     style_axis(ax)
     ax.set_title(f'Stasiun AWS {stn} ({len(d)} hari uji)', fontsize=10, fontweight='bold')
-    ax.xaxis.set_major_locator(mdates.DayLocator(interval=5))
+    ax.xaxis.set_major_locator(mticker.FixedLocator(mdates.date2num(list(pd.date_range(end=max_date, periods=8, freq='4D')))))  # tick terakhir = max_date
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%d %b'))
     ax.tick_params(axis='x', labelsize=8)
     ax.legend(fontsize=7.5, loc='lower left')
@@ -109,7 +111,7 @@ for ax, stn in zip(axes, stations_t):
             label=f'NusaKlim (benar {sum(a == p for a, p in valid)}/{len(valid)} hari)')
     style_axis(ax)
     ax.set_xticks(hs)
-    ax.set_xticklabels([f'H+{h}' for h in hs], fontsize=8)
+    ax.set_xticklabels([f'H+{h}\n{(issue_date + pd.Timedelta(days=h)):%d-%m}' for h in hs], fontsize=8)
     ax.set_title(f'Stasiun AWS {stn}', fontsize=10, fontweight='bold')
     ax.legend(fontsize=7.5, loc='lower left')
     print(f'  [{stn}] traj acc={acc:.3f}')
