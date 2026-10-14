@@ -161,8 +161,11 @@ def _verify_new_bundle(started_at: float) -> dict:
 
 
 def run_pipeline(task_id: str, trigger: str, extra_files: list[tuple[str, str]] | None = None,
-                 retrain_only: bool = False, on_success=None, ingestion_stats: dict | None = None) -> bool:
+                 retrain_only: bool = False, on_success=None, ingestion_stats: dict | None = None,
+                 refresh_only: bool = False) -> bool:
     """Jalankan tahap: merge file baru -> cleaning+agregasi -> retrain -> verifikasi -> reload.
+    refresh_only=True: lewati retrain (merge -> cleaning+agregasi -> reload), untuk ingest harian
+    supaya forecast maju ke tanggal data terbaru tanpa melatih ulang model.
     Selalu menulis 1 entri SUKSES/GAGAL ke logs/pipeline.log. Return True kalau sukses."""
     _ensure_dirs()
     run_log = os.path.join(_paths()["runs"], f"{task_id}.log")
@@ -201,9 +204,12 @@ def run_pipeline(task_id: str, trigger: str, extra_files: list[tuple[str, str]] 
         else:
             entry["files"] = "(retrain dari data harian yang sudah ada)"
 
-        t_retrain = time.time()
-        _run_script("retrain", os.path.join(settings.base_dir, "retrain_pipeline.py"), run_log)
-        entry.update(_verify_new_bundle(t_retrain))
+        if refresh_only:
+            entry["metrics_note"] = "refresh data harian saja (tanpa retrain)"
+        else:
+            t_retrain = time.time()
+            _run_script("retrain", os.path.join(settings.base_dir, "retrain_pipeline.py"), run_log)
+            entry.update(_verify_new_bundle(t_retrain))
 
         try:
             ret_stats = run_all_retention(exclude_logs={os.path.basename(run_log)})

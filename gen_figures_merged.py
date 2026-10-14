@@ -128,7 +128,7 @@ algo_used = bundle['algo_used']
 df_daily = pd.read_csv(DATA_PATH)
 df_featured, _, _, _ = build_features_and_targets(df_daily)
 max_date = df_featured['date_dt'].max()
-issue_date = max_date - pd.Timedelta(days=7)
+issue_date = pd.Timestamp(os.environ['NUSAKLIM_TRAJ_ISSUE_DATE']) if os.environ.get('NUSAKLIM_TRAJ_ISSUE_DATE') else max_date - pd.Timedelta(days=7)
 print(f'\nFIG M4: issue_date={issue_date.date()}, realisasi aktual s/d {max_date.date()}')
 
 with open(os.path.join(FIG_DIR, '..', 'figures_model', 'fig_model3_stations.json'), encoding='utf-8') as f:
@@ -170,7 +170,7 @@ for stn in stations_5:
                 label=f'Prediksi ({algo_used[f"{var}_h1"]})')
         ax.set_title(f"{LABELS[var]}  [{mae_str}]", fontsize=9.2, fontweight='bold')
         ax.set_xticks(dates)
-        ax.set_xticklabels([f'H+{h}' for h in h_range], fontsize=7.5)
+        ax.set_xticklabels([f'H+{h}\n{d:%d-%m}' for h, d in zip(h_range, dates)], fontsize=7.5)
         ax.tick_params(axis='y', labelsize=7.5)
         ax.legend(fontsize=6.5)
         ax.grid(True, alpha=0.3, linestyle='--')

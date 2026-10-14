@@ -9,6 +9,7 @@ import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 plt.rcParams['font.family'] = 'DejaVu Sans'
 
@@ -164,7 +165,9 @@ for station_id in station_ids:
         y_pred = models[f'{var}_h1'].predict(X)
         if var == 'rainfall_total_mm':
             y_pred = np.clip(y_pred, 0, None)
-        dates = valid['date_dt'].values
+        # Target H+1 = nilai hari berikutnya dari tanggal baris fitur, jadi sumbu-x memakai tanggal yang diramal
+        # (baris fitur + 1 hari) agar aktual & prediksi diplot di tanggal yang benar dan deret berakhir di max_date.
+        dates = (valid['date_dt'] + pd.Timedelta(days=1)).values
 
         mae_str = f"MAE: {mean_absolute_error(y_actual, y_pred):.2f}" if len(valid) > 0 else "MAE: N/A"
 
@@ -172,6 +175,8 @@ for station_id in station_ids:
         ax.plot(dates, y_pred, marker='x', markersize=3.5, color='#DC2626', linewidth=1.3, linestyle='--', label=f'Prediksi ({algo_used[f"{var}_h1"]})')
         ax.set_title(f"{LABELS[var]}  [{mae_str}]", fontsize=9.2, fontweight='bold')
         ax.set_ylabel(LABELS[var].split('(')[-1].rstrip(')'), fontsize=8)
+        ax.set_xticks(list(pd.date_range(end=max_date, periods=8, freq='4D')))  # 4 hari sekali, tick terakhir = max_date
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
         ax.tick_params(axis='x', labelrotation=30, labelsize=7)
         ax.tick_params(axis='y', labelsize=7.5)
         ax.legend(fontsize=6.5)
