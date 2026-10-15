@@ -41,8 +41,7 @@ ALGO_COLOR = {
 }
 
 with open(os.path.join(BASE_DIR, 'benchmark_merged_5algo_h1_h7.json'), encoding='utf-8') as f:
-    import radiation_units as ru  # radiasi: total harian (SUM) -> MJ/m2 hanya saat tampil
-    records = ru.scale_benchmark_records(json.load(f))
+    records = json.load(f)
 df_bench = pd.DataFrame(records)
 df_bench['AlgoShort'] = df_bench['Algoritma'].map(ALGO_SHORT)
 df_reg = df_bench[df_bench['Variabel'] != CLASSIFICATION_TARGET]
@@ -158,9 +157,6 @@ for stn in stations_5:
         for d in dates:
             row = stn_data[stn_data['date_dt'] == d]
             actuals.append(row[var].values[0] if not row.empty and not pd.isna(row[var].values[0]) else np.nan)
-        if var == ru.SOLAR:  # total harian (SUM) -> MJ/m2 per stasiun
-            preds = [p * ru.station_factor(stn) for p in preds]
-            actuals = [a * ru.station_factor(stn) for a in actuals]
 
         valid_acts, valid_preds = [], []
         for a, p in zip(actuals, preds):

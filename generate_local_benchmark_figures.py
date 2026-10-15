@@ -17,8 +17,7 @@ FIG_DIR = os.path.join(BASE_DIR, 'figures_per_station')
 os.makedirs(FIG_DIR, exist_ok=True)
 
 with open(os.path.join(BASE_DIR, 'local_benchmark_v3.json'), encoding='utf-8') as f:
-    import radiation_units as ru  # radiasi: total harian (SUM) -> MJ/m2 hanya saat tampil
-    R = ru.scale_local_benchmark(json.load(f))
+    R = json.load(f)
 
 import sys
 sys.path.insert(0, BASE_DIR)

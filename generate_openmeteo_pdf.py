@@ -268,7 +268,7 @@ story.append(Paragraph(
 ))
 story.append(Paragraph(
     'Data Open-Meteo diambil per jam lalu dirangkum ke harian (zona waktu WIB) dengan aturan yang sama seperti data AWS: rata-rata untuk suhu, kelembapan, tekanan, dan kecepatan angin; jumlah untuk curah hujan; arah angin dari rata-rata vektor kemudian dikategorikan memakai batas sudut yang sama dengan data AWS. '
-    'Tekanan Open-Meteo memakai tekanan permukaan (<i>surface pressure</i>). <b>Radiasi Matahari</b> dibahas terpisah pada Bab 7.1 (Gambar 6) karena satuannya perlu disamakan lebih dulu: kolom radiasi AWS (<code>solar_radiation_avg</code>) berupa total harian (penjumlahan pembacaan per hari), sedangkan radiasi gelombang pendek Open-Meteo adalah rata-rata W/m&sup2;. Keduanya disajikan dalam energi harian MJ/m&sup2;. Radiasi tidak diikutkan dalam Gambar 1 maupun rata-rata pemenang Bab 4 dan 6.',
+    'Tekanan Open-Meteo memakai tekanan permukaan (<i>surface pressure</i>). <b>Radiasi Matahari</b> dibahas terpisah pada Bab 7.1 (Gambar 6) karena satuannya perlu disamakan lebih dulu: kolom radiasi AWS (<code>solar_radiation_avg</code>) berupa total harian (penjumlahan pembacaan per hari), sedangkan radiasi gelombang pendek Open-Meteo adalah rata-rata W/m&sup2;. Radiasi tidak diikutkan dalam Gambar 1 maupun rata-rata pemenang Bab 4 dan 6.',
     style_body
 ))
 
@@ -408,20 +408,17 @@ if os.path.exists(fp_solar):
     _sc = OM['solar_comparison']
     _sol_nk = [sid for sid in STN_ORDER if _sc[sid]['winner'] == 'NusaKlim']
     _sol_om = [sid for sid in STN_ORDER if _sc[sid]['winner'] == 'Open-Meteo']
-    _sol_rows = '; '.join(f'{sid}: Open-Meteo {_sc[sid]["om"]["value"]:,.2f} vs NusaKlim {_sc[sid]["nk"]["value"]:,.2f}'.replace(',', '#').replace('.', ',').replace('#', '.') for sid in STN_ORDER)
-    _om_bias = [_sc[sid]['om']['bias'] for sid in STN_ORDER]
-    _om_dir = 'konsisten bias tinggi (melebihi data AWS di semua stasiun)' if all(b > 0 for b in _om_bias) else ('konsisten bias rendah (di bawah data AWS di semua stasiun)' if all(b < 0 for b in _om_bias) else 'arah bias tidak seragam antar stasiun')
+    _sol_rows = '; '.join(f'{sid}: Open-Meteo {_sc[sid]["om"]["value"]:,.0f} vs NusaKlim {_sc[sid]["nk"]["value"]:,.0f}'.replace(',', '.') for sid in STN_ORDER)
     story.append(Paragraph(
-        'Data AWS dan model NusaKlim berskala total harian, sehingga disajikan sebagai energi harian MJ/m&sup2; dengan mengalikannya 0,0864 lalu membaginya dengan jumlah pembacaan normal stasiun (144 per hari pada interval 10 menit; sekitar 63 per hari pada Stasiun 267). '
-        'Radiasi Open-Meteo (rata-rata W/m&sup2;) langsung dikali 0,0864 menjadi MJ/m&sup2;. Dengan demikian ketiga garis berada pada satuan yang sama. '
-        f'MAE (MJ/m&sup2; per hari): {_sol_rows}. '
+        'Agar sebanding dengan total harian AWS, rata-rata W/m&sup2; Open-Meteo dikonversi ke skala total harian dengan mengalikannya dengan jumlah pembacaan normal stasiun (144 per hari pada interval 10 menit; sekitar 63 per hari pada Stasiun 267). '
+        f'MAE (satuan total harian): {_sol_rows}. '
         f'NusaKlim lebih akurat di Stasiun {_join(_sol_nk)}; Open-Meteo lebih akurat di Stasiun {_join(_sol_om)}. '
         'Semua 30 hari uji dihitung. Pada 9 Agustus, Stasiun 222, 248, dan 267 hanya menerima 2 sampai 4 pembacaan (normalnya 63 sampai 144), sehingga total radiasi AWS hari itu bernilai 0; kondisi ini berlaku untuk semua indikator pada hari tersebut (nilai harian dihitung dari sedikit pembacaan), tetapi paling terlihat pada radiasi karena radiasi dijumlah, bukan dirata-rata. '
-        f'Open-Meteo {_om_dir}, kemungkinan karena menggambarkan radiasi di area terbuka sedangkan sensor AWS berada di dalam areal kebun. Bias prediksi NusaKlim lebih kecil, tetapi garisnya cenderung datar dan kurang menangkap fluktuasi harian.',
+        'Open-Meteo konsisten bias tinggi (melebihi data AWS di semua stasiun), kemungkinan karena menggambarkan radiasi di area terbuka sedangkan sensor AWS berada di dalam areal kebun. Bias prediksi NusaKlim jauh lebih kecil dan arahnya tidak seragam, tetapi garisnya cenderung datar dan kurang menangkap fluktuasi harian.',
         style_body
     ))
     story.append(Image(fp_solar, width=17.0*cm, height=12.75*cm))
-    story.append(Paragraph(f'Gambar 6: Kurva Perbandingan Data Aktual AWS vs Open-Meteo vs Prediksi NusaKlim untuk Radiasi Matahari pada 4 Stasiun Uji (energi harian, MJ/m&sup2;), {OM["evaluation_period"].replace(" to ", " s/d ")}.', style_caption))
+    story.append(Paragraph(f'Gambar 6: Kurva Perbandingan Data Aktual AWS vs Open-Meteo vs Prediksi NusaKlim untuk Radiasi Matahari pada 4 Stasiun Uji (satuan total harian; Open-Meteo dikonversi), {OM["evaluation_period"].replace(" to ", " s/d ")}.', style_caption))
 
 story.append(PageBreak())
 

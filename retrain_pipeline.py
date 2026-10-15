@@ -74,7 +74,7 @@ REGRESSION_TARGETS = {
     'temp_avg': 'Suhu Rata-rata (°C)',
     'humidity_avg': 'Kelembapan (%)',
     'rainfall_total_mm': 'Curah Hujan (mm)',
-    'solar_radiation_avg': 'Radiasi Matahari (MJ/m²)',  # nilai internal total harian (SUM); disajikan MJ/m² oleh radiation_units.py
+    'solar_radiation_avg': 'Radiasi Matahari (Wh/m²)',
     'pressure_avg_hpa': 'Tekanan Udara (hPa)',
     'wind_speed_avg': 'Kecepatan Angin (km/h)',
 }

@@ -17,8 +17,6 @@ plt.rcParams['font.family'] = 'DejaVu Sans'
 plt.rcParams['figure.dpi'] = 200
 
 df = pd.read_csv(os.path.join(BASE_DIR, 'nusaklim_daily_aggregated.csv'))
-import radiation_units as ru  # radiasi: total harian (SUM) -> MJ/m2 hanya saat tampil
-df = ru.convert_daily(df)
 df['date'] = pd.to_datetime(df['date'])
 
 daily = df.groupby('date').agg(
@@ -46,7 +44,7 @@ PARAMS = [
     dict(col='humidity_avg', slug='kelembapan', title='Kelembapan Rata-rata', unit='%', color='#0284C7'),
     dict(col='pressure_avg_hpa', slug='tekanan', title='Tekanan Udara Rata-rata', unit='hPa', color='#7C3AED'),
     dict(col='rainfall_total_mm', slug='hujan', title='Curah Hujan Rata-rata Nasional', unit='mm/hari', color='#2563EB'),
-    dict(col='solar_radiation_avg', slug='radiasi', title='Radiasi Solar (Energi Harian)', unit='MJ/m²', color='#EA580C'),
+    dict(col='solar_radiation_avg', slug='radiasi', title='Radiasi Solar (Total Harian)', unit='Wh/m²', color='#EA580C'),
     dict(col='wind_speed_avg', slug='angin', title='Kecepatan Angin Rata-rata', unit='km/jam', color='#059669'),
 ]
 
