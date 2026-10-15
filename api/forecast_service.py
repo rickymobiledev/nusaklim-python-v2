@@ -19,7 +19,6 @@ from api.models_schema import (
 
 sys.path.insert(0, settings.base_dir)
 from retrain_pipeline import build_features_and_targets, REGRESSION_TARGETS, CLASSIFICATION_TARGET
-from radiation_units import WM2_TO_MJ_PER_DAY, normal_readings
 
 # Day names in Indonesian
 DAY_NAMES_ID = {
@@ -58,7 +57,6 @@ class ForecastEngine:
             self.df_daily = load_daily()
             self.df_daily['date'] = pd.to_datetime(self.df_daily['date'])
             self.df_daily['stnname'] = self.df_daily['stnname'].astype(str)
-            self._solar_n_cache = None  # N pembacaan normal per stasiun dihitung ulang dari data harian terbaru
             print(f"[Engine] Loaded {len(self.df_daily):,} historical station days.")
 
             if self.bundle is not None:
@@ -266,13 +264,6 @@ class ForecastEngine:
             forecast=forecast_items
         )
 
-    def _solar_normal_readings(self, stn_str):
-        """Jumlah pembacaan normal per hari stasiun ini (median records_count), untuk mengubah total harian radiasi ke rata-rata W/m2."""
-        if not hasattr(self, '_solar_n_cache') or self._solar_n_cache is None:
-            self._solar_n_cache = normal_readings(self.df_daily[['stnname', 'records_count']])
-        n, n_global = self._solar_n_cache
-        return float(n.get(stn_str, n_global))
-
     def predict_7_days_physical(self, station_id: str) -> PhysicalForecastResponse:
         """Format alternatif untuk integrasi web existing: nilai fisik mentah
         (suhu/kelembapan/radiasi/hujan/tekanan/angin) tanpa rekomendasi agronomi,
@@ -292,7 +283,6 @@ class ForecastEngine:
                 rh_avg = float(np.clip(models[f'humidity_avg_h{h}'].predict(X)[0], 0.0, 100.0))
                 rain_mm = max(0.0, float(models[f'rainfall_total_mm_h{h}'].predict(X)[0]))
                 solar_raw = max(0.0, float(models[f'solar_radiation_avg_h{h}'].predict(X)[0]))
-                solar_n = self._solar_normal_readings(stn_str)
                 press = float(models[f'pressure_avg_hpa_h{h}'].predict(X)[0])
                 wind_v = max(0.0, float(models[f'wind_speed_avg_h{h}'].predict(X)[0]))
                 wind_cat = str(models[f'wind_direction_name_h{h}'].predict(X)[0])
@@ -301,8 +291,7 @@ class ForecastEngine:
                 t_avg = 27.4 + float(np.sin(h) * 0.3)
                 rh_avg = 84.0 + float(np.cos(h) * 2.0)
                 rain_mm = 3.5
-                solar_raw = 165.0  # rata-rata historis nasional (W/m2)
-                solar_n = None  # fallback sudah rata-rata W/m2 (bukan total harian)
+                solar_raw = 19900.0  # median historis nasional total harian (W/m2, jumlah pembacaan per hari)
                 press = 1007.0
                 wind_v = 0.82
                 wind_cat = latest_wind
@@ -312,15 +301,14 @@ class ForecastEngine:
                 self.winddir_deg_global.get(wind_cat, 180.0)
             )
 
-            # Model memprediksi TOTAL pembacaan W/m2 per hari (skala SUM). Dibagi N pembacaan normal stasiun -> rata-rata W/m2,
-            # lalu energi harian MJ/m2 = W/m2 * 86400 s / 1e6 (= x 0.0864). Fallback (solar_n None) sudah rata-rata W/m2.
-            radiation_mj = solar_raw * WM2_TO_MJ_PER_DAY / (solar_n if solar_n else 1.0)
+            # solar_radiation_avg = total harian (SUM pembacaan W/m2), ditampilkan apa adanya
+            radiation_wm2 = solar_raw
 
             forecast_days.append(PhysicalForecastDay(
                 date=target_date.strftime("%Y-%m-%d"),
                 temperature=round(t_avg, 1),
                 humidity=round(rh_avg, 1),
-                radiation=round(radiation_mj, 2),
+                radiation=round(radiation_wm2, 2),
                 rainfall=round(rain_mm, 1),
                 airPressure=round(press, 1),
                 windSpeed=round(wind_v, 2),

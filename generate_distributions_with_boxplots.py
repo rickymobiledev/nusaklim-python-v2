@@ -16,8 +16,6 @@ output_path = os.path.join(figures_dir, "fig2_distributions.png")
 
 print(f"Reading dataset from {data_path}...")
 df = pd.read_csv(data_path)
-import radiation_units as ru  # radiasi: total harian (SUM) -> MJ/m2 hanya saat tampil
-df = ru.convert_daily(df)
 
 # Variables to plot
 vars_config = [
@@ -52,16 +50,16 @@ vars_config = [
     },
     {
         'col': 'solar_radiation_avg',
-        'name': 'Radiasi Solar (MJ/m² per hari)',
+        'name': 'Akumulasi Radiasi Solar (W/m² total harian)',
         'color': '#EA580C',
-        'unit': 'MJ/m²',
+        'unit': 'W/m²',
         'data': df[df['solar_radiation_avg'] > 0]['solar_radiation_avg'].dropna()
     },
     {
         'col': 'wind_speed_avg',
-        'name': 'Kecepatan Angin Rata-rata (km/h)',
+        'name': 'Kecepatan Angin Rata-rata (m/s)',
         'color': '#7C3AED',
-        'unit': 'km/h',
+        'unit': 'm/s',
         'data': df['wind_speed_avg'].dropna()
     }
 ]

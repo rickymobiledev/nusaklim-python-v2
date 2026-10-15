@@ -369,7 +369,7 @@ data2 = [
     ["Suhu (temp_c)", "temp_c = (tempout - 32.0) \u00d7 (5/9)", "Sentinel 3276.7\u00b0F & -90\u00b0F di-NaN; batas valid 12\u201345\u00b0C"],
     ["Tekanan (pressure_hpa)", "pressure_hpa = bar \u00d7 33.864", "inHg \u2192 hPa; di luar 920\u20131040 hPa diisolasi ke NaN"],
     ["Curah Hujan (rainfall_mm)", "rainfall_mm = rain15 \u00d7 12.70", "Tipping bucket \u2192 mm; >60 mm/15-menit diisolasi ke NaN"],
-    ["Radiasi & Angin", "Sentinel solar=32767, windspd=255, winddir=32767 \u2192 NaN", "Batas solar 0\u20132000 W/m\u00b2; angin 0\u2013150 km/jam; arah 0\u2013360\u00b0"],
+    ["Radiasi & Angin", "Sentinel solar=32767, windspd=255, winddir=32767 \u2192 NaN", "Batas solar 0\u20132000 W/m\u00b2; angin 0\u2013150 m/s; arah 0\u2013360\u00b0"],
 ]
 add_table(s, Inches(0.6), Inches(1.55), Inches(12.1), Inches(3.1), data2, col_widths=[Inches(2.9), Inches(4.4), Inches(4.8)], font_size=11.5, header_font_size=12)
 
@@ -440,7 +440,7 @@ data4 = [
     ["pressure_hpa", "hPa (mbar)", "920,0 \u2013 1040,0 hPa", "Tekanan udara barometrik permukaan tanah"],
     ["rainfall_mm", "Milimeter (mm)", "0,0 \u2013 60,0 mm", "Akumulasi curah hujan per interval 15 menit"],
     ["solar_radiation_wm2", "W/m\u00b2", "0,0 \u2013 2000,0 W/m\u00b2", "Intensitas radiasi flux penyinaran matahari"],
-    ["wind_speed_kmh", "km/jam", "0,0 \u2013 150,0 km/h", "Kecepatan angin permukaan"],
+    ["wind_speed_ms", "m/s", "0,0 \u2013 150,0 m/s", "Kecepatan angin permukaan"],
     ["wind_direction_deg", "Derajat (\u00b0)", "0,0\u00b0 \u2013 360,0\u00b0", "Arah datangnya angin (0\u00b0/360\u00b0=Utara, 90\u00b0=Timur)"],
 ]
 add_table(s, Inches(0.5), Inches(1.5), Inches(12.3), Inches(5.4), data4, col_widths=[Inches(2.5), Inches(1.9), Inches(2.6), Inches(5.3)], font_size=10.5, header_font_size=11.5)
@@ -743,7 +743,7 @@ data10 = [
     ["Suhu Udara", "\u00b0C", "RATA-RATA (MEAN) + Min/Max", "Dilengkapi pencatatan T_min dan T_max"],
     ["Tekanan Barometer", "hPa (mbar)", "RATA-RATA (MEAN)", "Rata-rata tekanan permukaan per stasiun"],
     ["Kelembapan (RH)", "%", "RATA-RATA (MEAN) + Min/Max", "Dilengkapi pencatatan RH_min dan RH_max"],
-    ["Kecepatan Angin", "km/h", "RATA-RATA (MEAN) + Max", "Dilengkapi V_max (gust/kec. maksimum)"],
+    ["Kecepatan Angin", "m/s", "RATA-RATA (MEAN) + Max", "Dilengkapi V_max (gust/kec. maksimum)"],
     ["Arah Angin (Derajat)", "Derajat & Kategori", "RATA-RATA \u2192 Kategori", "Dilanjutkan konversi ke nama mata angin"],
 ]
 add_table(s, Inches(0.5), Inches(2.05), Inches(12.3), Inches(4.9), data10, col_widths=[Inches(2.6), Inches(2.2), Inches(3.0), Inches(4.5)], font_size=11, header_font_size=12)
@@ -810,7 +810,7 @@ data12 = [
     ["Kelembapan Avg (%)", "97.031", "85,79 \u00b1 5,71", "19,67", "83,02", "86,42", "89,45", "96,44", "100,00"],
     ["Tekanan Udara (hPa)", "97.031", "1000,52 \u00b1 13,06", "920,08", "1000,06", "1004,50", "1007,16", "1013,22", "1034,88"],
     ["Curah Hujan (mm/hari)", "97.031", "6,52 \u00b1 18,66", "0,00", "0,00", "0,00", "4,32", "76,59", "300,00"],
-    ["Kecepatan Angin (km/h)", "97.031", "0,80 \u00b1 0,75", "0,00", "0,39", "0,67", "1,02", "3,06", "18,79"],
+    ["Kecepatan Angin (m/s)", "97.031", "0,80 \u00b1 0,75", "0,00", "0,39", "0,67", "1,02", "3,06", "18,79"],
 ]
 add_table(s, Inches(0.3), Inches(1.5), Inches(12.6), Inches(3.6), data12, col_widths=[Inches(1.8), Inches(0.8), Inches(1.5), Inches(0.9), Inches(1.0), Inches(1.0), Inches(1.0), Inches(0.8), Inches(0.8)], font_size=10.5, header_font_size=11)
 
@@ -826,7 +826,7 @@ set_notes(s, (
     "selalu berada pada kelembapan tinggi.\n\n"
     "3. Curah Hujan: Q1 dan Median bernilai 0,00 mm (lebih dari 50% hari tanpa hujan). Q3 tercatat 4,32 mm/hari, "
     "dan melonjak drastis pada P99 (76,59 mm) serta maksimum 300,00 mm/hari \u2014 distribusi right-skewed.\n\n"
-    "4. Kecepatan Angin: Q1 tercatat 0,39 km/jam, Median 0,67 km/jam, dan Q3 1,02 km/jam, membuktikan sirkulasi "
+    "4. Kecepatan Angin: Q1 tercatat 0,39 m/s, Median 0,67 m/s, dan Q3 1,02 m/s, membuktikan sirkulasi "
     "udara di bawah kanopi perkebunan rata-rata sangat tenang (calm).\n\n"
     "Grafik di bawah tabel memvisualisasikan bentuk sebaran masing-masing variabel lengkap dengan boxplot."
 ))

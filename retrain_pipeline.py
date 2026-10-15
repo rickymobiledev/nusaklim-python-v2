@@ -74,9 +74,9 @@ REGRESSION_TARGETS = {
     'temp_avg': 'Suhu Rata-rata (°C)',
     'humidity_avg': 'Kelembapan (%)',
     'rainfall_total_mm': 'Curah Hujan (mm)',
-    'solar_radiation_avg': 'Radiasi Matahari (MJ/m²)',  # nilai internal total harian (SUM); disajikan MJ/m² oleh radiation_units.py
+    'solar_radiation_avg': 'Radiasi Matahari (Wh/m²)',
     'pressure_avg_hpa': 'Tekanan Udara (hPa)',
-    'wind_speed_avg': 'Kecepatan Angin (km/h)',
+    'wind_speed_avg': 'Kecepatan Angin (m/s)',
 }
 CLASSIFICATION_TARGET = 'wind_direction_name'  # Arah Mata Angin (Utara/Timur/Selatan/Barat)
 
@@ -463,7 +463,7 @@ def generate_7day_forecast(station_id, df_featured=None, bundle_path=None):
             'Rain_Total_mm': round(r_tot, 1),
             'Solar_Wh_m2': int(solar_wh_m2),
             'Pressure_hPa': round(press, 1),
-            'Wind_Speed_kmh': round(wind_v, 1),
+            'Wind_Speed_ms': round(wind_v, 1),
             'Wind_Direction': wind_dir,
         })
 

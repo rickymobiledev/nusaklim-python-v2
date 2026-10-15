@@ -99,7 +99,7 @@ def run():
         windspd_raw = pd.to_numeric(chunk['windspd'].replace('---', np.nan), errors='coerce')
         windspd_invalid = (windspd_raw < 0) | (windspd_raw > 100.0) | (windspd_raw == 255)
         qc_dropped['windspd'] += windspd_invalid.sum()
-        wind_speed_kmh = windspd_raw.mask(windspd_invalid)
+        wind_speed_ms = windspd_raw.mask(windspd_invalid)
 
         winddir_raw = pd.to_numeric(chunk['winddir'].replace('---', np.nan), errors='coerce')
         winddir_invalid = (winddir_raw < 0) | (winddir_raw > 360.0) | (winddir_raw == 32767)
@@ -118,7 +118,7 @@ def run():
             'pressure_hpa': pressure_hpa.round(2).values,
             'rainfall_mm': rainfall_mm.round(2).values,
             'solar_radiation_wm2': solar_radiation_wm2.round(1).values,
-            'wind_speed_kmh': wind_speed_kmh.round(2).values,
+            'wind_speed_ms': wind_speed_ms.round(2).values,
             'wind_direction_deg': wind_direction_deg.round(1).values,
         })
 
@@ -144,7 +144,7 @@ def run():
             'pressure_hpa': [500.0, 1200.0],
             'rainfall_mm': [0.0, 1000.0],
             'solar_radiation_wm2': [0.0, 2000.0],
-            'wind_speed_kmh': [0.0, 100.0],
+            'wind_speed_ms': [0.0, 100.0],
             'wind_direction_deg': [0.0, 360.0],
         }
     }

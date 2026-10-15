@@ -20,15 +20,15 @@ os.makedirs(FIG_DIR, exist_ok=True)
 from sklearn.metrics import mean_absolute_error
 from retrain_pipeline import build_features_and_targets, DATA_PATH, extract_feature_importance, compute_permutation_importance, CLASSIFICATION_TARGET, wind_majority_baseline
 
-bundle = joblib.load(os.path.join(BASE_DIR, "models", "weather_model_latest.joblib"))
-import radiation_units as ru  # radiasi: total harian (SUM) -> MJ/m2 hanya saat tampil
-metrics = ru.scale_bundle_metrics(bundle['metrics'])
+from report_snapshot import REPORT_BUNDLE, load_report_fig_daily  # snapshot Laporan 3 (data s.d. 19 Agustus 2026)
+bundle = joblib.load(REPORT_BUNDLE)
+metrics = bundle['metrics']
 feature_cols = bundle['feature_cols']
 target_cols = bundle['target_cols']
 models = bundle['models']
 algo_used = bundle['algo_used']
 
-df_daily = pd.read_csv(DATA_PATH)
+df_daily = load_report_fig_daily()
 df_featured, _, _, _ = build_features_and_targets(df_daily)
 
 from datetime import timedelta
@@ -39,8 +39,8 @@ test_df = df_featured[df_featured['date_dt'] > split_date]
 REG_TARGETS = ['temp_avg', 'humidity_avg', 'rainfall_total_mm', 'solar_radiation_avg', 'pressure_avg_hpa', 'wind_speed_avg']
 LABELS = {
     'temp_avg': 'Suhu Rata-rata (°C)', 'humidity_avg': 'Kelembapan (%)',
-    'rainfall_total_mm': 'Curah Hujan (mm)', 'solar_radiation_avg': 'Radiasi Matahari (MJ/m²)',
-    'pressure_avg_hpa': 'Tekanan Udara (hPa)', 'wind_speed_avg': 'Kecepatan Angin (km/h)',
+    'rainfall_total_mm': 'Curah Hujan (mm)', 'solar_radiation_avg': 'Radiasi Matahari (W/m²)',
+    'pressure_avg_hpa': 'Tekanan Udara (hPa)', 'wind_speed_avg': 'Kecepatan Angin (m/s)',
     'wind_direction_name': 'Arah Mata Angin (kategori)',
 }
 COLORS = {
@@ -102,18 +102,22 @@ print('saved', p1b)
 # ------------------------------------------------------------------------------
 ALL_TARGETS_FOR_IMPORTANCE = REG_TARGETS + [CLASSIFICATION_TARGET]
 
+# permutation_importance_h1.json adalah sumber tunggal angka Bab 5 (teks dibaca generate_model_pdf.py);
+# gambar memakainya apa adanya. Hitung ulang hanya bila NUSAKLIM_REGEN_PERM_IMPORTANCE=1.
+_perm_json = os.path.join(FIG_DIR, 'permutation_importance_h1.json')
 perm_imp = {}
-for var in ALL_TARGETS_FOR_IMPORTANCE:
-    key = f'{var}_h1'
-    col = target_cols[key]
-    vt = test_df.dropna(subset=feature_cols + [col])
-    ttype = 'classification' if var == CLASSIFICATION_TARGET else 'regression'
-    perm_imp[key] = compute_permutation_importance(models[key], vt[feature_cols], vt[col], ttype)
-    if var == ru.SOLAR:
-        perm_imp[key] = perm_imp[key] * ru.global_factor()  # kenaikan MAE dalam MJ/m2
-
-with open(os.path.join(FIG_DIR, 'permutation_importance_h1.json'), 'w', encoding='utf-8') as f:
-    json.dump({k: v.to_dict() for k, v in perm_imp.items()}, f, indent=2)
+if os.path.exists(_perm_json) and os.environ.get('NUSAKLIM_REGEN_PERM_IMPORTANCE') != '1':
+    with open(_perm_json, encoding='utf-8') as f:
+        perm_imp = {k: pd.Series(v) for k, v in json.load(f).items()}
+else:
+    for var in ALL_TARGETS_FOR_IMPORTANCE:
+        key = f'{var}_h1'
+        col = target_cols[key]
+        vt = test_df.dropna(subset=feature_cols + [col])
+        ttype = 'classification' if var == CLASSIFICATION_TARGET else 'regression'
+        perm_imp[key] = compute_permutation_importance(models[key], vt[feature_cols], vt[col], ttype)
+    with open(_perm_json, 'w', encoding='utf-8') as f:
+        json.dump({k: v.to_dict() for k, v in perm_imp.items()}, f, indent=2)
 
 fig, axes = plt.subplots(2, 4, figsize=(22, 10))
 axes = axes.flatten()
@@ -166,9 +170,6 @@ for station_id in station_ids:
         X = valid[feature_cols]
         y_actual = valid[target_col].values
         y_pred = models[f'{var}_h1'].predict(X)
-        if var == ru.SOLAR:  # total harian (SUM) -> MJ/m2 per stasiun
-            y_actual = y_actual * ru.station_factor(station_id)
-            y_pred = y_pred * ru.station_factor(station_id)
         if var == 'rainfall_total_mm':
             y_pred = np.clip(y_pred, 0, None)
         # Target H+1 = nilai hari berikutnya dari tanggal baris fitur, jadi sumbu-x memakai tanggal yang diramal

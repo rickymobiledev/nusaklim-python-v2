@@ -177,7 +177,7 @@ rules_data = [
      Paragraph('Tipping bucket mentah dikonversi ke mm. Batas kewajaran per interval: 0.0 &le; RR &le; 1000.0 mm.', style_table_cell)],
     [Paragraph('<b>8. Filter Radiasi &amp; Angin</b>', style_table_cell_bold),
      Paragraph('Kode eror sensor <code>solar=32767</code>, <code>windspd=255</code>, <code>winddir=32767</code> diubah jadi kosong (NaN).', style_table_cell),
-     Paragraph('Batas kewajaran radiasi: 0-2000 W/m², kecepatan angin: 0-100 km/jam, arah angin: 0-360°.', style_table_cell)],
+     Paragraph('Batas kewajaran radiasi: 0-2000 W/m², kecepatan angin: 0-100 m/s, arah angin: 0-360°.', style_table_cell)],
 ]
 tbl_rules = Table(rules_data, colWidths=[115, 175, 225])
 tbl_rules.setStyle(TableStyle([
@@ -286,7 +286,7 @@ dict_data = [
     [Paragraph('<code>pressure_hpa</code>', style_table_cell_bold), Paragraph('Float', style_table_cell), Paragraph('hPa (mbar)', style_table_cell_center), Paragraph('500.0 s/d 1200.0 hPa', style_table_cell), Paragraph('Tekanan udara di permukaan tanah.', style_table_cell)],
     [Paragraph('<code>rainfall_mm</code>', style_table_cell_bold), Paragraph('Float', style_table_cell), Paragraph('Milimeter (mm)', style_table_cell_center), Paragraph('0.0 s/d 1000.0 mm', style_table_cell), Paragraph('Akumulasi curah hujan per interval 15 menit.', style_table_cell)],
     [Paragraph('<code>solar_radiation_wm2</code>', style_table_cell_bold), Paragraph('Float', style_table_cell), Paragraph('W/m²', style_table_cell_center), Paragraph('0.0 s/d 2000.0 W/m²', style_table_cell), Paragraph('Intensitas radiasi matahari yang diterima permukaan.', style_table_cell)],
-    [Paragraph('<code>wind_speed_kmh</code>', style_table_cell_bold), Paragraph('Float', style_table_cell), Paragraph('km/jam', style_table_cell_center), Paragraph('0.0 s/d 100.0 km/h', style_table_cell), Paragraph('Kecepatan angin permukaan pada interval observasi.', style_table_cell)],
+    [Paragraph('<code>wind_speed_ms</code>', style_table_cell_bold), Paragraph('Float', style_table_cell), Paragraph('m/s', style_table_cell_center), Paragraph('0.0 s/d 100.0 m/s', style_table_cell), Paragraph('Kecepatan angin permukaan pada interval observasi.', style_table_cell)],
     [Paragraph('<code>wind_direction_deg</code>', style_table_cell_bold), Paragraph('Float', style_table_cell), Paragraph('Derajat (°)', style_table_cell_center), Paragraph('0.0° s/d 360.0°', style_table_cell), Paragraph('Arah datangnya angin (0°/360° = Utara, 90° = Timur, dst).', style_table_cell)],
 ]
 tbl_dict = Table(dict_data, colWidths=[95, 55, 65, 95, 205])

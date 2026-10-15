@@ -12,9 +12,14 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 # Paths
 BASE_DIR = r"D:\Projects\Kodepanda\Nusaklim\nusaklim"
+# Default: snapshot Laporan 5 (data AWS, model, dan jendela uji 21 Juli - 19 Agustus 2026) supaya uji ulang
+# menghasilkan tanggal & angka yang sama dengan laporan terbit. NUSAKLIM_OM_LIVE=1 -> data & model terbaru.
+sys.path.insert(0, BASE_DIR)
+from report_snapshot import REPORT_BUNDLE, REPORT_CUTOFF, load_report_daily
+OM_LIVE = os.environ.get("NUSAKLIM_OM_LIVE") == "1"
 daily_csv = os.path.join(BASE_DIR, "nusaklim_daily_aggregated.csv")
 device_csv = os.path.join(BASE_DIR, "device_nusaklim.csv")
-model_bundle_path = os.path.join(BASE_DIR, "models", "weather_model_latest.joblib")
+model_bundle_path = os.path.join(BASE_DIR, "models", "weather_model_latest.joblib") if OM_LIVE else REPORT_BUNDLE
 fig_dir = os.path.join(BASE_DIR, "figures")
 os.makedirs(fig_dir, exist_ok=True)
 
@@ -48,8 +53,10 @@ for sid in TEST_STATION_IDS:
 # 2. Evaluation window = the model's own documented Out-Of-Time blind-test split
 #    (last 30 days of the aggregated dataset).
 # ------------------------------------------------------------------------------
-df = pd.read_csv(daily_csv)
+df = pd.read_csv(daily_csv) if OM_LIVE else load_report_daily()
 df['date_dt'] = pd.to_datetime(df['date'])
+if not OM_LIVE:
+    df = df[df['date_dt'] <= REPORT_CUTOFF]
 df = df.sort_values(['stnname', 'date_dt']).reset_index(drop=True)
 
 max_date = df['date_dt'].max()
@@ -81,7 +88,7 @@ INDICATORS = [
     # Radiasi Matahari DIKELUARKAN dari pembandingan (revisi 12-10-2026): kolom solar_radiation_avg AWS kini TOTAL harian
     # (SUM, skala puluhan ribu; Notulen Poin 12) sedangkan Open-Meteo shortwave_radiation adalah rata-rata W/m2 -> satuan tidak sebanding.
     ('pressure_avg_hpa', 'Tekanan Udara', 'hPa', 'pressure_avg_hpa', 'om_pressure'),
-    ('wind_speed_avg', 'Kecepatan Angin', 'km/h', 'wind_speed_avg', 'om_wind'),
+    ('wind_speed_avg', 'Kecepatan Angin', 'm/s', 'wind_speed_avg', 'om_wind'),
     ('wind_direction_name', 'Arah Mata Angin', 'kategori', 'wind_direction_name', 'om_winddir_cat'),
 ]
 CLF_KEY = 'wind_direction_name'
@@ -134,7 +141,8 @@ def fetch_open_meteo(lat, lon):
                  'https://archive-api.open-meteo.com/v1/archive'):
         try:
             resp = requests.get(base, params=dict(latitude=lat, longitude=lon, start_date=start_date,
-                                                  end_date=end_date, hourly=HOURLY, timezone='Asia/Jakarta'),
+                                                  end_date=end_date, hourly=HOURLY, timezone='Asia/Jakarta',
+                                                  wind_speed_unit='ms'),
                                 timeout=40)
             if resp.status_code == 200:
                 h = pd.DataFrame(resp.json()['hourly'])
@@ -370,25 +378,21 @@ fig, axes = plt.subplots(2, 2, figsize=(14, 8.5), dpi=200)
 for ax, sid in zip(axes.flatten(), stn_ids):
     m = merged_by_station[sid].merge(nk_solar[nk_solar['stnname'] == int(sid)].drop(columns='stnname'), on='date_dt', how='left')
     n_full = float(m['records_count'].median())  # jumlah pembacaan per hari normal stasiun ini (144 atau ~72)
-    # Data AWS & model NusaKlim berskala total harian (SUM) -> energi harian MJ/m2 = SUM x 0,0864 / n_full (radiation_units.py).
-    # Open-Meteo = rata-rata W/m2 -> MJ/m2 = x 0,0864. Seluruh perbandingan di bawah dalam MJ/m2 per hari.
-    m['aws_mj'] = m[SOLAR] * 0.0864 / n_full
-    m['om_mj'] = m['om_solar'] * 0.0864
-    m['nk_mj'] = m['nk_solar'] * 0.0864 / n_full
-    sub = m.dropna(subset=['aws_mj', 'om_mj', 'nk_mj'])
-    mae_om = float(mean_absolute_error(sub['aws_mj'], sub['om_mj']))
-    mae_nk = float(mean_absolute_error(sub['aws_mj'], sub['nk_mj']))
+    m['om_solar_total'] = m['om_solar'] * n_full
+    sub = m.dropna(subset=[SOLAR, 'om_solar_total', 'nk_solar'])
+    mae_om = float(mean_absolute_error(sub[SOLAR], sub['om_solar_total']))
+    mae_nk = float(mean_absolute_error(sub[SOLAR], sub['nk_solar']))
     winner = 'NusaKlim' if mae_nk < mae_om else ('Open-Meteo' if mae_om < mae_nk else 'Seri')
     solar_res[sid] = {'n': int(len(sub)), 'readings_per_day': int(n_full),
-                      'om': {'value': round(mae_om, 2), 'bias': round(float((sub['om_mj'] - sub['aws_mj']).mean()), 2)},
-                      'nk': {'value': round(mae_nk, 2), 'bias': round(float((sub['nk_mj'] - sub['aws_mj']).mean()), 2)},
+                      'om': {'value': round(mae_om, 1), 'bias': round(float((sub['om_solar_total'] - sub[SOLAR]).mean()), 1)},
+                      'nk': {'value': round(mae_nk, 1), 'bias': round(float((sub['nk_solar'] - sub[SOLAR]).mean()), 1)},
                       'winner': winner}
-    ax.plot(m['date_dt'], m['aws_mj'], color=COL_ACT, linewidth=2.0, marker='o', markersize=3, label='Aktual AWS')
-    ax.plot(m['date_dt'], m['om_mj'], color=COL_OM, linewidth=1.5, linestyle='--', marker='s', markersize=2.5,
-            label=f'Open-Meteo (MAE {mae_om:,.2f})')
+    ax.plot(m['date_dt'], m[SOLAR], color=COL_ACT, linewidth=2.0, marker='o', markersize=3, label='Aktual AWS')
+    ax.plot(m['date_dt'], m['om_solar_total'], color=COL_OM, linewidth=1.5, linestyle='--', marker='s', markersize=2.5,
+            label=f'Open-Meteo (MAE {mae_om:,.0f})')
     ax.plot(m['date_dt'], m['nk_solar'], color=COL_NK, linewidth=1.6, marker='^', markersize=2.5,
-            label=f'NusaKlim (MAE {mae_nk:,.2f})')
-    ax.set_ylabel('Radiasi Matahari (MJ/m² per hari)', fontsize=8.5)
+            label=f'NusaKlim (MAE {mae_nk:,.0f})')
+    ax.set_ylabel('Radiasi Matahari (W/m², total harian)', fontsize=8.5)
     ax.set_title(f"Stasiun {sid} {test_stations[sid]['name']} — lebih akurat: {winner}", fontsize=9.5, fontweight='bold')
     ax.legend(fontsize=7, loc='best', frameon=True)
     ax.xaxis.set_major_locator(mdates.DayLocator(interval=5))
