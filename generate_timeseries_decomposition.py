@@ -44,8 +44,8 @@ PARAMS = [
     dict(col='humidity_avg', slug='kelembapan', title='Kelembapan Rata-rata', unit='%', color='#0284C7'),
     dict(col='pressure_avg_hpa', slug='tekanan', title='Tekanan Udara Rata-rata', unit='hPa', color='#7C3AED'),
     dict(col='rainfall_total_mm', slug='hujan', title='Curah Hujan Rata-rata Nasional', unit='mm/hari', color='#2563EB'),
-    dict(col='solar_radiation_avg', slug='radiasi', title='Radiasi Solar (Total Harian)', unit='Wh/m²', color='#EA580C'),
-    dict(col='wind_speed_avg', slug='angin', title='Kecepatan Angin Rata-rata', unit='km/jam', color='#059669'),
+    dict(col='solar_radiation_avg', slug='radiasi', title='Radiasi Solar (Total Harian)', unit='W/m²', color='#EA580C'),
+    dict(col='wind_speed_avg', slug='angin', title='Kecepatan Angin Rata-rata', unit='m/s', color='#059669'),
 ]
 
 MONTH_ID = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']

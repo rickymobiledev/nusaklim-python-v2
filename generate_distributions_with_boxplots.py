@@ -50,16 +50,16 @@ vars_config = [
     },
     {
         'col': 'solar_radiation_avg',
-        'name': 'Akumulasi Radiasi Solar (Wh/m² total harian)',
+        'name': 'Akumulasi Radiasi Solar (W/m² total harian)',
         'color': '#EA580C',
-        'unit': 'Wh/m²',
+        'unit': 'W/m²',
         'data': df[df['solar_radiation_avg'] > 0]['solar_radiation_avg'].dropna()
     },
     {
         'col': 'wind_speed_avg',
-        'name': 'Kecepatan Angin Rata-rata (km/h)',
+        'name': 'Kecepatan Angin Rata-rata (m/s)',
         'color': '#7C3AED',
-        'unit': 'km/h',
+        'unit': 'm/s',
         'data': df['wind_speed_avg'].dropna()
     }
 ]

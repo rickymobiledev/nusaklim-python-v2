@@ -50,7 +50,7 @@ anomaly_labels = [
     'Radiasi Solar (Sentinel 32767 W/m\u00b2 / >2000 W/m\u00b2)',
     'Tekanan Udara (<500 / >1200 hPa)',
     'Kelembapan (Sentinel -1/255)',
-    'Kec. Angin (Sentinel 255 / >100 km/jam)',
+    'Kec. Angin (Sentinel 255 / >100 m/s)',
     'Curah Hujan (<0 / >1000 mm)',
 ]
 anomaly_values = [qc['temp'], qc['winddir'], qc['solar'], qc['pressure'], qc['humidity'], qc['windspd'], qc['rain']]
@@ -217,11 +217,11 @@ axes[0, 0].legend(loc='upper right')
 axes[0, 0].set_title('Tren Rangkaian Waktu Cuaca Harian Nasional – Parameter Tambahan (2022 - 2026)', fontweight='bold', fontsize=13)
 
 axes[0, 1].plot(daily_b.index, solar_ma, color='#EA580C', lw=1.3, label='Radiasi Solar (7-day MA)')
-axes[0, 1].set_ylabel('Radiasi Solar (Wh/m² total harian)', fontweight='bold', fontsize=11)
+axes[0, 1].set_ylabel('Radiasi Solar (W/m² total harian)', fontweight='bold', fontsize=11)
 axes[0, 1].legend(loc='upper right')
 
 axes[1, 0].plot(daily_b.index, windspd_ma, color='#7C3AED', lw=1.3, label='Kecepatan Angin (7-day MA)')
-axes[1, 0].set_ylabel('Kec. Angin (km/jam)', fontweight='bold', fontsize=11)
+axes[1, 0].set_ylabel('Kec. Angin (m/s)', fontweight='bold', fontsize=11)
 axes[1, 0].set_xlabel('Tanggal Pengamatan', fontweight='bold', fontsize=11)
 axes[1, 0].legend(loc='upper right')
 

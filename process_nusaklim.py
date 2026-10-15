@@ -120,7 +120,7 @@ def run_nusaklim_pipeline(
         qc_flags['hum_qc_dropped'] += hum_invalid.sum()
         hum_raw = hum_raw.mask(hum_invalid)
 
-        # Kecepatan Angin (batas kewajaran 0 - 100 km/h, filter kode error 255)
+        # Kecepatan Angin (batas kewajaran 0 - 100 m/s, filter kode error 255)
         windspd_raw = pd.to_numeric(chunk['windspd'].replace('---', np.nan), errors='coerce')
         windspd_invalid = (windspd_raw < 0) | (windspd_raw > 100.0) | (windspd_raw == 255)
         qc_flags['windspd_qc_dropped'] += windspd_invalid.sum()

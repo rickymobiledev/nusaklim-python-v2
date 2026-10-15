@@ -29,13 +29,22 @@ fig_dir = os.path.join(BASE_DIR, 'figures_model')
 sys.path.insert(0, BASE_DIR)
 from retrain_pipeline import (generate_7day_forecast, REGRESSION_TARGETS, CLASSIFICATION_TARGET,
                                REG_ALGO_ORDER, CLF_ALGO_ORDER, load_champion_algorithms,
-                               extract_feature_importance, BENCHMARK_JSON_PATH, multi_metric_rank, wind_majority_baseline)
-_MAJ_CLS, _MAJ_SHARE = wind_majority_baseline(1)
+                               extract_feature_importance, BENCHMARK_JSON_PATH, multi_metric_rank, wind_majority_baseline,
+                               load_daily, build_features_and_targets)
+REGRESSION_TARGETS = {**REGRESSION_TARGETS, 'solar_radiation_avg': 'Radiasi Matahari (W/m²)'}  # Laporan 3/3b: satuan radiasi W/m²
+
+# Laporan 3 dikunci ke snapshot terbitnya: data sampai 19 Agustus 2026 (uji 30 hari = 21 Juli - 19 Agustus)
+# dan bundle model yang dilatih pada data tersebut. Data/bundle yang lebih baru tidak ikut,
+# supaya jendela uji, metrik, dan tabel ramalan tetap sama dengan PDF terbit.
+from report_snapshot import REPORT_CUTOFF, REPORT_BUNDLE, REPORT_RAW_CSV, load_report_daily
+_feat, _feat_cols, _tgt_cols, _ = build_features_and_targets(load_report_daily())
+_feat = _feat[_feat['date_dt'] <= REPORT_CUTOFF]
+_MAJ_CLS, _MAJ_SHARE = wind_majority_baseline(1, df_featured=_feat, feature_cols=_feat_cols, target_cols=_tgt_cols)
 
 # ------------------------------------------------------------------------------
 # LOAD REAL MODEL BUNDLE & BENCHMARK RESULTS (live, not hardcoded)
 # ------------------------------------------------------------------------------
-bundle = joblib.load(os.path.join(BASE_DIR, 'models', 'weather_model_latest.joblib'))
+bundle = joblib.load(REPORT_BUNDLE)
 metrics = bundle['metrics']
 feature_cols = bundle['feature_cols']
 target_cols = bundle['target_cols']
@@ -44,7 +53,7 @@ algo_used = bundle['algo_used']
 n_feature = len(feature_cols)
 n_target = len(target_cols)
 
-with open(os.path.join(BASE_DIR, 'nusaklim_daily_aggregated.csv'), encoding='utf-8') as f:
+with open(REPORT_RAW_CSV, encoding='utf-8') as f:
     n_raw_rows = sum(1 for _ in f) - 1
 
 with open(os.path.join(BASE_DIR, 'figures_model', 'permutation_importance_h1.json'), encoding='utf-8') as _f:
@@ -62,7 +71,7 @@ with open(BENCHMARK_JSON_PATH, 'r', encoding='utf-8') as f:
     bench_records = json.load(f)
 df_bench_all = pd.DataFrame(bench_records)
 
-fc_df = generate_7day_forecast(station_id='222')
+fc_df = generate_7day_forecast(station_id='222', df_featured=_feat, bundle_path=REPORT_BUNDLE)
 
 REG_VARS = list(REGRESSION_TARGETS.keys())
 REG_LABELS = REGRESSION_TARGETS
@@ -181,7 +190,7 @@ story.append(Paragraph('Dokumentasi Teknis Pelatihan Model Multi-Horizon Machine
 
 n_test_ref = metrics['temp_avg_h1']['n_test']
 n_train_ref = metrics['temp_avg_h1']['n_train']
-model_size_mb = os.path.getsize(os.path.join(BASE_DIR, 'models', 'weather_model_latest.joblib')) / (1024 * 1024)
+model_size_mb = os.path.getsize(REPORT_BUNDLE) / (1024 * 1024)
 
 cover_box_content = [
     [Paragraph('<b>Status Model</b>', style_table_cell_bold), Paragraph('Model Produksi Terlatih (Prediksi Multi-Hari H+1 s/d H+7, 7 Variabel)', style_table_cell)],
@@ -611,7 +620,7 @@ tbl_metrics.setStyle(TableStyle([
 story.append(tbl_metrics)
 story.append(Spacer(1, 3))
 story.append(Paragraph(
-    'Catatan satuan MAE: Suhu (&deg;C), Kelembapan (%), Curah Hujan (mm), Radiasi Matahari (Wh/m&sup2;, total harian), Tekanan Udara (hPa), Kecepatan Angin (km/h). Arah Mata Angin dievaluasi dengan Accuracy klasifikasi 4-kelas (baseline kelas mayoritas "' + _MAJ_CLS + '" &asymp; ' + f'{_MAJ_SHARE * 100:.1f}' + '%). Radiasi Matahari dimodelkan sebagai <b>total harian</b> (penjumlahan seluruh pembacaan sensor, skala puluhan ribu, sesuai Notulen Poin 12), sehingga nilainya ikut dipengaruhi jumlah pembacaan yang diterima server per hari. R&sup2; radiasi relatif lebih rendah dibanding suhu atau tekanan karena radiasi sangat dipengaruhi tutupan awan yang berubah cepat dan sulit diramal beberapa hari ke depan.',
+    'Catatan satuan MAE: Suhu (&deg;C), Kelembapan (%), Curah Hujan (mm), Radiasi Matahari (W/m&sup2;, total harian), Tekanan Udara (hPa), Kecepatan Angin (m/s). Arah Mata Angin dievaluasi dengan Accuracy klasifikasi 4-kelas (baseline kelas mayoritas "' + _MAJ_CLS + '" &asymp; ' + f'{_MAJ_SHARE * 100:.1f}' + '%). Radiasi Matahari dimodelkan sebagai <b>total harian</b> (penjumlahan seluruh pembacaan sensor, skala puluhan ribu, sesuai Notulen Poin 12), sehingga nilainya ikut dipengaruhi jumlah pembacaan yang diterima server per hari. R&sup2; radiasi relatif lebih rendah dibanding suhu atau tekanan karena radiasi sangat dipengaruhi tutupan awan yang berubah cepat dan sulit diramal beberapa hari ke depan.',
     style_body
 ))
 
@@ -739,9 +748,9 @@ story.append(Paragraph(
 fc_rows = [[
     Paragraph('Horizon / Tanggal', style_table_header), Paragraph('Kondisi', style_table_header),
     Paragraph('Suhu', style_table_header), Paragraph('Kelembapan', style_table_header),
-    Paragraph('Hujan', style_table_header), Paragraph('Radiasi (Wh/m&sup2;)', style_table_header),
-    Paragraph('Tekanan', style_table_header), Paragraph('Angin', style_table_header),
-    Paragraph('Arah', style_table_header),
+    Paragraph('Hujan', style_table_header), Paragraph('Radiasi (W/m&sup2;)', style_table_header),
+    Paragraph('Tekanan', style_table_header), Paragraph('Kecepatan Angin', style_table_header),
+    Paragraph('Arah Angin', style_table_header),
 ]]
 for _, r in fc_df.iterrows():
     solar_val = r.get('Solar_Wh_m2', int(round(r.get('Solar_Wm2', 175) * 24)))
@@ -753,7 +762,7 @@ for _, r in fc_df.iterrows():
         Paragraph(f"{r['Rain_Total_mm']} mm", style_table_cell_center),
         Paragraph(f"<b>{solar_val:,}</b>", style_table_cell_center),
         Paragraph(f"{r['Pressure_hPa']} hPa", style_table_cell_center),
-        Paragraph(f"{r['Wind_Speed_kmh']} km/h", style_table_cell_center),
+        Paragraph(f"{r['Wind_Speed_ms']} m/s", style_table_cell_center),
         Paragraph(str(r['Wind_Direction']), style_table_cell_center),
     ])
 
@@ -768,7 +777,7 @@ tbl_fc.setStyle(TableStyle([
 ]))
 story.append(tbl_fc)
 story.append(Paragraph(
-    '<i>Catatan: Seluruh nilai di atas dihasilkan langsung oleh model produksi. Nilai Radiasi disajikan dalam skala <b>Akumulasi Energi Harian (Wh/m&sup2;/hari)</b> bernilai ribuan sesuai kebutuhan praktis agronomi dan karakteristik dataset stasiun AWS. Kondisi cuaca diklasifikasikan dari prediksi curah hujan menggunakan ambang batas BMKG.</i>',
+    '<i>Catatan: Seluruh nilai di atas dihasilkan langsung oleh model produksi. Nilai Radiasi disajikan dalam skala <b>Total Harian (W/m&sup2;, jumlah pembacaan sensor per hari)</b> bernilai ribuan sesuai kebutuhan praktis agronomi dan karakteristik dataset stasiun AWS. Kondisi cuaca diklasifikasikan dari prediksi curah hujan menggunakan ambang batas BMKG.</i>',
     style_caption
 ))
 

@@ -3,7 +3,7 @@
 # ==============================================================================
 
 from typing import List, Optional, Dict, Any, Literal
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 class StationInfo(BaseModel):
     station_id: str = Field(..., example="227")
@@ -74,7 +74,7 @@ class PhysicalForecastDay(BaseModel):
     date: str = Field(..., example="2026-10-01")
     temperature: float = Field(..., example=27.7)
     humidity: float = Field(..., example=80)
-    radiation: float = Field(..., example=21.51)
+    radiation: float = Field(..., example=20808, description="Radiasi matahari total harian (W/m², jumlah pembacaan sensor per hari)")
     rainfall: float = Field(..., example=1.9)
     airPressure: float = Field(..., example=1007)
     windSpeed: float = Field(..., example=1.66)
@@ -83,7 +83,7 @@ class PhysicalForecastDay(BaseModel):
 class PhysicalForecastUnits(BaseModel):
     temperature: str = "°C"
     humidity: str = "%"
-    radiation: str = "MJ/m²"
+    radiation: str = "W/m²"
     rainfall: str = "mm"
     airPressure: str = "hPa"
     windSpeed: str = "m/s"
@@ -129,6 +129,14 @@ class IngestRecord(BaseModel):
     rain15: Optional[float] = Field(None, description="Curah hujan per 15 menit")
     created_at: Optional[str] = Field(None, description="Opsional, format \"YYYY-MM-DD HH:MM:SS.000\"")
     updated_at: Optional[str] = Field(None, description="Opsional")
+
+    @field_validator("tempout", "humout", "windspd", "winddir", "bar", "solar", "rain15", mode="before")
+    @classmethod
+    def _placeholder_to_none(cls, v):
+        # Sensor tak terbaca dikirim sumber sebagai "---" / "" / "NaN" -> perlakukan sebagai kosong
+        if isinstance(v, str) and v.strip().lower() in {"", "-", "--", "---", "nan", "null", "none", "n/a"}:
+            return None
+        return v
 
 
 class IngestJsonRequest(BaseModel):

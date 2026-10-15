@@ -41,7 +41,7 @@ ALIAS = {'suhu': 'temp_avg', 'kelembapan': 'humidity_avg', 'hujan': 'rainfall_to
 LABELS = dict(REGRESSION_TARGETS)
 LABELS[CLASSIFICATION_TARGET] = 'Arah Mata Angin'
 UNITS = {'temp_avg': '°C', 'humidity_avg': '%', 'rainfall_total_mm': 'mm', 'solar_radiation_avg': 'W/m²',
-         'pressure_avg_hpa': 'hPa', 'wind_speed_avg': 'km/h'}
+         'pressure_avg_hpa': 'hPa', 'wind_speed_avg': 'm/s'}
 ORDER = list(REGRESSION_TARGETS) + [CLASSIFICATION_TARGET]
 
 ap = argparse.ArgumentParser(description='Demo performa model NusaKlim per indikator dan horizon')

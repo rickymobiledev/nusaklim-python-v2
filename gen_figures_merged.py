@@ -23,7 +23,7 @@ from retrain_pipeline import (build_features_and_targets, DATA_PATH, CLASSIFICAT
                                REGRESSION_TARGETS, multi_metric_rank, wind_majority_baseline)
 
 REG_TARGETS = list(REGRESSION_TARGETS.keys())
-LABELS = {**REGRESSION_TARGETS, CLASSIFICATION_TARGET: 'Arah Mata Angin (kategori)'}
+LABELS = {**REGRESSION_TARGETS, 'solar_radiation_avg': 'Radiasi Matahari (W/m²)', CLASSIFICATION_TARGET: 'Arah Mata Angin (kategori)'}
 COLORS = {
     'temp_avg': '#DC2626', 'humidity_avg': '#059669', 'rainfall_total_mm': '#2563EB',
     'solar_radiation_avg': '#F59E0B', 'pressure_avg_hpa': '#0D9488', 'wind_speed_avg': '#7C3AED',
@@ -119,16 +119,17 @@ print('saved', p3)
 # Issue date dipilih di dalam jendela uji (max_date - 7 hari) supaya realisasi
 # aktual H+1..H+7 masih tersedia di dataset untuk dibandingkan.
 # ------------------------------------------------------------------------------
-bundle = joblib.load(os.path.join(BASE_DIR, "models", "weather_model_latest.joblib"))
+from report_snapshot import REPORT_BUNDLE, REPORT_CUTOFF  # snapshot Laporan 3 (data s.d. 19 Agustus 2026)
+bundle = joblib.load(REPORT_BUNDLE)
 feature_cols = bundle['feature_cols']
 target_cols = bundle['target_cols']
 models = bundle['models']
 algo_used = bundle['algo_used']
 
-df_daily = pd.read_csv(DATA_PATH)
+df_daily = pd.read_csv(DATA_PATH)  # lengkap: trajektori dibandingkan dengan realisasi setelah titik ramal
 df_featured, _, _, _ = build_features_and_targets(df_daily)
 max_date = df_featured['date_dt'].max()
-issue_date = pd.Timestamp(os.environ['NUSAKLIM_TRAJ_ISSUE_DATE']) if os.environ.get('NUSAKLIM_TRAJ_ISSUE_DATE') else max_date - pd.Timedelta(days=7)
+issue_date = pd.Timestamp(os.environ['NUSAKLIM_TRAJ_ISSUE_DATE']) if os.environ.get('NUSAKLIM_TRAJ_ISSUE_DATE') else REPORT_CUTOFF
 print(f'\nFIG M4: issue_date={issue_date.date()}, realisasi aktual s/d {max_date.date()}')
 
 with open(os.path.join(FIG_DIR, '..', 'figures_model', 'fig_model3_stations.json'), encoding='utf-8') as f:

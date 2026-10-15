@@ -291,7 +291,7 @@ class ForecastEngine:
                 t_avg = 27.4 + float(np.sin(h) * 0.3)
                 rh_avg = 84.0 + float(np.cos(h) * 2.0)
                 rain_mm = 3.5
-                solar_raw = 165.0  # rata-rata historis nasional (W/m2)
+                solar_raw = 19900.0  # median historis nasional total harian (W/m2, jumlah pembacaan per hari)
                 press = 1007.0
                 wind_v = 0.82
                 wind_cat = latest_wind
@@ -301,14 +301,14 @@ class ForecastEngine:
                 self.winddir_deg_global.get(wind_cat, 180.0)
             )
 
-            # solar_radiation_avg = rata-rata harian W/m2; energi harian MJ/m2 = W/m2 * 86400 s / 1e6
-            radiation_mj = solar_raw * 0.0864
+            # solar_radiation_avg = total harian (SUM pembacaan W/m2), ditampilkan apa adanya
+            radiation_wm2 = solar_raw
 
             forecast_days.append(PhysicalForecastDay(
                 date=target_date.strftime("%Y-%m-%d"),
                 temperature=round(t_avg, 1),
                 humidity=round(rh_avg, 1),
-                radiation=round(radiation_mj, 2),
+                radiation=round(radiation_wm2, 2),
                 rainfall=round(rain_mm, 1),
                 airPressure=round(press, 1),
                 windSpeed=round(wind_v, 2),

@@ -62,9 +62,9 @@
     },
     "wind_speed_avg": {
       "label": "Kecepatan Angin",
-      "unit": "km/h",
+      "unit": "m/s",
       "metric": "MAE",
-      "om_avg": 6.1088,
+      "om_avg": 1.233,
       "nk_avg": 0.1825,
       "nk_wins": 4,
       "om_wins": 0,
@@ -209,12 +209,12 @@
         },
         "wind_speed_avg": {
           "label": "Kecepatan Angin",
-          "unit": "km/h",
+          "unit": "m/s",
           "metric": "MAE",
           "n": 30,
           "om": {
-            "value": 4.633,
-            "bias": 4.633
+            "value": 0.612,
+            "bias": 0.607
           },
           "nk": {
             "value": 0.277,
@@ -320,12 +320,12 @@
         },
         "wind_speed_avg": {
           "label": "Kecepatan Angin",
-          "unit": "km/h",
+          "unit": "m/s",
           "metric": "MAE",
           "n": 30,
           "om": {
-            "value": 6.246,
-            "bias": 6.246
+            "value": 1.129,
+            "bias": 1.129
           },
           "nk": {
             "value": 0.182,
@@ -431,12 +431,12 @@
         },
         "wind_speed_avg": {
           "label": "Kecepatan Angin",
-          "unit": "km/h",
+          "unit": "m/s",
           "metric": "MAE",
           "n": 30,
           "om": {
-            "value": 9.308,
-            "bias": 9.308
+            "value": 2.581,
+            "bias": 2.581
           },
           "nk": {
             "value": 0.109,
@@ -542,12 +542,12 @@
         },
         "wind_speed_avg": {
           "label": "Kecepatan Angin",
-          "unit": "km/h",
+          "unit": "m/s",
           "metric": "MAE",
           "n": 30,
           "om": {
-            "value": 4.248,
-            "bias": 4.248
+            "value": 0.61,
+            "bias": 0.61
           },
           "nk": {
             "value": 0.162,

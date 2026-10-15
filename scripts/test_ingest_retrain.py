@@ -339,7 +339,7 @@ def main():
     print(f"     - Generated At     : {forecast_post['generated_at_wib']}")
     print(f"     - Horizon Dihasilkan:")
     for item in forecast_items:
-        print(f"       [{item['horizon']}] {item['date']} ({item['day_name']}): {item['weather_condition']:<13} | Suhu={item['temp_avg']}°C | Hujan={item['rainfall_total_mm']}mm ({item['rain_probability_pct']}%) | Angin={item['wind_direction']} ({item['wind_speed_kmh']} km/h)")
+        print(f"       [{item['horizon']}] {item['date']} ({item['day_name']}): {item['weather_condition']:<13} | Suhu={item['temp_avg']}°C | Hujan={item['rainfall_total_mm']}mm ({item['rain_probability_pct']}%) | Angin={item['wind_direction']} ({item['wind_speed_ms']} m/s)")
     print(f"     [PASS] Forecast 7 hari lengkap dengan rekomendasi agronomi berfungsi dengan model baru.")
 
     # E. Verifikasi Endpoint Weather Format Fisik
