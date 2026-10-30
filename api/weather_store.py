@@ -257,6 +257,106 @@ def load_stations(conn=None):
     return pd.DataFrame.from_records(rows, columns=STATION_COLUMNS)
 
 
+EDITABLE_STATION_FIELDS = ("name", "brand", "latitude", "longitude", "company_code", "company_name")
+
+
+class StationExistsError(Exception):
+    pass
+
+
+class StationNotFoundError(Exception):
+    pass
+
+
+def _now_text():
+    return pd.Timestamp.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+
+
+def _write_stations_csv(df):
+    csv_path = Path(settings.device_csv_path)
+    tmp = csv_path.with_suffix(".csv.tmp")
+    df[STATION_COLUMNS].to_csv(tmp, index=False)
+    tmp.replace(csv_path)
+
+
+def create_station(station_id, fields):
+    """Tambah stasiun baru. StationExistsError kalau id sudah terdaftar."""
+    sid = str(station_id).strip()
+    now = _now_text()
+    record = {c: fields.get(c) for c in EDITABLE_STATION_FIELDS}
+    record.update(id=sid, created_at=now, updated_at=now)
+    row = _station_row(record)
+    if settings.storage_backend == "csv":
+        df = load_stations()
+        if sid in set(df["id"].astype(str).str.strip()):
+            raise StationExistsError(sid)
+        new = pd.DataFrame([dict(zip(STATION_COLUMNS, row))])
+        _write_stations_csv(pd.concat([df, new], ignore_index=True))
+        return
+    with connect() as conn:
+        initialize(conn)
+        cur = conn.execute(
+            f"INSERT INTO weather_stations ({STATION_NAMES}) VALUES ({', '.join(['%s'] * len(STATION_COLUMNS))}) "
+            "ON CONFLICT (id) DO NOTHING", row)
+        if cur.rowcount == 0:
+            raise StationExistsError(sid)
+
+
+def update_station(station_id, changes):
+    """Ubah sebagian field stasiun (hanya key di `changes`). StationNotFoundError kalau id tidak ada."""
+    sid = str(station_id).strip()
+    changes = {k: v for k, v in changes.items() if k in EDITABLE_STATION_FIELDS}
+    now = _now_text()
+    if settings.storage_backend == "csv":
+        df = load_stations()
+        mask = df["id"].astype(str).str.strip() == sid
+        if not mask.any():
+            raise StationNotFoundError(sid)
+        for k, v in changes.items():
+            df[k] = df[k].astype(object)
+            df.loc[mask, k] = v
+        df.loc[mask, "updated_at"] = now
+        _write_stations_csv(df)
+        return
+    sets = ", ".join(f"{k} = %s" for k in changes) + (", " if changes else "") + "updated_at = %s"
+    with connect() as conn:
+        initialize(conn)
+        cur = conn.execute(f"UPDATE weather_stations SET {sets} WHERE id = %s",
+                           [*changes.values(), now, sid])
+        if cur.rowcount == 0:
+            raise StationNotFoundError(sid)
+
+
+class StationInUseError(Exception):
+    pass
+
+
+def delete_station(station_id):
+    """Hapus stasiun dari registry. Ditolak (StationInUseError) kalau stasiun masih punya data
+    observasi, supaya riwayat cuaca tidak yatim/hilang. StationNotFoundError kalau id tidak ada."""
+    sid = str(station_id).strip()
+    if settings.storage_backend == "csv":
+        df = load_stations()
+        mask = df["id"].astype(str).str.strip() == sid
+        if not mask.any():
+            raise StationNotFoundError(sid)
+        daily_path = Path(settings.daily_csv_path)
+        if daily_path.is_file():
+            stn = pd.read_csv(daily_path, usecols=["stnname"], dtype=str)["stnname"].str.strip()
+            if (stn == sid).any():
+                raise StationInUseError(sid)
+        _write_stations_csv(df[~mask])
+        return
+    with connect() as conn:
+        initialize(conn)
+        try:
+            cur = conn.execute("DELETE FROM weather_stations WHERE id = %s", [sid])
+        except psycopg.errors.ForeignKeyViolation:
+            raise StationInUseError(sid)
+        if cur.rowcount == 0:
+            raise StationNotFoundError(sid)
+
+
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Inisialisasi PostgreSQL / impor riwayat cuaca")

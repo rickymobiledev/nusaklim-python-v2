@@ -15,6 +15,24 @@ class StationInfo(BaseModel):
     elevation_m: Optional[int] = Field(None, description="Tidak tersedia di device_nusaklim.csv")
     status: str = Field(..., example="Active")
 
+class StationCreateRequest(BaseModel):
+    station_id: str = Field(..., min_length=1, example="999")
+    estate_name: str = Field(..., min_length=1, example="PPKS Contoh")
+    lat: Optional[float] = Field(None, ge=-90, le=90)
+    lon: Optional[float] = Field(None, ge=-180, le=180)
+    region: Optional[str] = Field(None, description="Nama perusahaan/grup (kolom company_name).")
+    brand: Optional[str] = Field(None, example="Davis Instruments")
+    company_code: Optional[str] = Field(None, example="RPN")
+
+class StationUpdateRequest(BaseModel):
+    """Semua field opsional; hanya field yang dikirim yang diubah."""
+    estate_name: Optional[str] = Field(None, min_length=1)
+    lat: Optional[float] = Field(None, ge=-90, le=90)
+    lon: Optional[float] = Field(None, ge=-180, le=180)
+    region: Optional[str] = None
+    brand: Optional[str] = None
+    company_code: Optional[str] = None
+
 class StationsListResponse(BaseModel):
     total_stations: int
     stations: List[StationInfo]
