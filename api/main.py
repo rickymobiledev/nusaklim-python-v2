@@ -204,6 +204,27 @@ async def update_station_endpoint(station_id: str, payload: StationUpdateRequest
     reset_stations_cache()
     return StationInfo(**get_station_metadata(station_id))
 
+@app.delete(
+    f"{settings.api_prefix}/stations/{{station_id}}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    tags=["AWS Stations Metadata"],
+    summary="Hapus Stasiun AWS",
+    description="Menghapus stasiun dari registry. Ditolak (409) jika stasiun masih punya data observasi, "
+                "agar riwayat cuaca tidak hilang/yatim; 404 jika stasiun tidak terdaftar.",
+    responses={404: {"description": "station_id tidak terdaftar."},
+               409: {"description": "Stasiun masih punya data observasi."}}
+)
+async def delete_station_endpoint(station_id: str):
+    from api.weather_store import delete_station, StationNotFoundError, StationInUseError
+    try:
+        await run_in_threadpool(delete_station, station_id)
+    except StationNotFoundError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Stasiun {station_id.strip()} tidak terdaftar.")
+    except StationInUseError:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail=f"Stasiun {station_id.strip()} masih punya data observasi; tidak dapat dihapus.")
+    reset_stations_cache()
+
 @app.get(
     f"{settings.api_prefix}/forecast/{{station_id}}",
     response_model=ForecastResponse,

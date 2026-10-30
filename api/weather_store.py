@@ -306,6 +306,36 @@ def update_station(station_id, changes):
             raise StationNotFoundError(sid)
 
 
+class StationInUseError(Exception):
+    pass
+
+
+def delete_station(station_id):
+    """Hapus stasiun dari registry. Ditolak (StationInUseError) kalau stasiun masih punya data
+    observasi, supaya riwayat cuaca tidak yatim/hilang. StationNotFoundError kalau id tidak ada."""
+    sid = str(station_id).strip()
+    if settings.storage_backend == "csv":
+        df = load_stations()
+        mask = df["id"].astype(str).str.strip() == sid
+        if not mask.any():
+            raise StationNotFoundError(sid)
+        daily_path = Path(settings.daily_csv_path)
+        if daily_path.is_file():
+            stn = pd.read_csv(daily_path, usecols=["stnname"], dtype=str)["stnname"].str.strip()
+            if (stn == sid).any():
+                raise StationInUseError(sid)
+        _write_stations_csv(df[~mask])
+        return
+    with connect() as conn:
+        initialize(conn)
+        try:
+            cur = conn.execute("DELETE FROM weather_stations WHERE id = %s", [sid])
+        except psycopg.errors.ForeignKeyViolation:
+            raise StationInUseError(sid)
+        if cur.rowcount == 0:
+            raise StationNotFoundError(sid)
+
+
 def main():
     import argparse
     parser = argparse.ArgumentParser(description="Inisialisasi PostgreSQL / impor riwayat cuaca")
