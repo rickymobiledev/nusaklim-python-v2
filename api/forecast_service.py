@@ -194,6 +194,16 @@ class ForecastEngine:
 
         return X, base_date, min_off, max_off, latest_wind
 
+    @staticmethod
+    def _forecast_anchor(base_date: pd.Timestamp) -> pd.Timestamp:
+        """Tanggal jangkar kalender untuk H+1..H+7. Kalau data stasiun tertinggal (AWS mati /
+        upload belum masuk), nilai tetap dihitung dari observasi terakhir di database, tetapi
+        tanggal yang ditampilkan terus berjalan 7 hari ke depan dari hari ini - angkanya bisa
+        sama dengan ramalan pekan lalu karena memakai histori yang sama. Jangkar minimal
+        kemarin (H-1), sehingga H+1 jatuh pada hari ini dan H+7 pada hari ini + 6."""
+        return max(pd.Timestamp(base_date).normalize(),
+                   pd.Timestamp.today().normalize() - pd.Timedelta(days=1))
+
     def predict_7_days(self, station_id: str) -> ForecastResponse:
         stn_str = str(station_id).strip()
         meta = get_station_metadata(stn_str)
@@ -202,9 +212,10 @@ class ForecastEngine:
         X, base_date, min_off, max_off, latest_wind = self._resolve_inference_context(stn_str)
 
         forecast_items = []
+        anchor_date = self._forecast_anchor(base_date)
 
         for h in range(1, 8):
-            target_date = base_date + timedelta(days=h)
+            target_date = anchor_date + timedelta(days=h)
             day_name = DAY_NAMES_ID[target_date.weekday()]
 
             if X is not None:
@@ -274,8 +285,9 @@ class ForecastEngine:
         X, base_date, _min_off, _max_off, latest_wind = self._resolve_inference_context(stn_str)
 
         forecast_days = []
+        anchor_date = self._forecast_anchor(base_date)
         for h in range(1, 8):
-            target_date = base_date + timedelta(days=h)
+            target_date = anchor_date + timedelta(days=h)
 
             if X is not None:
                 models = self.bundle['models']
