@@ -15,9 +15,9 @@ from fastapi.responses import RedirectResponse
 from starlette.concurrency import run_in_threadpool
 
 from api.config import settings
-from api.stations_db import get_all_stations, get_station_metadata
+from api.stations_db import get_all_stations, get_station_metadata, reset_stations_cache
 from api.models_schema import (
-    StationsListResponse, StationInfo, ForecastResponse,
+    StationsListResponse, StationInfo, StationCreateRequest, StationUpdateRequest, ForecastResponse,
     ComparisonResponse, OpenMeteoComparisonItem, HealthResponse, RetrainResponse,
     PhysicalForecastResponse, PhysicalForecastBulkResponse, IngestJsonRequest
 )
@@ -157,6 +157,52 @@ async def list_stations():
 async def get_station_detail(station_id: str):
     meta = get_station_metadata(station_id)
     return StationInfo(**meta)
+
+_STATION_FIELD_MAP = {"estate_name": "name", "lat": "latitude", "lon": "longitude",
+                      "region": "company_name", "brand": "brand", "company_code": "company_code"}
+
+@app.post(
+    f"{settings.api_prefix}/stations",
+    response_model=StationInfo,
+    status_code=status.HTTP_201_CREATED,
+    tags=["AWS Stations Metadata"],
+    summary="Tambah Stasiun AWS Baru",
+    description="Mendaftarkan stasiun baru ke registry. 409 jika station_id sudah terdaftar (gunakan PATCH untuk mengubah).",
+    responses={409: {"description": "station_id sudah terdaftar."}}
+)
+async def create_station_endpoint(payload: StationCreateRequest):
+    from api.weather_store import create_station, StationExistsError
+    fields = {_STATION_FIELD_MAP[k]: v for k, v in payload.model_dump().items() if k in _STATION_FIELD_MAP}
+    try:
+        await run_in_threadpool(create_station, payload.station_id, fields)
+    except StationExistsError:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail=f"Stasiun {payload.station_id.strip()} sudah terdaftar. Gunakan PATCH untuk mengubahnya.")
+    reset_stations_cache()
+    return StationInfo(**get_station_metadata(payload.station_id))
+
+@app.patch(
+    f"{settings.api_prefix}/stations/{{station_id}}",
+    response_model=StationInfo,
+    tags=["AWS Stations Metadata"],
+    summary="Edit Data Stasiun AWS",
+    description="Ubah sebagian atau seluruh metadata stasiun; hanya field yang dikirim yang berubah. 404 jika stasiun belum terdaftar.",
+    responses={404: {"description": "station_id tidak terdaftar."}}
+)
+async def update_station_endpoint(station_id: str, payload: StationUpdateRequest):
+    from api.weather_store import update_station, StationNotFoundError
+    sent = payload.model_dump(exclude_unset=True)
+    if not sent:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Tidak ada field yang dikirim untuk diubah.")
+    if sent.get("estate_name") is None and "estate_name" in sent:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="estate_name tidak boleh null.")
+    changes = {_STATION_FIELD_MAP[k]: v for k, v in sent.items()}
+    try:
+        await run_in_threadpool(update_station, station_id, changes)
+    except StationNotFoundError:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Stasiun {station_id.strip()} tidak terdaftar.")
+    reset_stations_cache()
+    return StationInfo(**get_station_metadata(station_id))
 
 @app.get(
     f"{settings.api_prefix}/forecast/{{station_id}}",

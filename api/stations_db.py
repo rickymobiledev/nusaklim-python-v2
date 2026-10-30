@@ -32,6 +32,11 @@ def _to_float(value):
     except (ValueError, TypeError):
         return None
 
+def reset_stations_cache():
+    """Dipanggil setelah stasiun ditambah/diubah agar registry dibaca ulang."""
+    global _stations_cache
+    _stations_cache = None
+
 def get_station_metadata(station_id: str) -> dict:
     """Metadata stasiun dari device_nusaklim.csv / tabel weather_stations.
 
