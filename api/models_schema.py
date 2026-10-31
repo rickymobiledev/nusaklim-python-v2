@@ -10,6 +10,8 @@ class StationInfo(BaseModel):
     estate_name: str = Field(..., example="PMO_Kebun Gedeh")
     province: Optional[str] = Field(None, description="Tidak tersedia di device_nusaklim.csv")
     region: Optional[str] = Field(None, example="AWS PMO")
+    brand: Optional[str] = Field(None, example="Davis Instruments")
+    company_code: Optional[str] = Field(None, example="RPN")
     lat: Optional[float] = Field(None, example=-6.802516)
     lon: Optional[float] = Field(None, example=107.040665)
     elevation_m: Optional[int] = Field(None, description="Tidak tersedia di device_nusaklim.csv")

@@ -3,6 +3,7 @@
 Raw sensor values stay as text to preserve historical error markers for QC.
 The observation key is (stnname, utctime); append preserves the first reading.
 """
+import time
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 
@@ -33,6 +34,26 @@ def connect():
     if not settings.database_url:
         raise ValueError("NUSAKLIM_DATABASE_URL belum diisi")
     return psycopg.connect(settings.database_url, connect_timeout=10)
+
+
+def connect_with_retry():
+    """connect() yang mengulang bila PostgreSQL/pgbouncer belum siap (mis. baru restart).
+
+    Hanya error koneksi (OperationalError, termasuk ConnectionTimeout) yang diulang;
+    delay berlipat ganda per percobaan.
+    """
+    attempts = max(1, settings.db_connect_retries)
+    delay = settings.db_connect_retry_delay
+    for attempt in range(1, attempts + 1):
+        try:
+            return connect()
+        except psycopg.OperationalError as exc:
+            if attempt == attempts:
+                raise
+            print(f"[DB] Koneksi gagal ({attempt}/{attempts}): {exc}. "
+                  f"Ulangi dalam {delay:g}s...", flush=True)
+            time.sleep(delay)
+            delay *= 2
 
 
 def initialize(conn):
@@ -207,7 +228,7 @@ def save_daily(frame):
 def load_daily():
     if settings.storage_backend == "csv":
         return pd.read_csv(settings.daily_csv_path, dtype={"stnname": str})
-    with connect() as conn:
+    with connect_with_retry() as conn:
         rows = conn.execute(f"SELECT {DAILY_NAMES} FROM weather_daily ORDER BY stnname, date").fetchall()
     frame = pd.DataFrame.from_records(rows, columns=DAILY_COLUMNS)
     if frame.empty:

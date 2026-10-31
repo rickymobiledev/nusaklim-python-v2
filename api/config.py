@@ -72,6 +72,8 @@ Semua endpoint API butuh header `X-API-Key` (klik **Authorize** di Swagger). `/d
     max_run_logs: int = Field(default=30, gt=0, description="Maksimum file log eksekusi pipeline yang dipertahankan di logs/runs/.")
     storage_backend: Literal["csv", "postgres"] = "csv"
     database_url: str = Field(default="", repr=False)
+    db_connect_retries: int = Field(default=5, ge=1, description="Jumlah percobaan koneksi PostgreSQL saat memuat data harian.")
+    db_connect_retry_delay: float = Field(default=3.0, gt=0, description="Jeda awal (detik) antar percobaan; berlipat ganda tiap kegagalan.")
 
     @model_validator(mode="after")
     def resolve_paths(self):
