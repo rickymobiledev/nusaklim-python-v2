@@ -93,6 +93,27 @@ def _write_log(entry: dict):
     print(f"[MLOps] {line.strip()}")
 
 
+def last_pipeline_runs() -> tuple[dict | None, dict | None]:
+    """(run terakhir, run SUKSES terakhir) dari pipeline_history.jsonl. Baris rusak dilewati."""
+    path = os.path.join(_paths()["logs"], "pipeline_history.jsonl")
+    last = last_ok = None
+    try:
+        with open(path, "r", encoding="utf-8", errors="replace") as f:
+            for line in f:
+                try:
+                    entry = json.loads(line)
+                except ValueError:
+                    continue
+                if not isinstance(entry, dict) or "task_id" not in entry:
+                    continue
+                last = entry
+                if entry.get("status") == "SUKSES":
+                    last_ok = entry
+    except OSError:
+        pass
+    return last, last_ok
+
+
 def _tail(path: str, n: int = TAIL_LINES) -> str:
     try:
         with open(path, "r", encoding="utf-8", errors="replace") as f:
@@ -189,7 +210,7 @@ def run_pipeline(task_id: str, trigger: str, extra_files: list[tuple[str, str]] 
                 try:
                     if settings.storage_backend == "postgres":
                         from api.weather_store import import_raw_csv
-                        stats = import_raw_csv(path, mode)
+                        stats = import_raw_csv(path, mode, source=trigger)
                     else:
                         stats = merge_upload(path, settings.raw_csv_path, mode, keep_source=True)
                 except Exception as e:

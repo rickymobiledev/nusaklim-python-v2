@@ -159,10 +159,35 @@ def ensure_stations_exist(conn, station_ids):
         )
 
 
-def _ingest_batches(batches, mode="append"):
+# Insert new observations and, in the same statement, refresh weather_station_latest from the
+# rows actually inserted (duplicates skipped by ON CONFLICT do not count as an ingest).
+EPOCH_PATTERN = "^[0-9]{1,12}([.][0-9]+)?$"
+_INSERT_AND_TRACK = f"""
+    WITH ins AS (
+        INSERT INTO weather_raw ({RAW_NAMES}) SELECT {RAW_NAMES} FROM incoming_weather
+        ON CONFLICT (stnname, utctime) DO NOTHING
+        RETURNING stnname, utctime
+    ), agg AS (
+        SELECT stnname, count(*) AS n,
+               max(CASE WHEN utctime ~ '{EPOCH_PATTERN}' THEN utctime::numeric END)::bigint AS last_utctime
+        FROM ins GROUP BY stnname
+    ), up AS (
+        INSERT INTO weather_station_latest (stnname, last_utctime, last_ingested_at)
+        SELECT stnname, last_utctime, now() FROM agg
+        ON CONFLICT (stnname) DO UPDATE SET
+            last_utctime = GREATEST(weather_station_latest.last_utctime, EXCLUDED.last_utctime),
+            last_ingested_at = EXCLUDED.last_ingested_at
+    )
+    SELECT stnname, n, last_utctime FROM agg
+"""
+
+
+def _ingest_batches(batches, mode="append", source=None):
     if mode != "append":
         raise UploadValidationError("PostgreSQL hanya mendukung mode append; replace seluruh riwayat tidak didukung.")
     total = added = 0
+    stations = set()
+    max_utctime = None
     # One transaction per request/file: a bad later batch rolls back the entire import.
     with connect() as conn:
         initialize(conn)
@@ -177,23 +202,66 @@ def _ingest_batches(batches, mode="append"):
                     for record in records:
                         copy.write_row(_raw_row(record))
                         total += 1
-                cur.execute(f"INSERT INTO weather_raw ({RAW_NAMES}) SELECT {RAW_NAMES} FROM incoming_weather ON CONFLICT (stnname, utctime) DO NOTHING")
-                added += cur.rowcount
+                for stnname, n, last_utctime in cur.execute(_INSERT_AND_TRACK).fetchall():
+                    added += n
+                    stations.add(stnname)
+                    if last_utctime is not None and (max_utctime is None or last_utctime > max_utctime):
+                        max_utctime = last_utctime
                 cur.execute("TRUNCATE incoming_weather")
+        conn.execute(
+            "INSERT INTO weather_ingest_log (source, rows_received, rows_added, stations_count, max_utctime) "
+            "VALUES (%s, %s, %s, %s, %s)",
+            (source, total, added, len(stations), max_utctime),
+        )
     return {"mode": mode, "rows_in_upload": total, "rows_added": added, "rows_skipped": total - added}
 
 
-def ingest_records(records, mode="append"):
-    return _ingest_batches([records], mode)
+def ingest_records(records, mode="append", source=None):
+    return _ingest_batches([records], mode, source)
 
 
-def import_raw_csv(path, mode="append", chunk_size=100_000):
+def import_raw_csv(path, mode="append", chunk_size=100_000, source=None):
     validate_csv_header(path)
     def batches():
         for frame in pd.read_csv(path, dtype=str, chunksize=chunk_size, low_memory=False):
             frame.columns = frame.columns.str.strip()
             yield frame.to_dict("records")
-    return _ingest_batches(batches(), mode)
+    return _ingest_batches(batches(), mode, source)
+
+
+def _epoch_to_iso(epoch):
+    from datetime import datetime, timezone
+    return None if epoch is None else datetime.fromtimestamp(epoch, tz=timezone.utc).isoformat()
+
+
+def ingest_freshness(include_stations=False):
+    """Ingest terakhir + (opsional) observasi terakhir per stasiun, dari tabel tracking (tanpa scan weather_raw).
+    Kalau migrasi 003 belum diterapkan (belum ada ingest sejak deploy), kembalikan kosong."""
+    from datetime import datetime, timezone
+    with connect_with_retry() as conn:
+        if conn.execute("SELECT to_regclass('weather_ingest_log')").fetchone()[0] is None:
+            return {"last_ingest": None, "stations": [] if include_stations else None}
+        row = conn.execute(
+            "SELECT ingested_at, source, rows_received, rows_added, stations_count, max_utctime "
+            "FROM weather_ingest_log ORDER BY ingested_at DESC, id DESC LIMIT 1"
+        ).fetchone()
+        last_ingest = None if row is None else {
+            "ingested_at": row[0].isoformat(), "source": row[1], "rows_received": row[2],
+            "rows_added": row[3], "stations_count": row[4], "latest_observation_at": _epoch_to_iso(row[5]),
+        }
+        stations = None
+        if include_stations:
+            now = datetime.now(timezone.utc).timestamp()
+            stations = [
+                {"station_id": stnname, "last_observation_at": _epoch_to_iso(last_utc),
+                 "hours_since_last_observation": None if last_utc is None else round((now - last_utc) / 3600, 1),
+                 "last_ingested_at": ingested_at.isoformat() if ingested_at else None}
+                for stnname, last_utc, ingested_at in conn.execute(
+                    "SELECT stnname, last_utctime, last_ingested_at FROM weather_station_latest "
+                    "ORDER BY last_utctime ASC NULLS FIRST, stnname"
+                ).fetchall()
+            ]
+    return {"last_ingest": last_ingest, "stations": stations}
 
 
 def iter_raw_chunks(chunk_size=500_000):

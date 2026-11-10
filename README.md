@@ -287,6 +287,23 @@ kiriman ulang diabaikan. `mode=replace` ditolak agar upload tidak menghapus
 seluruh riwayat database. Endpoint upload CSV dan folder `data_raw/incoming/` juga
 diimpor ke PostgreSQL saat backend ini aktif.
 
+### Cek kapan data terakhir di-ingest
+
+```http
+GET /api/v1/ingest/status?include_stations=true
+X-API-Key: <key>
+```
+
+- `last_ingest`: ingest data mentah terakhir (termasuk batch `trigger_retrain=false`),
+  dengan waktu, sumber, jumlah baris baru, dan observasi terbaru. Khusus PostgreSQL,
+  dicatat di tabel `weather_ingest_log` (migrasi `003`).
+- `last_pipeline_run` / `last_successful_pipeline_run`: proses cleaning/retrain terakhir
+  dari `logs/pipeline_history.jsonl`.
+- `stations` (jika `include_stations=true`): observasi terakhir tiap stasiun dari tabel
+  `weather_station_latest`, diurutkan dari yang paling lama, untuk menemukan stasiun yang
+  datanya berhenti masuk. `last_ingested_at` bernilai `null` untuk data lama sebelum
+  migrasi `003` diterapkan.
+
 Setelah penyimpanan, API otomatis menjalankan cleaning dari `weather_raw`,
 menyimpan ulang `weather_daily`, retrain, dan reload model di background.
 Hasil proses ada di `logs/pipeline.log`, `logs/pipeline_history.jsonl`, dan

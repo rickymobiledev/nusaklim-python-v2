@@ -78,6 +78,37 @@ class WeatherStoreTests(unittest.TestCase):
             store._ingest_batches(broken_batches())
         self.assertEqual(self.count_raw(), 0)
 
+    def test_ingest_tracking_records_latest_per_station(self):
+        empty = store.ingest_freshness(include_stations=True)
+        self.assertIsNone(empty["last_ingest"])
+        self.assertEqual(empty["stations"], [])
+
+        store.ingest_records([
+            dict(stnname="001", utctime=1787136600),
+            dict(stnname="001", utctime=1787137200),
+            dict(stnname="002", utctime="---"),
+        ], source="test")
+        # Late + duplicate data: latest utctime must not go backwards, duplicates are not "new".
+        store.ingest_records([
+            dict(stnname="001", utctime=1787000000),
+            dict(stnname="001", utctime=1787137200),
+        ], source="late")
+
+        result = store.ingest_freshness(include_stations=True)
+        last = result["last_ingest"]
+        self.assertEqual((last["source"], last["rows_received"], last["rows_added"], last["stations_count"]),
+                         ("late", 2, 1, 1))
+        self.assertEqual(last["latest_observation_at"], "2026-08-17T20:53:20+00:00")
+        by_id = {s["station_id"]: s for s in result["stations"]}
+        self.assertEqual(by_id["001"]["last_observation_at"], "2026-08-19T11:00:00+00:00")
+        self.assertIsNotNone(by_id["001"]["last_ingested_at"])
+        self.assertIsNone(by_id["002"]["last_observation_at"])  # epoch rusak, tetap tercatat masuk
+        self.assertEqual(result["stations"][0]["station_id"], "002")  # tanpa observasi valid -> paling atas
+
+        store.ingest_records([dict(stnname="001", utctime=1787136600)], source="dup")
+        self.assertEqual(store.ingest_freshness()["last_ingest"]["rows_added"], 0)
+        self.assertIsNone(store.ingest_freshness()["stations"])
+
     def test_replace_rejected_without_changing_history(self):
         store.ingest_records([dict(stnname="001", utctime=1787136600)])
         with self.assertRaises(store.UploadValidationError):

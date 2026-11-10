@@ -194,7 +194,25 @@ def test_ingest_upload_no_retrain():
     assert "tanpa retrain" in data["message"]
     print(f"[PASS] POST /api/v1/ingest/upload (trigger_retrain=False) -> {data['message']}")
 
+def test_ingest_status():
+    response = client.get("/api/v1/ingest/status", headers=AUTH_HEADERS)
+    assert response.status_code == 200, f"Expected 200, got {response.status_code}: {response.text}"
+    data = response.json()
+    assert data["storage_backend"] in ("csv", "postgres")
+    assert isinstance(data["is_pipeline_running"], bool)
+    assert data["stations"] is None
+    response = client.get("/api/v1/ingest/status", params={"include_stations": "true"}, headers=AUTH_HEADERS)
+    assert response.status_code == 200, response.text
+    assert isinstance(response.json()["stations"], list)
+    print(f"[PASS] GET /api/v1/ingest/status -> last_ingest={data['last_ingest']}, "
+          f"last_pipeline_run={(data['last_pipeline_run'] or {}).get('timestamp')}")
+
+def test_ingest_status_requires_api_key():
+    assert client.get("/api/v1/ingest/status").status_code == 401
+
 TEST_FUNCS = [
+    test_ingest_status,
+    test_ingest_status_requires_api_key,
     test_root_redirect,
     test_health_endpoint,
     test_stations_list,

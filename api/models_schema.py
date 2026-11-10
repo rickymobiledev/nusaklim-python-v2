@@ -84,6 +84,42 @@ class HealthResponse(BaseModel):
     model_last_trained: str
     inference_latency_ms: float
 
+class LastIngestInfo(BaseModel):
+    ingested_at: str = Field(..., description="Waktu ingest (ISO 8601, zona waktu server DB).")
+    source: Optional[str] = Field(None, description="Asal ingest, mis. api:/ingest/json, api:/ingest/upload, api:/ingest.")
+    rows_received: int
+    rows_added: int = Field(..., description="Baris baru yang benar-benar tersimpan (duplikat tidak dihitung).")
+    stations_count: int = Field(..., description="Jumlah stasiun yang mendapat baris baru.")
+    latest_observation_at: Optional[str] = Field(None, description="utctime terbaru di antara baris baru (ISO 8601 UTC).")
+
+class PipelineRunInfo(BaseModel):
+    task_id: str
+    trigger: Optional[str] = None
+    timestamp: str = Field(..., description="Waktu selesai proses (waktu lokal server).")
+    status: str = Field(..., description="SUKSES / GAGAL")
+    rows_added: Optional[int] = None
+    max_train_date: Optional[str] = Field(None, description="Tanggal data harian terakhir yang dipakai model.")
+    duration_sec: Optional[float] = None
+    stage: Optional[str] = Field(None, description="Tahap yang gagal (hanya jika GAGAL).")
+    reason: Optional[str] = Field(None, description="Penyebab gagal (hanya jika GAGAL).")
+
+class StationFreshness(BaseModel):
+    station_id: str
+    last_observation_at: Optional[str] = Field(None, description="utctime observasi terbaru stasiun ini (ISO 8601 UTC).")
+    hours_since_last_observation: Optional[float] = None
+    last_ingested_at: Optional[str] = Field(None, description="Kapan baris baru stasiun ini terakhir masuk. "
+                                                              "null = data lama sebelum pelacakan ingest aktif.")
+
+class IngestStatusResponse(BaseModel):
+    storage_backend: str
+    is_pipeline_running: bool = Field(..., description="True jika job ingest/retrain sedang berjalan di proses API ini.")
+    last_ingest: Optional[LastIngestInfo] = Field(None, description="Ingest data mentah terakhir (termasuk batch tanpa retrain). "
+                                                                    "Hanya untuk backend postgres.")
+    last_pipeline_run: Optional[PipelineRunInfo] = Field(None, description="Proses pipeline (ingest/retrain) terakhir, sukses atau gagal.")
+    last_successful_pipeline_run: Optional[PipelineRunInfo] = None
+    stations: Optional[List[StationFreshness]] = Field(None, description="Hanya jika include_stations=true; "
+                                                                         "diurutkan dari observasi paling lama.")
+
 class RetrainResponse(BaseModel):
     status: str
     message: str

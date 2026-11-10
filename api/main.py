@@ -19,7 +19,8 @@ from api.stations_db import get_all_stations, get_station_metadata, reset_statio
 from api.models_schema import (
     StationsListResponse, StationInfo, StationCreateRequest, StationUpdateRequest, ForecastResponse,
     ComparisonResponse, OpenMeteoComparisonItem, HealthResponse, RetrainResponse,
-    PhysicalForecastResponse, PhysicalForecastBulkResponse, IngestJsonRequest
+    PhysicalForecastResponse, PhysicalForecastBulkResponse, IngestJsonRequest,
+    IngestStatusResponse, PipelineRunInfo
 )
 from api.ingest_upload import validate_csv_header, records_to_csv, UploadValidationError, merge_upload
 from api.pipeline_runner import run_pipeline
@@ -410,6 +411,48 @@ async def trigger_retrain(background_tasks: BackgroundTasks):
         timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S WIB")
     )
 
+def _pipeline_run_info(entry: dict | None) -> PipelineRunInfo | None:
+    if not entry:
+        return None
+    fields = {k: entry.get(k) for k in PipelineRunInfo.model_fields if entry.get(k) is not None}
+    fields.setdefault("timestamp", "")
+    fields.setdefault("status", "")
+    if "max_train_date" in fields:
+        fields["max_train_date"] = str(fields["max_train_date"])
+    return PipelineRunInfo(**fields)
+
+@app.get(
+    f"{settings.api_prefix}/ingest/status",
+    response_model=IngestStatusResponse,
+    tags=["MLOps & Automation"],
+    summary="Cek Kapan Data Terakhir Di-ingest",
+    description="Status kesegaran data: (1) `last_ingest` = ingest data mentah terakhir, termasuk batch "
+                "`trigger_retrain=false` (backend postgres saja), (2) `last_pipeline_run` / `last_successful_pipeline_run` "
+                "= proses cleaning/retrain terakhir dari logs/pipeline_history.jsonl, (3) `is_pipeline_running`. "
+                "Dengan `include_stations=true`, ikut dikirim observasi terakhir tiap stasiun (urut dari yang paling lama) "
+                "untuk mendeteksi stasiun yang datanya berhenti masuk.",
+    response_description="Ringkasan ingest & pipeline terakhir, plus (opsional) kesegaran data per stasiun.",
+    responses={**UNAUTHORIZED_RESPONSE, 503: {"description": "Gagal membaca status dari PostgreSQL."}}
+)
+async def get_ingest_status(include_stations: bool = Query(False, description="Sertakan observasi terakhir per stasiun.")):
+    from api.pipeline_runner import last_pipeline_runs
+    last_run, last_ok = await run_in_threadpool(last_pipeline_runs)
+    freshness = {"last_ingest": None, "stations": [] if include_stations else None}
+    if settings.storage_backend == "postgres":
+        from api.weather_store import ingest_freshness
+        try:
+            freshness = await run_in_threadpool(ingest_freshness, include_stations)
+        except Exception:
+            raise HTTPException(status_code=503, detail="Gagal membaca status ingest dari PostgreSQL.")
+    return IngestStatusResponse(
+        storage_backend=settings.storage_backend,
+        is_pipeline_running=_is_training,
+        last_ingest=freshness["last_ingest"],
+        last_pipeline_run=_pipeline_run_info(last_run),
+        last_successful_pipeline_run=_pipeline_run_info(last_ok),
+        stations=freshness["stations"],
+    )
+
 def background_ingest_task(task_id: str, staging_path: str | None = None, mode: str = "append", ingestion_stats: dict | None = None,
                            refresh_only: bool = False):
     """Merge file baru (upload + isi data_raw/incoming/) -> cleaning -> retrain. Hasil SUKSES/GAGAL
@@ -489,7 +532,7 @@ async def trigger_ingest_upload(
             validate_csv_header(staging_path)
             if settings.storage_backend == "postgres":
                 from api.weather_store import import_raw_csv
-                stats = await run_in_threadpool(import_raw_csv, staging_path, mode)
+                stats = await run_in_threadpool(import_raw_csv, staging_path, mode, source="api:/ingest/upload")
                 backend_msg = f"{stats['rows_added']:,} baris baru disimpan ke PostgreSQL; {stats['rows_skipped']:,} duplikat diabaikan (batching ingest, tanpa retrain)."
             else:
                 stats = await run_in_threadpool(merge_upload, staging_path, settings.raw_csv_path, mode)
@@ -574,7 +617,8 @@ async def trigger_ingest_json(payload: IngestJsonRequest, background_tasks: Back
         if settings.storage_backend == "postgres":
             from api.weather_store import ingest_records
             try:
-                stats = await run_in_threadpool(ingest_records, [r.model_dump() for r in payload.records], payload.mode)
+                stats = await run_in_threadpool(ingest_records, [r.model_dump() for r in payload.records], payload.mode,
+                                                source="api:/ingest/json")
             except Exception:
                 raise HTTPException(status_code=503, detail="Gagal menyimpan data ke PostgreSQL; request dapat dikirim ulang.")
             return RetrainResponse(
@@ -619,7 +663,8 @@ async def trigger_ingest_json(payload: IngestJsonRequest, background_tasks: Back
     if settings.storage_backend == "postgres":
         from api.weather_store import ingest_records
         try:
-            stats = await run_in_threadpool(ingest_records, [r.model_dump() for r in payload.records], payload.mode)
+            stats = await run_in_threadpool(ingest_records, [r.model_dump() for r in payload.records], payload.mode,
+                                            source="api:/ingest/json")
             background_tasks.add_task(background_ingest_task, task_id, ingestion_stats=stats, refresh_only=payload.refresh_only)
         except Exception:
             _release_training_slot()
